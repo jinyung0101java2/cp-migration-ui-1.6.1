@@ -31,20 +31,9 @@ public class IntroOverviewController {
     public Object baseView() {
         UsersLoginMetaData usersLoginMetaData = loginService.getAuthenticationUserMetaData();
         if (Constants.AUTH_ADMIN_LIST.contains(usersLoginMetaData.getUserType())) {
-            return "global/overview";
+            return "migrations/migrations";
         }
 
-        return "index";
-    }
-
-
-    /**
-     * Index 페이지 이동(Move Intro overview page)
-     *
-     * @return the intro overview
-     */
-    @GetMapping(value = ConstantsUrl.URI_CP_INDEX_URL)
-    public String getIntroOverview() {
         return "index";
     }
 }

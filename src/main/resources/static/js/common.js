@@ -13,33 +13,9 @@ const func = {
 	depth2 : '',
 
 	init(depth1, depth2){
-		func.depth1 = depth1;
-		func.depth2 = depth2;
 
 		// Locale Language 조회
 		func.getLocaleLang();
-
-		if(IS_GLOBAL == false) {
-			func.loadData('GET', `${func.url}users/clustersList?isGlobal=${IS_GLOBAL}`, 'application/json', func.clusters);
-		}
-		else {
-			document.getElementById('clusterTitleDiv').style.display="none";
-			document.getElementById('nameSpaceTitleDiv').style.display="none";
-
-			if(sessionStorage.getItem('cluster') == null) {
-				func.loadData('GET', `${func.url}users/clustersList?isGlobal=${IS_GLOBAL}`, 'application/json', func.clusters);
-			}
-		}
-
-
-		// navigation 초기 선택 설정
-		if(depth1.length >= 0){
-			//depth1 toggle on
-			document.querySelector('[aside_d1='+depth1+']').classList.toggle('on', true);
-			// depth2 toggle on
-			document.querySelector('[aside_d2='+depth2+']').classList.toggle('on', true);
-
-		}
 
 		// navigation height 설정
 		var navSub = document.querySelector('nav').querySelectorAll('.sub');
@@ -942,51 +918,4 @@ const func = {
 			},
 		});
 	},
-
-	onclickToGuide() {
-		const lang = document.getElementById("u_locale_lang").value;
-		let guideListUl = '';
-
-		guideListUl += `<li><a href="javascript:;" data-name="userguide">${USER_GUIDE}</a></li>`;
-		if(func.depth1 === 'global' && func.depth2 === 'g_overview') {
-			guideListUl += `<li><a href="javascript:;" data-name="playparkusageguide">${PLAYPARK_USAGE_GUIDE}</a></li>`;
-		}
-		document.getElementById("guideListUl").innerHTML = guideListUl;
-
-		var name = document.querySelector('.guideList').querySelectorAll('a');
-
-		for(let i=0 ; i<name.length; i++) {
-			name[i].addEventListener('click', (e) => {
-				IS_RELOAD = true;
-
-				if(e.target.getAttribute('data-name') === 'userguide' && lang === 'ko') {
-					func.moveToUserGuideLink();
-				}
-				if(e.target.getAttribute('data-name') === 'userguide' && lang === 'en') {
-					func.moveToEngUserGuideLink();
-				}
-				if(e.target.getAttribute('data-name') === 'playparkusageguide') {
-					func.moveToPlayprkUsageGuideLink();
-				}
-			}, false);
-		}
-	},
-	moveToUserGuideLink(){
-		window.open('about:blank').location.href = generatedGuideLink('ko', func.depth1);
-	},
-	moveToEngUserGuideLink(){
-		window.open('about:blank').location.href = generatedGuideLink('en', func.depth1);
-	},
-	moveToPlayprkUsageGuideLink() {
-		window.open('about:blank').location.href = GUIDE_URL_PLAYPARK;
-	},
-	isCollapse(id, collapse) {
-		let el =  document.getElementById(id);
-		el.classList.toggle('collapse');
-		if(collapse) {
-			el.title="Collapse Content";
-		}else {
-			el.title="Expand Content"
-		}
-	}
 }
