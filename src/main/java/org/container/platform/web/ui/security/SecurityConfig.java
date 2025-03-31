@@ -69,7 +69,7 @@ public class SecurityConfig {
                 .addFilterBefore(portalOauth2SecurityFilter, UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage(propertyService.getKeycloakOauth2LoginPath())
-                        .userInfoEndpoint(userInfo -> userInfo.userService(portalOAuth2UserService))
+                  //      .userInfoEndpoint(userInfo -> userInfo.userService(portalOAuth2UserService))
                         .defaultSuccessUrl("/", true)
                         .failureHandler(portalOauth2FailureHandler))
                 .logout(logout -> logout
