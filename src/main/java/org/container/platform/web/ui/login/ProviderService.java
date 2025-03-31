@@ -41,7 +41,7 @@ public class ProviderService {
      * @param users the users
      * @return the resultStatus
      */
-    public AuthenticationResponse loginUsers(Users users) {
+    public AuthenticationResponse loginUsers(Users users) {//삭제
         return restTemplateService.send(TARGET_CP_API, ConstantsUrl.URL_API_LOGIN, HttpMethod.POST, users, AuthenticationResponse.class);
     }
 
@@ -52,7 +52,7 @@ public class ProviderService {
      * @param users the users
      * @return the resultStatus
      */
-    public ResultStatus registerUsers(Users users) {
+    public ResultStatus registerUsers(Users users) {//삭제
         return restTemplateService.send(TARGET_CP_API, ConstantsUrl.URL_API_SIGNUP,
                 HttpMethod.POST, users, ResultStatus.class);
     }

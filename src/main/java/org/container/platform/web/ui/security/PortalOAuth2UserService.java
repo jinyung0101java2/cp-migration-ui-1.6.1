@@ -46,15 +46,15 @@ public class PortalOAuth2UserService implements OAuth2UserService {
         DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
         OAuthAttributes attributes = new OAuthAttributes(oAuth2User.getAttributes());
-        boolean isSuperAdmin = attributes.getRoles().contains(propertyService.getKeycloakSuperAdminRole()) ? true : false;
+        boolean isSuperAdmin = attributes.getRoles().contains(propertyService.getKeycloakSuperAdminRole()) ? true : false;//삭제
 
         // Creating a User Account
-        Users users = new Users(attributes.getUsername(), attributes.getSub(), isSuperAdmin);
+        Users users = new Users(attributes.getUsername(), attributes.getSub(), isSuperAdmin);//삭제
         LOGGER.info("###############################################################");
         LOGGER.info(CommonUtils.loggerReplace("[USERINFO] " + users.userIfo()));
         LOGGER.info("###############################################################");
 
-        try {
+        try {//삭제
             ResultStatus status = providerService.registerUsers(users);
             if (status.getResultCode().equals(Constants.RESULT_STATUS_FAIL)) {
                 if (!Constants.ALREADY_REGISTERED_MESSAGE.contains(status.getResultMessage())) {

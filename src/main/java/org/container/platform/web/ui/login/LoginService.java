@@ -40,7 +40,7 @@ public class LoginService {
      *
      * @param authenticationResponse the AuthenticationResponse
      */
-    public UsersLoginMetaData setAuthDetailsLoginMetaData(AuthenticationResponse authenticationResponse) {
+    public UsersLoginMetaData setAuthDetailsLoginMetaData(AuthenticationResponse authenticationResponse) {//삭제
         UsersLoginMetaData usersLoginMetaData = new UsersLoginMetaData();
         usersLoginMetaData.setAccessToken(authenticationResponse.getToken());
         usersLoginMetaData.setClusterId(authenticationResponse.getClusterId());
