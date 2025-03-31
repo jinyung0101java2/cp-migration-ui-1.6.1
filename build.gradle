@@ -1,0 +1,63 @@
+plugins {
+	id 'java'
+	id 'war'
+	id 'org.springframework.boot' version '3.4.4'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'org.container.platform.web.ui'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+	all {
+		exclude group: 'commons-logging', module: 'commons-logging'
+	}
+}
+
+ext {
+	jstlVersion = '1.2'
+	gsonVersion = '2.8.9'
+	lombokVersion = '1.18.30'
+	sitemeshVersion = '3.0.1'
+	httpcoreVersion = '4.4.6'
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-freemarker'
+	testImplementation "org.springframework.boot:spring-boot-starter-test"
+	implementation 'org.apache.httpcomponents.client5:httpclient5'
+	implementation("org.apache.httpcomponents:httpcore:${httpcoreVersion}")
+	implementation "com.google.code.gson:gson:${gsonVersion}"
+	implementation "org.projectlombok:lombok:${lombokVersion}"
+	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+	implementation("org.sitemesh:sitemesh:${sitemeshVersion}")
+	implementation "javax.servlet:jstl:${jstlVersion}"
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4'
+	implementation 'net.minidev:json-smart:2.5.2'
+	implementation 'io.github.classgraph:classgraph:4.8.179'
+
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-devtools'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+	implementation 'org.json:json:20240303'
+	implementation 'io.netty:netty-handler:4.1.118.Final'
+	implementation 'io.netty:netty-common:4.1.118.Final'
+	implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect"
+	implementation group: 'javax.servlet.jsp', name: 'javax.servlet.jsp-api', version: '2.3.1'
+	implementation 'commons-beanutils:commons-beanutils:1.9.4'
+}
