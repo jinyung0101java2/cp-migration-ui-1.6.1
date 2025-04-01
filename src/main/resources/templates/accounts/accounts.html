@@ -9,7 +9,7 @@
         </article>
         <article class="base tab-cont-wrap">
             <ul class="tab-btn">
-                <li type="notice-migrations" id="tab-migrations"><a onclick="movePage(URI_CP_MIGRATIONS_LIST)">Migrations</a></li>
+                <li type="notice-migrations" id="tab-migrations"><a onclick="movePage(URI_CP_MIGRATIONS_CREATE)">Migrations</a></li>
                 <li type="notice-accounts" id="tab-accounts" class="active"><a href="javascript:">Accounts</a></li>
             </ul>
             <div class="notice tab-cont-wrap">
@@ -47,23 +47,13 @@
     <script type="text/javascript">
     window.onload = () => {
 
-        callbackFuncNameLoad();
-
         const accounts = {
-            offset : 0, // 로드 페이지 넘버
-            limit : 10, // 로드 게시물 개수
-            allItemCount : 0, //게시물 촐 개수
-            type : 'administrator',
 
             init(){
-                func.nameLoad = accounts.reset;
 
-                accounts.load();
-
-                accounts.event();
             },
 
-            reset(){
+            /*reset(){
                 func.removeHtml(document.querySelector('.listTable'));
 
                 accounts.offset = 0;
@@ -81,11 +71,11 @@
             //draw(data){
             draw(data){
 
-                /*let data = {
+                /!*let data = {
                     "name": "jjy",
                     "storageType": "s3",
                     "provider": "NHN"
-                }*/
+                }*!/
 
                 if(accounts.offset == 0) accounts.allItemCount = data.itemMetaData.allItemCount;
 
@@ -119,24 +109,24 @@
                 };
 
                 accounts.listEvent();
-            },
+            },*/
 
             event(){
                 // more 버튼 event
-                document.querySelector('.more').addEventListener('click', (e) => {
+                /*document.querySelector('.more').addEventListener('click', (e) => {
                     if(document.querySelector('.listTable').querySelectorAll('tr').length < accounts.allItemCount){
                     accounts.offset++;
 
                     accounts.load();
                 };
-            }, false);
+            }, false);*/
 
                 document.querySelector('.create').addEventListener('click', (e) => {
                     document.location.href = URI_CP_ACCOUNTS_CREATE;
             }, false);
             },
 
-            listEvent(){
+            /*listEvent(){
                 var listAll = document.querySelector('.listTable').querySelectorAll('a');
 
                 for(var i=accounts.offset*10; i<=listAll.length-1; i++){
@@ -147,10 +137,11 @@
                     document.location.href = URI_CP_CONFIGS_CONFIGMAPS + URI_CP_DETAILS;
                 }, true);
                 };
-            },
+            },*/
         }
 
         accounts.init();
+        accounts.event();
     }
 </script>
 </th:block>

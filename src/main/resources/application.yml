@@ -80,7 +80,10 @@ chaosApi:
   url: http://localhost:8092
 catalogApi:
   url: http://localhost:8093
-
+migrationApi:
+  url: https://mig.115.68.198.189.nip.io
+vaultApi:
+  url: https://mig.115.68.198.189.nip.io
 ---
 spring:
   config:
@@ -97,3 +100,7 @@ chaosApi:
   url: ${CP_PORTAL_CHAOS_API_URI}
 catalogApi:
   url: ${CP_PORTAL_CATALOG_API_URI}
+migrationApi:
+  url: ${CP_MIGRATION_API_URI}
+vaultApi:
+  url: ${CP_VAULT_API_URI}

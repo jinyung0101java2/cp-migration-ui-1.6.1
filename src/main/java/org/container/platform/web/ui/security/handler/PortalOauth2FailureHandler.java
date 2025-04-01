@@ -19,19 +19,12 @@ import java.io.IOException;
 public class PortalOauth2FailureHandler implements AuthenticationFailureHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(PortalOauth2FailureHandler.class);
 
-    @Override
+    @Override// 여기 에러도 cp 에러
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         String loc = "/error/500";
 
         if (exception instanceof OAuth2AuthenticationException oauthEx) {
             LOGGER.info("######### AUTHENTICATION EXCEPTION MESSAGE : {}", CommonUtils.loggerReplace(oauthEx.getError()));
-            String errorCode = oauthEx.getError().getErrorCode();
-            if (errorCode.equals(Constants.LOGIN_INACTIVE_USER_MESSAGE)) {
-                loc = ConstantsUrl.URl_CP_INACTIVE;
-            }
-            if (Constants.LOGIN_UNAUTHORIZED_MESSAGE.contains(errorCode)) {
-                loc = "/error/401";
-            }
         }
 
         response.sendRedirect(loc);

@@ -30,14 +30,10 @@ public class PortalOauth2SecurityFilter extends OncePerRequestFilter {
 
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication != null) {
-            if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(Constants.AUTH_INACTIVE_USER))) {
-                LOGGER.info("######## MOVE TO THE INACTIVE USER VIEW");
-                response.sendRedirect(ConstantsUrl.URl_CP_INACTIVE);
-                return;
-            }
+       if (authentication != null) {
             if (!customIntercepterService.isActive()) {
                 LOGGER.info("######## LOGOUT CAUSE OAUTH2 TOKEN IS NOT ACTIVE");
                 request.getSession().invalidate();

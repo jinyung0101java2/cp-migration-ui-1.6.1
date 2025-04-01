@@ -1,32 +1,9 @@
 
 const func = {
+	migrationUrl: URI_CP_MIGRATION_API,
+	vaultUrl: URI_CP_VAULT_API,
+	ui : 'http://localhost:8090/',
 
-	url : URI_REQUEST_CP_API,
-	catalogUrl : URI_REQUEST_CATALOG_API,
-	chaosUrl : URI_REQUEST_CHAOS_API,
-	ui : 'http://localhost:8091/',
-	nameLoad : new function(){},
-	clusterData:  new Object(),
-	nameData : new Object(),
-	createIm : '',
-	depth1 : '',
-	depth2 : '',
-
-	init(depth1, depth2){
-
-		// Locale Language 조회
-		func.getLocaleLang();
-
-		// navigation height 설정
-		var navSub = document.querySelector('nav').querySelectorAll('.sub');
-		for(var i=0; i<=navSub.length-1; i++){
-			var childSum = navSub[i].childElementCount;
-			navSub[i].style.height = (childSum*35+30)+((childSum-1)*10)+'px';
-		};
-
-		func.event();
-		func.onclickToGuide();
-	},
 
 	event(){
 		// navigation
@@ -74,188 +51,6 @@ const func = {
 			func.alertPopup('Sign Out', MSG_WANT_TO_SIGN_OUT + '<br><p id="logout-sub">' + MSG_INTEGRATED_SIGN_OUT_TAKES_PLACE + '</p>', true, MSG_CONFIRM, func.logout);
 		}, false);
 
-	},
-
-	logout(){
-		sessionStorage.clear();
-		movePage(URI_CP_LOGOUT);
-	},
-
-	clusters(data){
-		var html ='';
-		for(
-			var i=0; i<=data.items.length-1; i++){
-			html += `<li><a href="javascript:;" data-name="${data.items[i].clusterId}" data-type="${data.items[i].clusterType}">${data.items[i].clusterName}</a></li>`;
-		};
-
-		document.getElementById("clusterListUl").innerHTML = html;
-
-		/////////////////////
-		if(sessionStorage.getItem('cluster') != null){
-			document.querySelector('.clusterTop').innerText = sessionStorage.getItem('clusterName');
-		} else {
-			document.querySelector('.clusterTop').innerText = data.items[0].clusterName;
-			sessionStorage.setItem('cluster', data.items[0].clusterId);
-			sessionStorage.setItem('clusterName', data.items[0].clusterName);
-			sessionStorage.setItem('clusterType', data.items[0].clusterType);
-		};
-
-		var name = document.querySelector('.clusterUl').querySelectorAll('a');
-		func.setUserAuthority(sessionStorage.getItem('cluster'), data.items);
-
-		//cluster click event
-		for(var i=0 ; i<name.length; i++){
-			name[i].addEventListener('click', (e) => {
-				sessionStorage.setItem('cluster' , e.target.getAttribute('data-name'));
-				sessionStorage.setItem('clusterType' , e.target.getAttribute('data-type'));
-				sessionStorage.setItem('clusterName', e.target.innerText);
-				document.querySelector('.clusterTop').innerText = e.target.innerText;
-				sessionStorage.removeItem('nameSpace');
-				func.setUserAuthority(sessionStorage.getItem('cluster'), data.items);
-				IS_RELOAD = true;
-				func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/users/namespacesList`, 'application/json', func.namespaces);
-			}, false);
-		};
-
-		func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/users/namespacesList`, 'application/json', func.namespaces);
-
-	},
-
-	namespaces(data){
-		func.nameData = data;
-
-		var html = '';
-		if(document.querySelector('.nameSpace')){
-			for(var i=0; i<=data.items.length-1; i++){
-				var namespace = data.items[i].cpNamespace;
-				html += `<li><a href="javascript:;" data-name="${namespace}">${namespace}</a></li>`;
-			};
-
-			document.getElementById("namespaceListUl").innerHTML = html;
-
-			if(sessionStorage.getItem('nameSpace') != null){
-				document.querySelector('.nameTop').innerText = sessionStorage.getItem('nameSpace');
-			} else {
-				document.querySelector('.nameTop').innerText =  data.items[0].cpNamespace;
-				sessionStorage.setItem('nameSpace', data.items[0].cpNamespace);
-				sessionStorage.setItem('roleSetCode', data.items[0].roleSetCode);
-			};
-
-			var name = document.querySelector('.nameSpace').querySelectorAll('a');
-
-			for(var i=0 ; i<name.length; i++){
-				name[i].addEventListener('click', (e) => {
-					sessionStorage.setItem('nameSpace' , e.target.getAttribute('data-name'));
-					document.querySelector('.nameTop').innerText = e.target.innerText;
-					if(IS_NAMELOAD) {
-						func.loadData('GET', null, 'application/json', func.nameLoad);
-					}
-					else {
-						movePage(URI_CP_INDEX_URL);
-					}
-				}, false);
-
-			};
-
-			if(IS_RELOAD) {
-				if(IS_NAMELOAD) {
-					func.loadData('GET', null, 'application/json', func.nameLoad);
-				}
-				else {
-					movePage(URI_CP_INDEX_URL);
-				}
-			}
-			if(IS_INDEX) {
-				func.loadData('GET', null, 'application/json', func.nameLoad);
-			}
-		};
-	},
-
-	apply(title, url, btnName, name){
-		sessionStorage.setItem('vaultDbName' , name);
-		var html = `<div class="modal-wrap" id="modal">
-			<div class="modal midium" style="width: 600px">
-				<h5>${title}</h5>
-					<dl>
-						<dt>Namespace</dt>
-						<dd>
-							<fieldset>
-								<select id="namespaceList" class="namespaceList">
-								</select>
-							</fieldset>
-						</dd>
-					</dl>
-					<dl>			
-						<dt style="line-height: 50px">Application</dt>
-						<dd>
-							<fieldset>
-								<select id="createApp" class="createApp" disabled>
-								</select>
-							</fieldset>
-						</dd>
-					</dl>
-				<a class="confirm" href="javascript:;">${btnName}</a>
-				<a class="close" href="javascript:;">`+ MSG_CLOSE + `</a>
-			</div>
-		</div>`;
-
-		func.appendHtml(document.getElementById('wrap'), html, 'div');
-
-		func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/users/namespacesList`, 'application/json', namespaceDraw);
-
-		function namespaceDraw(data) {
-			for(var i=0; i<=data.items.length-1; i++){
-				var namespace = data.items[i].cpNamespace;
-				var html = `<option value="${namespace}">${namespace}</option>`;
-				func.appendHtml(document.getElementById('namespaceList'), html, 'select');
-			};
-		}
-
-
-		/*if(sessionStorage.getItem('nameSpace') === NAMESPACE_ALL_VALUE) {
-			document.getElementById('createApp').selectedIndex = 0;}
-		else {
-			document.getElementById('createApp').value = sessionStorage.getItem('nameSpace');
-		}*/
-
-		document.getElementById('namespaceList').addEventListener('click', (e) => {
-
-			func.removeHtml(document.querySelector('#createApp'))
-			document.querySelector('#createApp').disabled = false;
-			let namespace = document.getElementById('namespaceList').value;
-			func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${namespace}/deployments/vaultSecret`, 'application/json', applicationDraw);
-
-			function applicationDraw(data) {
-				for(var i=0; i<=data.items.length-1; i++){
-					var application = data.items[i].name;
-					var html = `<option value="${application}">${application}</option>`;
-					func.appendHtml(document.getElementById('createApp'), html, 'select');
-				};
-			}
-
-		}, false);
-
-		document.getElementById('modal').querySelector('.close').addEventListener('click', (e) => {
-			document.getElementById('wrap').removeChild(document.getElementById('modal'));
-		}, false);
-
-
-		document.getElementById('modal').querySelector('.confirm').addEventListener('click', (e) => {
-
-			document.querySelector('.nameTop').innerHTML = sessionStorage.getItem('nameSpace');
-			sessionStorage.setItem('appNamespace' , document.querySelector('#namespaceList > option:checked').value);
-			sessionStorage.setItem('appName' , document.querySelector('#createApp > option:checked').value);
-			document.getElementById('wrap').removeChild(document.getElementById('modal'));
-
-			var sendData = JSON.stringify ({
-				cluster : sessionStorage.getItem('cluster'),
-				namespace : sessionStorage.getItem('appNamespace'),
-				resourceName : sessionStorage.getItem('appName'),
-				dbService : sessionStorage.getItem('vaultDbName')
-			});
-
-			func.saveData('POST', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('appNamespace')}/${url}/application/apply`, sendData, true, 'application/json', func.historyBack);
-		}, false);
 	},
 
 	create(title, url, name){
@@ -423,9 +218,9 @@ const func = {
 							return false;
 						}
 
-						sessionStorage.setItem('user' , JSON.parse(request.responseText).userId);
+					/*	sessionStorage.setItem('user' , JSON.parse(request.responseText).userId);
 						sessionStorage.setItem('userType' , JSON.parse(request.responseText).userType);
-						sessionStorage.setItem('token' , 'Bearer ' + JSON.parse(request.responseText).accessToken);
+						sessionStorage.setItem('token' , 'Bearer ' + JSON.parse(request.responseText).accessToken);*/
 
 
 					} else {
@@ -522,7 +317,29 @@ const func = {
 	// 데이터 로드 - loadData(method, url, callbackFunction)
 	// (전송타입, url, 콜백함수)
 	/////////////////////////////////////////////////////////////////////////////////////
-	loadData(method, url, header, callbackFunction, list){
+	loadData(method, url, header, callbackFunction, list, token) {
+		httpRequest = new XMLHttpRequest();
+
+		httpRequest.open(method, url, bull);
+		httpRequest.setRequestHeader('Content-type', header);
+		httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+		httpRequest.responseType = "json"
+		httpRequest.send(data)
+		//httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
+		//httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
+
+		httpRequest.onreadystatechange = () => {
+			if (httpRequest.readyState === XMLHttpRequest.DONE){
+				if (httpRequest.status === 200) {
+					alert("send 완료")
+				} else (
+					alert("request에 문제가 있습니다.")
+				)
+			}
+		}
+	},
+
+	/*loadData(method, url, header, callbackFunction, list, token){
 		if(sessionStorage.getItem('token') == null){
 			func.loginCheck();
 		};
@@ -573,7 +390,7 @@ const func = {
 			};
 
 			request.send(); },0);
-	},
+	},*/
 
 	/////////////////////////////////////////////////////////////////////////////////////
 	// 상태 데이터 로드 - statusLoadData(method, url, callbackFunction)
@@ -637,13 +454,14 @@ const func = {
 	// 데이터 SAVE - saveData(method, url, data, bull, callFunc)
 	// (전송타입, url, 데이터, 분기, 콜백함수)
 	/////////////////////////////////////////////////////////////////////////////////////
-	saveData(method, url, data, bull, header, callFunc){
+	/*saveData(method, url, data, bull, header, callFunc){
+
 		func.loading();
 
-		if(sessionStorage.getItem('token') == null){
+		/!*if(sessionStorage.getItem('token') == null){
 			func.loginCheck();
 		};
-
+*!/
 
 		var request = new XMLHttpRequest();
 
@@ -684,20 +502,41 @@ const func = {
 
 						}
 					} else {
-						/*
+						/!*
                         if(method == 'DELETE'){
                             /func.alertPopup('DELETE', 'DELETE FAILED', func.winReload);
                         } else {
                             /func.alertPopup('SAVE', 'SAVE FAILED', func.winReload);
                         };
-                        */
+                        *!/
 					};
 				};
 			};
 
 			request.send(data); }, 0);
-	},
+	},*/
 
+	saveData(method, url, data, bull, header){
+		httpRequest = new XMLHttpRequest();
+
+		httpRequest.open(method, url, bull);
+		httpRequest.setRequestHeader('Content-type', header);
+		httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+		httpRequest.responseType = "json"
+		httpRequest.send(data)
+		//httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
+		//httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
+
+		httpRequest.onreadystatechange = () => {
+			if (httpRequest.readyState === XMLHttpRequest.DONE){
+				if (httpRequest.status === 200) {
+					alert("send 완료")
+				} else (
+					alert("request에 문제가 있습니다.")
+				)
+			}
+		}
+	},
 	/////////////////////////////////////////////////////////////////////////////////////
 	// 데이터 SAVE - dryRun(method, url, data, bull, callFunc)
 	// (전송타입, url, 데이터, 분기, 콜백함수)

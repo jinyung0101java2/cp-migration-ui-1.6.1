@@ -35,13 +35,11 @@ public class LoginController {
 
     private final LoginService loginService;
     private final ProviderService providerService;
-    private final SecurityUtils securityUtils;
 
     @Autowired
-    public LoginController(LoginService loginService, ProviderService providerService, SecurityUtils securityUtils) {
+    public LoginController(LoginService loginService, ProviderService providerService) {
         this.loginService = loginService;
         this.providerService = providerService;
-        this.securityUtils = securityUtils;
     }
 
 
@@ -111,16 +109,5 @@ public class LoginController {
 
         return ConstantsUrl.LANG_EN;
     }
-
-
-    /**
-     * User 클러스터 권한 설정 (Setting User Cluster Authority)
-     */
-//    @Operation(summary = "User 클러스터 권한 설정 (Setting User Cluster Authority)")
-//    @PutMapping(value = ConstantsUrl.URI_API_SET_CLUSTER_AUTHORITY)
-//    @ResponseBody
-//    public void setUserClusterAuthority(@RequestBody String userType) {//삭제
-//        securityUtils.updateUserAuthorities(userType);
-//    }
 
 }
