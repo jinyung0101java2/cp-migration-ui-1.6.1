@@ -8,55 +8,17 @@ package org.container.platform.web.ui.common;
  * @since 2021.06.14
  */
 public class ConstantsUrl {
-    public static final String URI_CP_BASE_URL = "/container-platform";
+    public static final String URI_CP_BASE_URL = "/container-platform";//
     public static final String URI_CP_GLOBAL_URL = "/container-platform";
-    public static final String URI_CP_INDEX_URL = "/container-platform/clusters";
-    public static final String URI_CP_CLUSTERS_NAMESPACES = "/container-platform/namespaces";
-    public static final String URI_CP_CLUSTERS_NODES = "/container-platform/nodes";
+    public static final String URI_CP_CONFIGS_CONFIGMAPS = "/container-platform/configMaps";//
 
-    public static final String URI_CP_WORKLOADS_DEPLOYMENTS = "/container-platform/deployments";
-    public static final String URI_CP_WORKLOADS_PODS = "/container-platform/pods";
-    public static final String URI_CP_WORKLOADS_REPLICASETS = "/container-platform/replicaSets";
-
-    public static final String URI_CP_SERVICES_SERVICES = "/container-platform/services";
-    public static final String URI_CP_SERVICES_INGRESSES = "/container-platform/ingresses";
-
-    public static final String URI_CP_STORAGES_STORAGECLASSES = "/container-platform/storageClasses";
-    public static final String URI_CP_STORAGES_PERSISTENTVOLUMES = "/container-platform/persistentVolumes";
-    public static final String URI_CP_STORAGES_PERSISTENTVOLUMECLAIMS = "/container-platform/persistentVolumeClaims";
-
-    public static final String URI_CP_MANAGEMENTS_LIMITRANGES = "/container-platform/limitRanges";
-    public static final String URI_CP_MANAGEMENTS_RESOURCEQUOTAS = "/container-platform/resourceQuotas";
-    public static final String URI_CP_MANAGEMENTS_ROLES = "/container-platform/roles";
-    public static final String URI_CP_MANAGEMENTS_USERS_ADMIN = "/container-platform/admin";
-    public static final String URI_CP_MANAGEMENTS_USERS = "/container-platform/users";
-    public static final String URI_CP_MANAGEMENTS_INACTIVE_USERS = "/container-platform/inactiveUsers";
-    public static final String URI_CP_CONFIGS_CONFIGMAPS = "/container-platform/configMaps";
-    public static final String URI_CP_CONFIGS_SECRETS = "/container-platform/secrets";
-    public static final String URI_CP_CONFIGS_VAULT_SECRETS = "/container-platform/vaultSecrets";
-
-    public static final String URI_CP_CHAOS_EXPERIMENTS = "/container-platform/experiments";
-    public static final String URI_CP_CHAOS_EVENTS = "/container-platform/events";
-    public static final String URI_CP_INFO_ACCESS = "/container-platform/access";
-    public static final String URI_CP_INFO_PRIVATE_REPOSITORY = "/container-platform/private_repository";
-
-    public static final String URI_CP_GLOBAL_CLUSTERS = "/global/clusters";
-    public static final String URI_CP_GLOBAL_CLOUD_ACCOUNTS = "/global/cloudAccounts";
-    public static final String URI_CP_GLOBAL_INSTANCE_CODE_TEMPLATES = "/global/templates";
-    public static final String URI_CP_GLOBAL_SSH_KEYS = "/global/sshKeys";
-
-    public static final String URI_CP_GLOBAL_ = "/global/templates";
-
-
-    public static final String URI_CP_CATALOG_REPOSITORIES = "/catalog/repositories";
-    public static final String URI_CP_CATALOG_RELEASES = "/catalog/releases";
-    public static final String URI_CP_CATALOG_CHARTS = "/charts";
-
-    public static final String URI_CP_CATALOG_INSTALL = "/install";
+    public static final String URI_CP_GLOBAL_CLUSTERS = "/global/clusters";//
+    public static final String URI_CP_GLOBAL_CLOUD_ACCOUNTS = "/global/cloudAccounts";//
+    public static final String URI_CP_GLOBAL_INSTANCE_CODE_TEMPLATES = "/global/templates";//
+    public static final String URI_CP_GLOBAL_SSH_KEYS = "/global/sshKeys";//
 
     public static final String URI_CP_LIST = "/list";
     public static final String URI_CP_DETAILS = "/details";
-    public static final String URI_CP_VAULT_DETAILS = "/vault/details";
     public static final String URI_CP_CREATE = "/create";
     public static final String URI_CP_UPDATE = "/update";
     public static final String URI_CP_POPUP = "/popup";

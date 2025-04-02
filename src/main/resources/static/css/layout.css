@@ -366,16 +366,6 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 .scrollTableList {display: block; max-height: 400px; overflow-y: scroll; width: 1070px; !important;}
 .eventFirstColumn {width: 856px;}
 
-/* chaos chart */
-.chaosChart {display:flex; flex-direction: column; flex-wrap: nowrap; max-height: 1068px; margin-bottom: 30px;}
-.chaosChart h4 {text-align:left; font-size:22px; line-height:30px; font-family:'Apple SD Gothic Neo B', sans-serif; font-weight:500; margin-bottom:6px;}
-.chaosChart h5 {text-align:left; font-size:20px; line-height:25px; font-family:'Apple SD Gothic Neo B', sans-serif; font-weight:500; margin-bottom:4px; margin-top:5px;}
-.chaosChart > ol {flex: 1; display:flex; flex-direction: row; flex-wrap: nowrap; margin-bottom: 20px; max-height: 230px; padding:0 2px; background-color:#ffffff;  box-shadow:2px 5px 5px 1px rgba(0, 0, 0, 0.12);}
-.chaosChart > ol > li {flex: 1; max-width: 100%; height: 230px;}
-.chaosResourceList {display: flex; margin-top: 10px; margin-left: 15px;}
-.chaosResourceListItem {flex:1; display: flex; align-items: center; margin-right: 10px;}
-.chaosResourceListColor {width: 20px; height: 20px; margin-right: 5px;}
-
 /* more btn */
 .more {position:relative; display:block; width:58px; height:30px; line-height:30px; margin:0 auto; color:#47494d; font-size:17px; padding-right:15px; margin-top:20px; opacity:.3; cursor:default;}
 .more:after {content:""; width:6.5px; height:6.5px; border-left:2px solid #6e6f72; border-bottom:2px solid #6e6f72; transform:rotate(-45deg); position:absolute; top:9px; right:7px;}
@@ -403,11 +393,6 @@ aside nav > ul > li.plus.on:before {content:""; background-color:#41454b;}
 /* btn04 */
 .btn04 {margin-top:29px; overflow:hidden; text-align:center;  font-family:'Apple SD Gothic Neo L', sans-serif;}
 .btn04 > button {color:#fff; background-color:#bdbfc4; float:left; width:240px; line-height:55px; height:52px; font-size:16px; border-radius:2px;}
-/*.btn03 div {float:right; overflow:hidden;}
-.btn03 div a {width :120px; float:left; background-color:#0950bf; color:#fff; line-height:55px; height:52px; font-size:16px; font-weight:300; border-radius:2px;}
-.btn03 div button {width :120px; float:left; background-color:#0950bf; color:#fff; line-height:55px; height:52px; font-size:16px; font-weight:300; border-radius:2px; font-family:'Apple SD Gothic Neo L', sans-serif;}
-.btn03 div a:first-child {margin-right:6px;}
-.btn03 div button:first-child {margin-right:6px;}*/
 
 /* btn05 */
 .btn05 {margin-top:29px; overflow:hidden; text-align:center;  font-family:'Apple SD Gothic Neo L', sans-serif;}
