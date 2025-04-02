@@ -72,10 +72,6 @@ logging:
 
 cpApi:
   url: http://localhost:3333
-chaosApi:
-  url: http://localhost:8092
-catalogApi:
-  url: http://localhost:8093
 migrationApi:
   url: https://mig.115.68.198.189.nip.io
 vaultApi:
@@ -92,10 +88,6 @@ logging:
 
 cpApi:
   url: ${CP_PORTAL_API_URI}
-chaosApi:
-  url: ${CP_PORTAL_CHAOS_API_URI}
-catalogApi:
-  url: ${CP_PORTAL_CATALOG_API_URI}
 migrationApi:
   url: ${CP_MIGRATION_API_URI}
 vaultApi:
