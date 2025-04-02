@@ -42,10 +42,6 @@ management:
       exposure:
         include: health
 
-private:
-  repository:
-    url: ${REPOSITORY_URL}
-
 guide:
   url: https://github.com/K-PaaS/container-platform/tree/master/use-guide/portal/
   url-eng: https://github.com/K-PaaS/cp-guide-eng/tree/master/use-guide/portal/
