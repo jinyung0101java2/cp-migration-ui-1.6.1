@@ -42,12 +42,6 @@ management:
       exposure:
         include: health
 
-guide:
-  url: https://github.com/K-PaaS/container-platform/tree/master/use-guide/portal/
-  url-eng: https://github.com/K-PaaS/cp-guide-eng/tree/master/use-guide/portal/
-  url-playpark: https://github.com/K-PaaS/container-platform/blob/playpark/use-guide/portal/container-platform-portal-deploy-guide.md#
-  name: cp-portal-use-guide-{}.md
-
 catalog:
   default:
     repo:
