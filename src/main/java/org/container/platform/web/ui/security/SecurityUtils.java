@@ -45,31 +45,4 @@ public class SecurityUtils {
 
         return oAuthTokens;
     }
-
-//    public void updateUserAuthorities(String updateUserType) {//삭제
-//        SecurityContext context = SecurityContextHolder.getContext();
-//        OAuth2AuthenticationToken currentAuth = (OAuth2AuthenticationToken) context.getAuthentication();
-//        PortalOAuth2User currentUser = (PortalOAuth2User) currentAuth.getPrincipal();
-//        UsersLoginMetaData currentMetaData = currentUser.getUsersLoginMetaData();
-//
-//        OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(currentAuth.getAuthorizedClientRegistrationId(), currentAuth.getName());
-//
-//        authorizedClientService.removeAuthorizedClient(currentAuth.getAuthorizedClientRegistrationId(), currentAuth.getName());
-//
-//        // Update Authorities
-//        List<GrantedAuthority> updatedAuthorities = new ArrayList<>();
-//        updatedAuthorities.add(new SimpleGrantedAuthority(currentMetaData.getUserType()));
-//        updatedAuthorities.add(new SimpleGrantedAuthority(updateUserType));
-//
-//        PortalOAuth2User newUser = new PortalOAuth2User(updatedAuthorities, currentUser.getAttributes(), "sub", currentMetaData);
-//        OAuth2AuthenticationToken newAuth = new OAuth2AuthenticationToken(newUser, updatedAuthorities, currentAuth.getAuthorizedClientRegistrationId());
-//
-//        context.setAuthentication(newAuth);
-//        authorizedClientService.saveAuthorizedClient(authorizedClient, newAuth);
-//
-//        LOGGER.info("OLD AUTHORITIES >> " + CommonUtils.loggerReplace(currentUser.getAuthorities()));
-//        LOGGER.info("NEW AUTHORITIES >> " + CommonUtils.loggerReplace(newUser.getAuthorities()));
-//    }
-
-
 }

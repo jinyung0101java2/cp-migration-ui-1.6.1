@@ -54,18 +54,6 @@ public class PortalOAuth2UserService implements OAuth2UserService {
         LOGGER.info(CommonUtils.loggerReplace("[USERINFO] " + users.userIfo()));
         LOGGER.info("###############################################################");
 
-        try {//삭제
-            ResultStatus status = providerService.registerUsers(users);
-            if (status.getResultCode().equals(Constants.RESULT_STATUS_FAIL)) {
-                if (!Constants.ALREADY_REGISTERED_MESSAGE.contains(status.getResultMessage())) {
-                    throw new Exception(status.getResultMessage());
-                }
-            }
-        } catch (Exception e) {
-            throw new OAuth2AuthenticationException(e.getMessage());
-        }
-
-
         // Login User
         List<SimpleGrantedAuthority> roles = null;
         UsersLoginMetaData usersLoginMetaData = null;
