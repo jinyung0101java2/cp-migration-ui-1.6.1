@@ -6,12 +6,9 @@
 
     <script th:inline="javascript">
 
-    // REQUEST API URI
+    const URI_CP_BASE_URL = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_BASE_URL}]];
     const URI_CP_MIGRATION_API = [[${@environment.getProperty('migrationApi.url')}]] + '/';
     const URI_CP_VAULT_API = [[${@environment.getProperty('vaultApi.url')}]] + '/';
-    const URI_CP_BASE_URL = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_BASE_URL}]];
-
-     var URI_CP_CONFIGS_CONFIGMAPS = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_CONFIGS_CONFIGMAPS}]];
 
      var URI_CP_DETAILS = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_DETAILS}]];
 
@@ -23,8 +20,6 @@
      var URL_API_CHANGE_LOCALE_PARAM = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URL_API_CHANGE_LOCALE_PARAM}]];
      var LANG_KO = [[${T(org.container.platform.web.ui.common.ConstantsUrl).LANG_KO}]];
      var LANG_EN = [[${T(org.container.platform.web.ui.common.ConstantsUrl).LANG_EN}]];
-
-     var URI_API_SET_CLUSTER_AUTHORITY = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_API_SET_CLUSTER_AUTHORITY}]];
 
 
      var RESULT_STATUS_SUCCESS = [[${T(org.container.platform.web.ui.common.Constants).RESULT_STATUS_SUCCESS}]];
@@ -39,7 +34,7 @@
     var URI_CP_ACCOUNTS_CREATE = [[${T(org.container.platform.web.ui.common.ConstantsUrl).URI_CP_ACCOUNTS_CREATE}]];
 
      // VALUE
-     var NAMESPACE_ALL_VALUE ='ALL';
+     //var NAMESPACE_ALL_VALUE ='ALL';
      var MSG_WANT_TO_SIGN_OUT = [[#{M0015}]];
      var MSG_INTEGRATED_SIGN_OUT_TAKES_PLACE = [[#{M0016}]];
      var MSG_CHECK_TO_DELETE =  [[#{M0018}]];
@@ -53,18 +48,9 @@
 
      var CURRENT_LOCALE_LANGUAGE = '';
 
-     var IS_RELOAD = false;
      var IS_NAMELOAD = false;
-     var IS_GLOBAL = false;
-     var IS_INDEX = false;
      var IS_VCHK = false;
      var IS_SEARCH = false;
-
-    // Create Resources
-    const MSG_ALLOW_TRAFFIC_BETWEEN_NAMESPACES_CHK =  [[#{M0936}]];
-    const MSG_ALLOW_TRAFFIC_BETWEEN_NAMESPACES_DETAILS =  [[#{M0937}]];
-
-    const ALLOW_TRAFFIC_RESOURCES = ["deployments", "replicaSets", "pods"];
 
 </script>
 
