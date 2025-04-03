@@ -45,7 +45,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
 
-
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
@@ -76,7 +75,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public SpringSecurityDialect securityDialect() {
         return new SpringSecurityDialect();
     }
-
 
     @Bean
     public ViewResolver viewResolver(MessageSource messageSource) {
@@ -111,9 +109,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(localeChangeInterceptor());
     }
 
-
-    //Locale //////////////////////////
-
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
@@ -127,7 +122,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         return interceptor;
     }
 
-
     @Bean
     public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
@@ -136,7 +130,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         return messageSource;
     }
-
 
 }
 

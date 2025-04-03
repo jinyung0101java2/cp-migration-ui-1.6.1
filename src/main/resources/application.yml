@@ -1,6 +1,6 @@
 spring:
   application:
-    name: cp-portal-ui
+    name: cp-migration-ui
   main:
     allow-bean-definition-overriding: true
     allow-circular-references: true
@@ -41,15 +41,6 @@ management:
     web:
       exposure:
         include: health
-
-catalog:
-  default:
-    repo:
-      url: ${CHART_REPO_URL}
-      name: ${CHART_REPO_NAME}
-      username: ${CHART_REPO_USERNAME}
-      password: ${CHART_REPO_PASSWORD}
-      cert: ${CHART_REPO_CRT} # base64 encoded certificate
 
 logging:
   config: classpath:logback-spring.xml

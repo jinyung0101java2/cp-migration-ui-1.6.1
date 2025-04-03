@@ -24,7 +24,7 @@ public class IntroController {
     }
 
     /**
-     * index 페이지 이동(Move Intro overview page)
+     * index 페이지 이동(Move Intro page)
      *
      * @return the view
      */
