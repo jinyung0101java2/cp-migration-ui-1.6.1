@@ -8,7 +8,7 @@ package org.container.platform.web.ui.common;
  * @since 2020.09.25
  */
 public class CommonUtils {
-s
+
     /**
      * LOGGER 개행문자 제거 (Object)
      *
