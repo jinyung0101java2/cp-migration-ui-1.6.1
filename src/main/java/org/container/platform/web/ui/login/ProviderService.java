@@ -25,13 +25,10 @@ import static org.container.platform.web.ui.common.Constants.URI_API_USERS_DETAI
 public class ProviderService {
 
     private final RestTemplateService restTemplateService;
-    private final PropertyService propertyService;
-
 
     @Autowired
-    public ProviderService(RestTemplateService restTemplateService, PropertyService propertyService) {
+    public ProviderService(RestTemplateService restTemplateService) {
         this.restTemplateService = restTemplateService;
-        this.propertyService = propertyService;
     }
 
 
@@ -41,56 +38,8 @@ public class ProviderService {
      * @param users the users
      * @return the resultStatus
      */
-    public AuthenticationResponse loginUsers(Users users) {//삭제
+    public AuthenticationResponse loginUsers(Users users) {
         return restTemplateService.send(TARGET_CP_API, ConstantsUrl.URL_API_LOGIN, HttpMethod.POST, users, AuthenticationResponse.class);
     }
-
-
-    /**
-     * 클러스터 관리자 등록(Post cluster admin sign up)
-     *
-     * @param users the users
-     * @return the resultStatus
-     */
-    public ResultStatus registerUsers(Users users) {//삭제
-        return restTemplateService.send(TARGET_CP_API, ConstantsUrl.URL_API_SIGNUP,
-                HttpMethod.POST, users, ResultStatus.class);
-    }
-
-
-
-    /**
-     * Namespace, User id를 통한 사용자 단건 조회(Get Users id namespaces detail)
-     *
-     * @param cluster   the cluster
-     * @param namespace the namespace
-     * @param userId    the userId
-     * @return the user detail
-     */
-    public Users getUsers(String cluster, String namespace, String userId) {
-        Users users = restTemplateService.send(TARGET_CP_API, URI_API_USERS_DETAIL
-                .replace("{cluster:.+}", cluster)
-                .replace("{namespace:.+}", namespace)
-                .replace("{userId:.+}", userId), HttpMethod.GET, null, Users.class);
-
-        users.setClusterToken(Constants.EMPTY_VALUE);
-        users.setSaToken(Constants.EMPTY_VALUE);
-        users.setPassword(Constants.EMPTY_VALUE);
-
-
-        return users;
-    }
-
-
-
-    /**
-     * 사용자 Refresh Token 조회 (Get Refresh Token)
-     *
-     * @return the user detail
-     */
-    public void getRefreshToken() {
-        restTemplateService.refreshToken(Constants.TARGET_CP_API, HttpMethod.GET, null, ResultStatus.class);
-    }
-
 
 }
