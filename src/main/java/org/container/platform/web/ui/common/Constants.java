@@ -17,13 +17,9 @@ public class Constants {
     public static final String AUTH_INACTIVE_USER = "INACTIVE_USER";
 
     public static final String LOGIN_TOKEN_EXPIRED = "TOKEN_EXPIRED";
-    public static final String LOGIN_FAIL_MESSAGE = "LOGIN_FAILED";
     public static final String LOGIN_INACTIVE_USER_MESSAGE = "INACTIVE_USER";
     public static final String CHECK_Y = "Y";
     public static final String CHECK_N = "N";
-
-    public static final String CHECK_TRUE = "true";
-    public static final String CHECK_FALSE = "false";
 
     private Constants() {
         throw new IllegalStateException();

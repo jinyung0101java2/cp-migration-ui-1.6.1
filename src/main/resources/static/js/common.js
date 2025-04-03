@@ -407,7 +407,7 @@ const func = {
 
 		httpRequest.open(method, url, bull);
 		httpRequest.setRequestHeader('Content-type', header);
-		httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+		httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('accessToken'));
 		httpRequest.responseType = "json"
 		httpRequest.send(data)
 		//httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
