@@ -8,8 +8,6 @@ package org.container.platform.web.ui.common;
  * @since 2021.06.14
  */
 public class ConstantsUrl {
-    public static final String URI_CP_BASE_URL = "/container-platform";//
-    public static final String URI_CP_GLOBAL_URL = "/container-platform";
     public static final String URI_CP_CONFIGS_CONFIGMAPS = "/container-platform/configMaps";//
 
     public static final String URI_CP_GLOBAL_CLUSTERS = "/global/clusters";//
@@ -49,6 +47,7 @@ public class ConstantsUrl {
     public static final String LANG_KO_START_WITH = "ko_";
     public static final String LANG_EN = "en";
 
+    public static final String  URI_CP_BASE_URL = "/";
     public static final String  URI_CP_MIGRATIONS_LIST = "/migrations";
     public static final String  URI_CP_MIGRATIONS_DETAIL = "/migrations/detail";
     public static final String  URI_CP_MIGRATIONS_CREATE = "/migrations/create";

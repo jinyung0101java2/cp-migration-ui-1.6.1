@@ -238,7 +238,6 @@ public class RestTemplateService {
       return accessToken;
     }
 
-///// Refresh Token
 
     /**
      * sendRefreshToken t

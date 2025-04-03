@@ -1,10 +1,7 @@
 package org.container.platform.web.ui.login;
 
-import org.container.platform.web.ui.common.Constants;
 import org.container.platform.web.ui.common.ConstantsUrl;
-import org.container.platform.web.ui.common.PropertyService;
 import org.container.platform.web.ui.common.RestTemplateService;
-import org.container.platform.web.ui.common.model.ResultStatus;
 import org.container.platform.web.ui.login.model.AuthenticationResponse;
 import org.container.platform.web.ui.login.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +9,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import static org.container.platform.web.ui.common.Constants.TARGET_CP_API;
-import static org.container.platform.web.ui.common.Constants.URI_API_USERS_DETAIL;
 
 /**
  * User Service 클래스
