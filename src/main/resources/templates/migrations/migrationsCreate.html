@@ -73,55 +73,92 @@
     <script type="text/javascript" th:inline="javascript">
         window.onload = () => {
             const migrationsCreate = {
+
                 init() {
-                    func.init()
+                    sessionStorage.setItem('accessToken' , 'Bearer ' + [[${accessToken}]]);
+                    sessionStorage.setItem('userGuid' , [[${userGuid}]]);
 
                     //vault에서 migration list 불러오기
-                    func.loadData('GET', `${func.vaultUrl}accounts/provider/info`, 'application/json', migrationsCreate.draw);
+                    //func.loadData('GET', `${func.vaultUrl}accounts/provider/info`, 'application/json', migrationsCreate.draw);
+                    migrationsCreate.draw()
                 },
 
                 draw(data) {  //vault에서 migration list 불러와서 source, destination 뿌려주기
-                    info = new Map(Object.entries(data.items));
-                    let html = ``;
+                    const data2 = ['minio1', 'minio2', 'kt', 'nhn', 'naver'];
+
+                    //info = new Map(Object.entries(data2.items));
+
                     let sourceMigrationHtml = ``;
                     let destinationMigrationHtml = ``;
 
-                    for (let key of info.keys()) {
+                    /*  for (let key of data2) {
+                          sourceMigrationHtml += `<option value="${key}">${key}</option>`;
+                      }
+
+                      for (let key of info.keys()) {
+                          destinationMigrationHtml += `<option value="${key}">${key}</option>`;
+                      }*/
+
+                    for (let key of data2) {
                         sourceMigrationHtml += `<option value="${key}">${key}</option>`;
                     }
 
-                    for (let key of info.keys()) {
+                    /*for (i = 0; i < data2.length; i++) {
+                        sourceMigrationHtml += `<option value="${data2[i]}">${data2[i]}</option>`;
+                    }*/
+
+                    for (let key of data2) {
                         destinationMigrationHtml += `<option value="${key}">${key}</option>`;
                     }
 
-                    func.appendHtml(document.getElementById('createProvider'), createProviderHtml);
-                    func.appendHtml(document.getElementById('destinationName'), registerProviderHtml);
+                    /* for (i = 0; i < data2.length; i++) {
+                         destinationMigrationHtml += `<option value="${data2[i]}">${data2[i]}</option>`;
+                     }*/
+
+                    func.appendHtml(document.getElementById('sourceMigration'), sourceMigrationHtml);
+                    func.appendHtml(document.getElementById('destinationMigration'), destinationMigrationHtml);
                 },
 
                 event() {
 
-                    let sourceMigration = document.querySelector('#createTemplates > option:checked');
-                    let sourceEndpoint = ``;
-                    let sourceAccessKeyId = ``;
-                    let sourceSecretAccessKey = ``;
-                    let sourceBucket = ``;
-
-                    func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                        document.getElementById('createTemplatesDetail').value = e.hclScript;
-                    })
-
-                    let detinationMigration = document.querySelector('#createTemplates > option:checked');
-                    let detinationEndpoint = ``;
-                    let detinationAccessKeyId = ``;
-                    let detinationSecretAccessKey = ``;
-                    let detinationBucket = ``;
-
-                    let destinationMigration = document.querySelector('#createTemplates > option:checked');
-                    func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                        document.getElementById('createTemplatesDetail').value = e.hclScript;
-                    })
-
                     document.getElementById('sync').addEventListener('click', (e) => {
+
+                        let sourceMigration = document.querySelector('#sourceMigration > option:checked').innerHTML;
+                        let sourceEndpoint = ``;
+                        let sourceAccessKeyId = ``;
+                        let sourceSecretAccessKey = ``;
+                        let sourceBucket = document.querySelector('#sourceBucket > option:checked').innerHTML;
+
+                        alert(sourceMigration)
+                        alert(sourceBucket)
+                        //vault에서 src account 정보 상세 조회 하기
+                        /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
+                            document.getElementById('createTemplatesDetail').value = e.hclScript;
+                        })*/
+
+                        //const source = map[storage_type:s3 endpoint:http://115.68.198.175:9000 access_key_id:admin secret_access_key:tpsxj0812]
+
+                        sourceEndpoint = `http://115.68.198.175:9000`;
+                        sourceAccessKeyId = `admin`;
+                        sourceSecretAccessKey = `tpsxj0812`;
+
+
+                        let detinationMigration = document.querySelector('#destinationMigration > option:checked').innerHTML;
+                        let detinationEndpoint = ``;
+                        let detinationAccessKeyId = ``;
+                        let detinationSecretAccessKey = ``;
+                        let detinationBucket = document.querySelector('#destinationBucket > option:checked').innerHTML;
+
+                        //vault에서 dest account 정보 상세 조회 하기
+                        /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
+                            document.getElementById('createTemplatesDetail').value = e.hclScript;
+                        })*/
+
+                        //map[storage_type:s3 endpoint:http://115.68.198.65:9000 access_key_id:admin secret_access_key:tpsxj0812]
+
+                        detinationEndpoint = `http://115.68.198.65:9000`;
+                        detinationAccessKeyId = `admin`;
+                        detinationSecretAccessKey = `tpsxj0812`;
 
                         let migrationsCreate =  {
                             "src": {
@@ -138,31 +175,50 @@
                             }
                         }
 
+                        alert(JSON.stringify(migrationsCreate))
+
                         func.saveData('POST', `${func.migrationUrl}v1/migration/sync/sync`, JSON.stringify(migrationsCreate), true, 'application/json');
+
 
                     }, false);
 
                     document.getElementById('copy').addEventListener('click', (e) => {
-                        let sourceMigration = document.querySelector('#createTemplates > option:checked');
+
+                        let sourceMigration = document.querySelector('#sourceMigration > option:checked').innerHtml;
                         let sourceEndpoint = ``;
                         let sourceAccessKeyId = ``;
                         let sourceSecretAccessKey = ``;
-                        let sourceBucket = ``;
+                        let sourceBucket = document.querySelector('#sourceBucket > option:checked').innerHtml;
 
-                        func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
+                        //vault에서 src account 정보 상세 조회 하기
+                        /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
                             document.getElementById('createTemplatesDetail').value = e.hclScript;
-                        })
+                        })*/
 
-                        let detinationMigration = document.querySelector('#createTemplates > option:checked');
+                        //const source = map[storage_type:s3 endpoint:http://115.68.198.175:9000 access_key_id:admin secret_access_key:tpsxj0812]
+
+                        sourceEndpoint = `http://115.68.198.175:9000`;
+                        sourceAccessKeyId = `admin`;
+                        sourceSecretAccessKey = `tpsxj0812`;
+
+
+                        let detinationMigration = document.querySelector('#destinationMigration > option:checked').innerHtml;
                         let detinationEndpoint = ``;
                         let detinationAccessKeyId = ``;
                         let detinationSecretAccessKey = ``;
-                        let detinationBucket = ``;
+                        let detinationBucket = document.querySelector('#destinationBucket > option:checked').innerHtml;
+                        alert(detinationMigration)
 
-                        let destinationMigration = document.querySelector('#createTemplates > option:checked');
-                        func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
+                        //vault에서 dest account 정보 상세 조회 하기
+                        /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
                             document.getElementById('createTemplatesDetail').value = e.hclScript;
-                        })
+                        })*/
+
+                        //map[storage_type:s3 endpoint:http://115.68.198.65:9000 access_key_id:admin secret_access_key:tpsxj0812]
+
+                        detinationEndpoint = `http://115.68.198.65:9000`;
+                        detinationAccessKeyId = `admin`;
+                        detinationSecretAccessKey = `tpsxj0812`;
 
                         let migrationsCreate =  {
                             "src": {
@@ -180,7 +236,6 @@
                         }
 
                         func.saveData('POST', `${func.migrationUrl}v1/migration/sync/copy`, JSON.stringify(migrationsCreate), true, 'application/json');
-
                     }, false);
                 },
             };
@@ -190,16 +245,38 @@
 
         function changeSourceMigrationSelect() {
             //Source Bucket 목록 불러와서 뿌려주기
-            func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
+            /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
                 document.getElementById('createTemplatesDetail').value = e.hclScript;
-            })
+            })*/
+            func.removeHtml(document.querySelector('#sourceBucket'));
+
+            const bucket1 = ['bucket1', 'bucket1', 'bucket3', 'bucket3', 'bucket5'];
+            let sourceBucketHtml = ``;
+
+            for (let key of bucket1) {
+                sourceBucketHtml += `<option value="${key}">${key}</option>`;
+            }
+
+            func.appendHtml(document.getElementById('sourceBucket'), sourceBucketHtml);
+
 
         }
         function changeDestinationMigrationSelect() {
             //Destination Bucket 목록 불러와서 뿌려주기
-            func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
+            /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
                 document.getElementById('createTemplatesDetail').value = e.hclScript;
-            })
+            })*/
+
+            func.removeHtml(document.querySelector('#destinationBucket'));
+
+            const bucket2 = ['bucket1', 'bucket1', 'bucket3', 'bucket3', 'bucket5'];
+            let destinationBucketHtml = ``;
+
+            for (let key of bucket2) {
+                destinationBucketHtml += `<option value="${key}">${key}</option>`;
+            }
+
+            func.appendHtml(document.getElementById('destinationBucket'), destinationBucketHtml);
 
         }
     </script>

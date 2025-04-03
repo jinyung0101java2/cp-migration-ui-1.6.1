@@ -75,7 +75,8 @@
             const migrationsCreate = {
 
                 init() {
-                    sessionStorage.setItem('accessToken' , 'Bearer ' + [[${accessToken}]])
+                    sessionStorage.setItem('accessToken' , 'Bearer ' + [[${accessToken}]]);
+                    sessionStorage.setItem('userGuid' , [[${userGuid}]]);
 
                     //vault에서 migration list 불러오기
                     //func.loadData('GET', `${func.vaultUrl}accounts/provider/info`, 'application/json', migrationsCreate.draw);

@@ -12,9 +12,9 @@
                 <h3 th:text="|Accounts #{M0024}|"></h3>
                 <div>
                     <dl>
-                        <dt><label for="name">Name</label></dt>
+                        <dt><label for="accountsName">Name</label></dt>
                         <dd>
-                            <input id="name" type="text"/>
+                            <input id="accountsName" type="text"/>
                         </dd>
                     </dl>
                     <dl>
@@ -63,8 +63,6 @@
 
 <th:block layout:fragment="script">
     <script type="text/javascript">
-        let info;
-        let providerInfo = "";
 
         window.onload = () => {
 
@@ -72,11 +70,11 @@
                 init() {
 
                     // provider 정보 조회
-                    func.loadData('GET', `${func.url}accounts/provider/info`, 'application/json', accountsCreate.draw);
+                    //func.loadData('GET', `${func.url}accounts/provider/info`, 'application/json', accountsCreate.draw);
 
                 },
 
-                draw(data) {
+               /* draw(data) {
                     info = new Map(Object.entries(data.items));
                     let html = ``;
 
@@ -88,20 +86,41 @@
                     document.getElementById('provider').selectedIndex = "0";
 
                     accountsCreate.event();
-                },
+                },*/
 
                 event() {
                     document.getElementById('save').addEventListener('click', () => {
                         func.alertPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, accountsCreate.save);
+                       /* let accountsName = document.getElementById('accountsName').value;
+                        let storageType = document.getElementById('storageType').value;
+                        let endpoint = document.getElementById('endpoint').value;
+                        let accessKeyId = document.getElementById('accessKeyId').value;
+                        let secretAccessKey = document.getElementById('secretAccessKey').value;
+
+                        let accountsCreate = {
+                            "configName": accountsName,
+                            "storageType": storageType,
+                            "endpoint": endpoint,
+                            "accessKeyId": accessKeyId,
+                            "secretAccessKey": secretAccessKey
+                        }
+
+                        alert(JSON.stringify(accountsCreate))*/
+
+
                     }, false);
-                    changeProviderSelect();
+                    //changeProviderSelect();
                 },
 
                 save() {
-                    let createName;
-                    let providerType = document.getElementById('provider').value;
+                    let accountsName = document.getElementById('accountsName').value;
+                    let storageType = document.getElementById('storageType').value;
+                    let endpoint = document.getElementById('endpoint').value;
+                    let accessKeyId = document.getElementById('accessKeyId').value;
+                    let secretAccessKey = document.getElementById('secretAccessKey').value;
 
-                    switch(providerType) {
+
+                    /*switch(providerType) {
                         case 'AWS':
                             createName = {
                                 "resourceName": document.getElementById('name').value,
@@ -166,9 +185,22 @@
                         //FIXME! error 처리.
 
 
+
+
+                    }*/
+
+                    let accountsCreate = {
+                        "configName": accountsName,
+                        "storageType": storageType,
+                        "endpoint": endpoint,
+                        "accessKeyId": accessKeyId,
+                        "secretAccessKey": secretAccessKey
                     }
+
+                    alert(JSON.stringify(accountsCreate))
+
                     //check FILE
-                    func.saveData('POST', `${func.url}accounts`, JSON.stringify(createName), true, 'application/json', accountsCreate.saveComp);
+                    func.saveData('POST', `${func.url}accounts`, JSON.stringify(accountsCreate), true, 'application/json', accountsCreate.saveComp);
 
                 },
 
@@ -177,6 +209,7 @@
                 }
             };
             accountsCreate.init();
+            accountsCreate.event();
         };
         function changeProviderSelect() {
             func.removeHtml(document.getElementById('providerInfo'));
