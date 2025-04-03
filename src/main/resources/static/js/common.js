@@ -4,6 +4,9 @@ const func = {
 	vaultUrl: URI_CP_VAULT_API,
 	ui : 'http://localhost:8090/',
 
+	init() {
+
+	},
 
 	event(){
 		// navigation
@@ -339,58 +342,6 @@ const func = {
 		}
 	},
 
-	/*loadData(method, url, header, callbackFunction, list, token){
-		if(sessionStorage.getItem('token') == null){
-			func.loginCheck();
-		};
-
-		if(url == null) {
-			callbackFunction();
-			return false;
-		}
-
-		var request = new XMLHttpRequest();
-
-		setTimeout(function() {
-			request.open(method, url, false);
-			request.setRequestHeader('Content-type', header);
-			request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
-			request.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
-			request.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
-
-			request.onreadystatechange = () => {
-				if (request.readyState === XMLHttpRequest.DONE){
-					if(request.status === 200 && request.responseText != ''){
-						var resultMessage = JSON.parse(request.responseText).resultMessage;
-						var resultCode =  JSON.parse(request.responseText).resultCode;
-						var detailMessage = JSON.parse(request.responseText).detailMessage;
-						//토큰 만료 검사
-						if( resultMessage == 'TOKEN_EXPIRED') {
-							func.refreshToken();
-							return func.loadData(method, url, header, callbackFunction, list);
-						}
-						else if(resultMessage == 'TOKEN_FAILED') {
-							func.loginCheck();
-							return func.loadData(method, url, header, callbackFunction, list);
-						}
-						else if(resultCode != RESULT_STATUS_SUCCESS) {
-							if(document.getElementById('loading')){
-								document.getElementById('wrap').removeChild(document.getElementById('loading'));
-							};
-							func.alertPopup('ERROR', detailMessage, true, MSG_CONFIRM, 'closed');
-						}
-						else {
-							callbackFunction(JSON.parse(request.responseText), list);
-						}
-					} else if(JSON.parse(request.responseText).httpStatusCode === 500){
-						sessionStorage.clear();
-						func.loginCheck();
-					};
-				};
-			};
-
-			request.send(); },0);
-	},*/
 
 	/////////////////////////////////////////////////////////////////////////////////////
 	// 상태 데이터 로드 - statusLoadData(method, url, callbackFunction)
@@ -450,71 +401,6 @@ const func = {
 
 	},
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	// 데이터 SAVE - saveData(method, url, data, bull, callFunc)
-	// (전송타입, url, 데이터, 분기, 콜백함수)
-	/////////////////////////////////////////////////////////////////////////////////////
-	/*saveData(method, url, data, bull, header, callFunc){
-
-		func.loading();
-
-		/!*if(sessionStorage.getItem('token') == null){
-			func.loginCheck();
-		};
-*!/
-
-		var request = new XMLHttpRequest();
-
-		setTimeout(function() {
-			request.open(method, url, false);
-			request.setRequestHeader('Content-type', header);
-			request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
-			request.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
-			request.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
-
-			request.onreadystatechange = () => {
-				if (request.readyState === XMLHttpRequest.DONE){
-					if(request.status === 200 && request.responseText != ''){
-
-						//토큰 만료 검사
-						if(JSON.parse(request.responseText).resultMessage == 'TOKEN_EXPIRED') {
-							func.refreshToken();
-							return func.saveData(method, url, data, bull, header, callFunc);
-						}
-						else if(JSON.parse(request.responseText).resultMessage == 'TOKEN_FAILED') {
-							func.loginCheck();
-							return func.loadData(method, url, header, callbackFunction, list);
-						}
-						else {
-							document.getElementById('wrap').removeChild(document.getElementById('loading'));
-							var response = JSON.parse(request.responseText);
-							if (response.httpStatusCode == 200) {
-								if(response.resultCode == RESULT_STATUS_SUCCESS) {
-									func.alertPopup('SUCCESS', response.detailMessage, true, MSG_CONFIRM, callFunc);
-								}
-								else {
-									func.alertPopup('ERROR', response.detailMessage, true, MSG_CONFIRM, 'closed');
-								}
-							}
-							else {
-								func.alertPopup('ERROR', response.detailMessage, true, MSG_CONFIRM, 'closed');
-							}
-
-						}
-					} else {
-						/!*
-                        if(method == 'DELETE'){
-                            /func.alertPopup('DELETE', 'DELETE FAILED', func.winReload);
-                        } else {
-                            /func.alertPopup('SAVE', 'SAVE FAILED', func.winReload);
-                        };
-                        *!/
-					};
-				};
-			};
-
-			request.send(data); }, 0);
-	},*/
 
 	saveData(method, url, data, bull, header){
 		httpRequest = new XMLHttpRequest();
@@ -632,36 +518,6 @@ const func = {
 		};
 	},
 
-	vaultDelAlertPopup(title, text, text2, bull, name, callback){
-		var html = `<div class='modal-wrap' id='alertModal'><div class='modal'><h5>${title}</h5><p>${text}</p><p>${text2}</p>`;
-		if(bull){
-			html += `<a class='confirm' href='javascript:;'>${name}</a>`;
-		};
-		html += `<a class='close' href='javascript:;'>` + MSG_CLOSE + `</a></div></div>`;
-
-		if(document.getElementById('alertModal') !== null) {
-			document.getElementById('wrap').removeChild(document.getElementById('alertModal'));
-		}
-
-		func.appendHtml(document.getElementById('wrap'), html, 'div');
-
-		document.getElementById('alertModal').querySelector('.close').addEventListener('click', (e) => {
-			document.getElementById('wrap').removeChild(document.getElementById('alertModal'));
-		}, false);
-
-		if(callback){
-			document.getElementById('alertModal').querySelector('.confirm').addEventListener('click', (e) => {
-				if(callback != 'closed'){
-					callback();
-				};
-
-				if(!IS_VCHK) {
-					document.getElementById('wrap').removeChild(document.getElementById('alertModal'));
-				}
-			}, false);
-		};
-	},
-
 	moveToMain() {
 		location.href = URI_CP_BASE_URL;
 	},
@@ -712,49 +568,4 @@ const func = {
 		};
 	},
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	// Count UP - 숫카 카운트업
-	// (적용 타겟, 적용 숫자)
-	/////////////////////////////////////////////////////////////////////////////////////
-	countUp(target, num) {
-		var cnt = -1;
-		var dif = 0;
-
-		var thisID = setInterval(function(){
-			if(cnt < num){
-				dif = num - cnt;
-
-				if(dif > 0) {
-					cnt += Math.ceil(dif / 5);
-				};
-
-				target.innerHTML = cnt;
-			} else {
-				clearInterval(thisID);
-			};
-		}, 20);
-	},
-
-	/////////////////////////////////////////////////////////////////////////////////////
-	// 도넛 차트
-	// (적용 타겟, 적용 데이터)
-	/////////////////////////////////////////////////////////////////////////////////////
-	donutChart(target, data){
-		var chart = c3.generate({
-			bindto: target,
-			data: {
-				columns: data,
-				type : 'donut'
-			},
-			donut: {
-				width: 47
-			},
-			legend: {
-				show: false
-			},
-			color: {
-				pattern: ['#0ca583', '#ffc53e', '#f34111', '#844adb', '#d9d9d9']
-			},
-		});
-	},
 }

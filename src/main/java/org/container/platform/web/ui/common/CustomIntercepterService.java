@@ -73,27 +73,6 @@ public class CustomIntercepterService {
         return bFlag;
     }
 
-    /**
-     * user logout.
-     */
-    public void logout() {
-        try {
-            OAuthTokens oAuthTokens = securityUtils.getTokens();
-            if (oAuthTokens != null) {
-                MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
-                parameters.add("client_id", propertyService.getKeycloakClientId());
-                parameters.add("client_secret", propertyService.getKeycloakClientSecret());
-                parameters.add("token", oAuthTokens.getAccessToken());
-                parameters.add("refresh_token", oAuthTokens.getRefreshToken());
-                send(propertyService.getKeycloakLogoutUri(), HttpMethod.POST, parameters);
-                LOGGER.info(String.format("[USER LOGOUT] username:%s, userId:%s", oAuthTokens.getUsername(), oAuthTokens.getUserId()));
-            }
-        } catch (Exception e) {
-            LOGGER.info("keycloak logout send :: Response Type: {}", CommonUtils.loggerReplace(e.getMessage()));
-        }
-    }
-
-
     private Map send(String reqUrl, HttpMethod httpMethod, Object bodyObject) throws KeyManagementException, KeyStoreException, NoSuchAlgorithmException {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders reqHeaders = new HttpHeaders();

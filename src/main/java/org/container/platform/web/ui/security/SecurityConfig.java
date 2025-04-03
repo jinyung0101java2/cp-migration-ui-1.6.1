@@ -3,7 +3,6 @@ package org.container.platform.web.ui.security;
 import org.container.platform.web.ui.common.ConstantsUrl;
 import org.container.platform.web.ui.common.PropertyService;
 import org.container.platform.web.ui.security.handler.PortalOauth2FailureHandler;
-import org.container.platform.web.ui.security.handler.PortalOauth2LogoutHandler;
 import org.container.platform.web.ui.security.handler.PortalOauth2SecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,13 +24,7 @@ public class SecurityConfig {
     private CorsConfigurationSource corsConfigurationSource;
 
     @Autowired
-    private PortalOAuth2UserService portalOAuth2UserService;
-
-    @Autowired
     private PortalOauth2FailureHandler portalOauth2FailureHandler;
-
-    @Autowired
-    private PortalOauth2LogoutHandler portalOauth2LogoutHandler;
 
     @Autowired
     private PortalOauth2SecurityFilter portalOauth2SecurityFilter;
@@ -43,19 +36,19 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> {
             web.ignoring()
-                    .requestMatchers(
-                            "/dist/**",
-                            "/plugins/**",
-                            "/css/**",
-                            "/js/**",
-                            "/font/**",
-                            "/img/**",
-                            "/error/**",
-                            "/common/error/**",
-                            ConstantsUrl.URI_CP_SESSION_OUT,
-                            ConstantsUrl.URl_CP_INACTIVE,
-                            "/actuator/**"
-                    );
+                .requestMatchers(
+                        "/dist/**",
+                        "/plugins/**",
+                        "/css/**",
+                        "/js/**",
+                        "/font/**",
+                        "/img/**",
+                        "/error/**",
+                        "/common/error/**",
+                        ConstantsUrl.URI_CP_SESSION_OUT,
+                        ConstantsUrl.URl_CP_INACTIVE,
+                        "/actuator/**"
+                );
         };
     }
 
@@ -69,16 +62,8 @@ public class SecurityConfig {
                 .addFilterBefore(portalOauth2SecurityFilter, UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage(propertyService.getKeycloakOauth2LoginPath())
-                  //      .userInfoEndpoint(userInfo -> userInfo.userService(portalOAuth2UserService))
                         .defaultSuccessUrl("/", true)
-                        .failureHandler(portalOauth2FailureHandler))
-                .logout(logout -> logout
-                        .logoutUrl(ConstantsUrl.URI_CP_LOGOUT)
-                        .addLogoutHandler(portalOauth2LogoutHandler)
-                        .invalidateHttpSession(true)
-                        .clearAuthentication(true)
-                        .deleteCookies("JSESSIONID", propertyService.getCpSessionCookieName())
-                        .logoutSuccessUrl("/"));
+                        .failureHandler(portalOauth2FailureHandler));
         return http.build();
     }
 }

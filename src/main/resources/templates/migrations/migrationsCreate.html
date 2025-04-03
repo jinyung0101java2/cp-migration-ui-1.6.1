@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout}">
-
 <div layout:fragment="content">
     <div id="content" class="sub-page clusters">
         <article class="location">
@@ -58,7 +57,7 @@
                 </div>
             </div>
             <!-- btn -->
-            <div class="btn02">
+            <div class="btn02" style="margin-top: 0">
                 <div>
                     <button type="submit" id="sync" th:text="#{M0938}"></button>
                 </div>
@@ -66,18 +65,16 @@
                     <button type="submit" id="copy" th:text="#{M0939}"></button>
                 </div>
             </div>
-            <input id="accessToken" type="hidden" th:value="${accessToken}"/>
         </article>
     </div>
 </div>
 
 <th:block layout:fragment="script">
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
         window.onload = () => {
-
             const migrationsCreate = {
                 init() {
-                    sessionStorage.setItem('accessToken' , 'Bearer ' + document.getElementById('token').innerHTML)
+                    func.init()
 
                     //vault에서 migration list 불러오기
                     func.loadData('GET', `${func.vaultUrl}accounts/provider/info`, 'application/json', migrationsCreate.draw);

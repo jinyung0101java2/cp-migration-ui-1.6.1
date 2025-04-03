@@ -84,7 +84,7 @@ header > div {position:relative; width:1600px; min-width:1600px; height:110px; m
 header > div h1 {float:left; width:310px; padding-top:8px; padding-left:44px;}
 header > div h1 a {display:block;}
 /*menu*/
-header > div > div {float:left; width:1150px; height:68px; margin:0 70px; border-bottom:1px solid rgba(255, 255, 255, 0.281); display: flex;}
+header > div > div {float:left; width:1150px; height:68px; margin:0 230px; border-bottom:1px solid rgba(255, 255, 255, 0.281); display: flex;}
 /*title*/
 header > div > div h3 {width: 250px; position:relative; padding-bottom:34px; padding-top:3px; color:#ffffff; font-size:27px; line-height:30px; margin-right: 40px;}
 header > div > div h3 > a {color:#ffffff; font-size:27px; display:block; line-height:30px; padding-right:30px; background:url("../img/arrowtop_icon.png") no-repeat 0 0; background-position:right 50%; transition:.3s; white-space: nowrap;  text-overflow: ellipsis; overflow: hidden;}
@@ -113,7 +113,7 @@ header > div > div > div > div > a {text-indent:-9999px; display:inline-block; w
 /*------------------------ // Header -------------------------*/
 
 /*------------------------ Main Container -------------------------*/
-#container {position:relative; overflow:hidden; display:flex; width:1600px; min-height:100%; margin:0 auto;}
+#container {position:relative; overflow:hidden; display:flex; width:1290px; min-height:100%; margin:0 auto;}
 
 
 /*------------------------ my info -------------------------*/

@@ -5,8 +5,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.container.platform.web.ui.common.ConstantsUrl;
-import org.container.platform.web.ui.login.model.UsersLoginMetaData;
-import org.container.platform.web.ui.security.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,58 +16,20 @@ import java.util.Locale;
 
 
 /**
- * Login Controller 클래스
+ * Locale Controller 클래스
  *
  * @author kjhoon
  * @version 1.0
  * @since 2021.06.15
  **/
-@Tag(name = "LoginController v1")
+@Tag(name = "LocaleController v1")
 @RestController
-public class LoginController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
+public class LocaleController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(LocaleController.class);
 
 
     @Autowired
     LocaleResolver localeResolver;
-
-    private final LoginService loginService;
-    private final ProviderService providerService;
-
-    @Autowired
-    public LoginController(LoginService loginService, ProviderService providerService) {
-        this.loginService = loginService;
-        this.providerService = providerService;
-    }
-
-
-    /**
-     * User LoginData 정보 조회
-     *
-     * @return the resultStatus
-     */
-    @Operation(summary = "User LoginData 정보 조회 (get User LoginData Info)")
-    @GetMapping(value = ConstantsUrl.URI_CP_GET_USER_LOGIN_DATA)
-    @ResponseBody
-    public UsersLoginMetaData getAdminLoginData() {
-        UsersLoginMetaData usersLoginMetaData = loginService.getAuthenticationUserMetaData();
-        return usersLoginMetaData;
-    }
-
-
-    /**
-     * User Refresh Token 조회
-     *
-     * @return the usersLoginMetaData
-     */
-    @Operation(summary = " User Refresh Token 조회 (Get User Refresh Token)")
-    @GetMapping(value = ConstantsUrl.URI_CP_REFRESH_TOKEN)
-    @ResponseBody
-    public UsersLoginMetaData getReFreshToken() {
-        providerService.getRefreshToken();
-        UsersLoginMetaData usersLoginMetaData = loginService.getAuthenticationUserMetaData();
-        return usersLoginMetaData;
-    }
 
     /**
      * Locale 언어 변경 (Change Locale Language)

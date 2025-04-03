@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout}">
-
 <div layout:fragment="content">
     <div id="content" class="sub-page clusters">
         <article class="location">
@@ -17,10 +16,10 @@
                 <div class="source" style="float: left;width: 45%;margin-right: 40px;">
                     <h3 th:text="Soucre"></h3>
                     <dl>
-                        <dt><label for="sourceName">Name</label></dt>
+                        <dt><label for="sourceMigration">Name</label></dt>
                         <dd>
                             <fieldset>
-                                <select id="sourceName">
+                                <select id="sourceMigration" onchange="changeSourceMigrationSelect()">
                                 </select>
                             </fieldset>
                         </dd>
@@ -38,10 +37,10 @@
                 <div class="destination" style="float: left;width: 45%;margin-right: 40px;">
                     <h3 th:text="Destination"></h3>
                     <dl>
-                        <dt><label for="destinationName">Name</label></dt>
+                        <dt><label for="destinationMigration">Name</label></dt>
                         <dd>
                             <fieldset>
-                                <select id="destinationName">
+                                <select id="destinationMigration" onchange="changeDestinationMigrationSelect()">
                                 </select>
                             </fieldset>
                         </dd>
@@ -55,12 +54,10 @@
                             </fieldset>
                         </dd>
                     </dl>
-                    <p th:text="${accessToken}"></p>
                 </div>
             </div>
             <!-- btn -->
-            <div class="btn02">
-                <!--<button onclick="movePage(URI_CP_MIGRATIONS_LIST);" th:text="#{M0028}"></button>-->
+            <div class="btn02" style="margin-top: 0">
                 <div>
                     <button type="submit" id="sync" th:text="#{M0938}"></button>
                 </div>
@@ -73,38 +70,136 @@
 </div>
 
 <th:block layout:fragment="script">
-    <script type="text/javascript">
-         window.onload = () => {
-
+    <script type="text/javascript" th:inline="javascript">
+        window.onload = () => {
             const migrationsCreate = {
                 init() {
-                    sessionStorage.setItem('token' , 'Bearer ' + document.getElementById('token').innerHTML)
+                    sessionStorage.setItem('accessToken' , 'Bearer ' + [[${accessToken}]])
+
+                    //vault에서 migration list 불러오기
+                    func.loadData('GET', `${func.vaultUrl}accounts/provider/info`, 'application/json', migrationsCreate.draw);
+                },
+
+                draw(data) {  //vault에서 migration list 불러와서 source, destination 뿌려주기
+                    info = new Map(Object.entries(data.items));
+                    let html = ``;
+                    let sourceMigrationHtml = ``;
+                    let destinationMigrationHtml = ``;
+
+                    for (let key of info.keys()) {
+                        sourceMigrationHtml += `<option value="${key}">${key}</option>`;
+                    }
+
+                    for (let key of info.keys()) {
+                        destinationMigrationHtml += `<option value="${key}">${key}</option>`;
+                    }
+
+                    func.appendHtml(document.getElementById('createProvider'), createProviderHtml);
+                    func.appendHtml(document.getElementById('destinationName'), registerProviderHtml);
                 },
 
                 event() {
+
+                    let sourceMigration = document.querySelector('#createTemplates > option:checked');
+                    let sourceEndpoint = ``;
+                    let sourceAccessKeyId = ``;
+                    let sourceSecretAccessKey = ``;
+                    let sourceBucket = ``;
+
+                    func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
+                        document.getElementById('createTemplatesDetail').value = e.hclScript;
+                    })
+
+                    let detinationMigration = document.querySelector('#createTemplates > option:checked');
+                    let detinationEndpoint = ``;
+                    let detinationAccessKeyId = ``;
+                    let detinationSecretAccessKey = ``;
+                    let detinationBucket = ``;
+
+                    let destinationMigration = document.querySelector('#createTemplates > option:checked');
+                    func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
+                        document.getElementById('createTemplatesDetail').value = e.hclScript;
+                    })
+
                     document.getElementById('sync').addEventListener('click', (e) => {
-                        alert("sync")
+
                         let migrationsCreate =  {
                             "src": {
                                 "storageType": "s3",
-                                "endpoint": "http://115.68.198.175:9000",
-                                "accessKeyId": "admin",
-                                "secretAccessKey": "tpsxj0812"
+                                "endpoint": sourceEndpoint,
+                                "accessKeyId": sourceAccessKeyId,
+                                "secretAccessKey": sourceSecretAccessKey
                             },
                             "dst": {
                                 "storageType": "s3",
-                                "endpoint": "http://115.68.198.65:9000",
-                                "accessKeyId": "admin",
-                                "secretAccessKey": "tpsxj0812"
+                                "endpoint": detinationEndpoint,
+                                "accessKeyId": detinationAccessKeyId,
+                                "secretAccessKey": detinationSecretAccessKey
                             }
                         }
 
-                        func.saveData('POST', `https://mig.115.68.198.189.nip.io/v1/migration/sync/sync`, JSON.stringify(migrationsCreate), true, 'application/json');
+                        func.saveData('POST', `${func.migrationUrl}v1/migration/sync/sync`, JSON.stringify(migrationsCreate), true, 'application/json');
+
+                    }, false);
+
+                    document.getElementById('copy').addEventListener('click', (e) => {
+                        let sourceMigration = document.querySelector('#createTemplates > option:checked');
+                        let sourceEndpoint = ``;
+                        let sourceAccessKeyId = ``;
+                        let sourceSecretAccessKey = ``;
+                        let sourceBucket = ``;
+
+                        func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
+                            document.getElementById('createTemplatesDetail').value = e.hclScript;
+                        })
+
+                        let detinationMigration = document.querySelector('#createTemplates > option:checked');
+                        let detinationEndpoint = ``;
+                        let detinationAccessKeyId = ``;
+                        let detinationSecretAccessKey = ``;
+                        let detinationBucket = ``;
+
+                        let destinationMigration = document.querySelector('#createTemplates > option:checked');
+                        func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
+                            document.getElementById('createTemplatesDetail').value = e.hclScript;
+                        })
+
+                        let migrationsCreate =  {
+                            "src": {
+                                "storageType": "s3",
+                                "endpoint": sourceEndpoint,
+                                "accessKeyId": sourceAccessKeyId,
+                                "secretAccessKey": sourceSecretAccessKey
+                            },
+                            "dst": {
+                                "storageType": "s3",
+                                "endpoint": detinationEndpoint,
+                                "accessKeyId": detinationAccessKeyId,
+                                "secretAccessKey": detinationSecretAccessKey
+                            }
+                        }
+
+                        func.saveData('POST', `${func.migrationUrl}v1/migration/sync/copy`, JSON.stringify(migrationsCreate), true, 'application/json');
 
                     }, false);
                 },
             };
-            migrationsCreate.event();
+            migrationsCreate.init();
+        }
+
+        function changeSourceMigrationSelect() {
+            //Source Bucket 목록 불러와서 뿌려주기
+            func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
+                document.getElementById('createTemplatesDetail').value = e.hclScript;
+            })
+
+        }
+        function changeDestinationMigrationSelect() {
+            //Destination Bucket 목록 불러와서 뿌려주기
+            func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
+                document.getElementById('createTemplatesDetail').value = e.hclScript;
+            })
+
         }
     </script>
 </th:block>
