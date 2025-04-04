@@ -12,7 +12,7 @@
                 <li type="notice-accounts" id="tab-accounts"><a onclick="movePage(URI_CP_ACCOUNTS_LIST)">Accounts</a></li>
             </ul>
             <div class="creat" style="overflow: auto">
-                <h3 th:text="|Migrations #{M0020}|"></h3>
+                <h3 th:text="|Migrations #{M0022}|"></h3>
                 <div class="source" style="float: left;width: 45%;margin-right: 40px;">
                     <h3 th:text="Soucre"></h3>
                     <dl>
@@ -29,6 +29,7 @@
                         <dd>
                             <fieldset>
                                 <select id="sourceBucket">
+                                    <option value="">
                                 </select>
                             </fieldset>
                         </dd>
@@ -50,6 +51,7 @@
                         <dd>
                             <fieldset>
                                 <select id="destinationBucket">
+                                    <option value=""></option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -59,10 +61,10 @@
             <!-- btn -->
             <div class="btn02" style="margin-top: 0">
                 <div>
-                    <button type="submit" id="sync" th:text="#{M0025}"></button>
+                    <button type="submit" id="sync" th:text="#{M0027}"></button>
                 </div>
                 <div>
-                    <button type="submit" id="copy" th:text="#{M0026}"></button>
+                    <button type="submit" id="copy" th:text="#{M0028}"></button>
                 </div>
             </div>
         </article>
@@ -89,7 +91,9 @@
                     //info = new Map(Object.entries(data2.items));
 
                     let sourceMigrationHtml = ``;
+                    let sourceBucketHtml = ``;
                     let destinationMigrationHtml = ``;
+                    let destinationBucketHtml = ``;
 
                   /*  for (let key of data2) {
                         sourceMigrationHtml += `<option value="${key}">${key}</option>`;
@@ -123,121 +127,175 @@
 
                     document.getElementById('sync').addEventListener('click', (e) => {
 
-                        let sourceMigration = document.querySelector('#sourceMigration > option:checked').innerHTML;
-                        let sourceEndpoint = ``;
-                        let sourceAccessKeyId = ``;
-                        let sourceSecretAccessKey = ``;
-                        let sourceBucket = document.querySelector('#sourceBucket > option:checked').innerHTML;
-
-                        alert(sourceMigration)
-                        alert(sourceBucket)
-                        //vault에서 src account 정보 상세 조회 하기
-                        /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                            document.getElementById('createTemplatesDetail').value = e.hclScript;
-                        })*/
-
-                        //const source = map[storage_type:s3 endpoint:http://115.68.198.175:9000 access_key_id:admin secret_access_key:tpsxj0812]
-
-                        sourceEndpoint = `http://115.68.198.175:9000`;
-                        sourceAccessKeyId = `admin`;
-                        sourceSecretAccessKey = `tpsxj0812`;
+                        let sourceMigration = document.querySelector('#sourceMigration');
+                        let sourceBucket = document.querySelector('#sourceBucket');
+                        let detinationMigration = document.querySelector('#destinationMigration');
+                        let detinationBucket = document.querySelector('#destinationBucket');
 
 
-                        let detinationMigration = document.querySelector('#destinationMigration > option:checked').innerHTML;
-                        let detinationEndpoint = ``;
-                        let detinationAccessKeyId = ``;
-                        let detinationSecretAccessKey = ``;
-                        let detinationBucket = document.querySelector('#destinationBucket > option:checked').innerHTML;
+                        //let source = document.getElementById('sourceMigration')
+                       /* alert('sourceMigration:::::' + sourceMigration.value)
+                        alert('sourceBucket::::::' + sourceBucket.value)
+                        alert('detinationMigration:::::' + detinationMigration.value)
+                        alert('detinationBucket::::::' + detinationBucket.value)
 
-                        //vault에서 dest account 정보 상세 조회 하기
-                        /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                            document.getElementById('createTemplatesDetail').value = e.hclScript;
-                        })*/
+                        console.log(JSON.stringify(sourceBucket.value))
+                        console.log(JSON.stringify(detinationBucket.value))
 
-                        //map[storage_type:s3 endpoint:http://115.68.198.65:9000 access_key_id:admin secret_access_key:tpsxj0812]
+                        if(sourceMigration.value !== 0 && detinationMigration.value !== 0 && sourceBucket.value !== 0 && detinationBucket.value !== 0) {
+                            alert
+                        }*/
 
-                        detinationEndpoint = `http://115.68.198.65:9000`;
-                        detinationAccessKeyId = `admin`;
-                        detinationSecretAccessKey = `tpsxj0812`;
 
-                        let migrationsCreate =  {
-                            "src": {
-                                "storageType": "s3",
-                                "endpoint": sourceEndpoint,
-                                "accessKeyId": sourceAccessKeyId,
-                                "secretAccessKey": sourceSecretAccessKey
-                            },
-                            "dst": {
-                                "storageType": "s3",
-                                "endpoint": detinationEndpoint,
-                                "accessKeyId": detinationAccessKeyId,
-                                "secretAccessKey": detinationSecretAccessKey
-                            }
+
+                        if(sourceBucket.value === "") {
+                            func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
+                        } else if (detinationBucket.value === "") {
+                            func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
+                        } else if (sourceBucket.value === "" && detinationBucket.value === "") {
+                            func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
+                        } else if (sourceMigration.value !== 0 && detinationMigration.value !== 0 && sourceBucket.value !== 0 && detinationBucket.value !== 0) {
+                            func.alertPopup('SYNC', MSG_CHECK_TO_SYNC, true, MSG_CONFIRM, migrationsCreate.sync);
                         }
-
-                        alert(JSON.stringify(migrationsCreate))
-
-                        func.saveData('POST', `${func.migrationUrl}v1/migration/sync/sync`, JSON.stringify(migrationsCreate), true, 'application/json');
-
 
                     }, false);
 
                     document.getElementById('copy').addEventListener('click', (e) => {
 
-                        let sourceMigration = document.querySelector('#sourceMigration > option:checked').innerHtml;
-                        let sourceEndpoint = ``;
-                        let sourceAccessKeyId = ``;
-                        let sourceSecretAccessKey = ``;
-                        let sourceBucket = document.querySelector('#sourceBucket > option:checked').innerHtml;
+                        let sourceMigration = document.querySelector('#sourceMigration');
+                        let sourceBucket = document.querySelector('#sourceBucket');
+                        let detinationMigration = document.querySelector('#destinationMigration');
+                        let detinationBucket = document.querySelector('#destinationBucket');
 
-                        //vault에서 src account 정보 상세 조회 하기
-                        /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                            document.getElementById('createTemplatesDetail').value = e.hclScript;
-                        })*/
-
-                        //const source = map[storage_type:s3 endpoint:http://115.68.198.175:9000 access_key_id:admin secret_access_key:tpsxj0812]
-
-                        sourceEndpoint = `http://115.68.198.175:9000`;
-                        sourceAccessKeyId = `admin`;
-                        sourceSecretAccessKey = `tpsxj0812`;
-
-
-                        let detinationMigration = document.querySelector('#destinationMigration > option:checked').innerHtml;
-                        let detinationEndpoint = ``;
-                        let detinationAccessKeyId = ``;
-                        let detinationSecretAccessKey = ``;
-                        let detinationBucket = document.querySelector('#destinationBucket > option:checked').innerHtml;
-                        alert(detinationMigration)
-
-                        //vault에서 dest account 정보 상세 조회 하기
-                        /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                            document.getElementById('createTemplatesDetail').value = e.hclScript;
-                        })*/
-
-                        //map[storage_type:s3 endpoint:http://115.68.198.65:9000 access_key_id:admin secret_access_key:tpsxj0812]
-
-                        detinationEndpoint = `http://115.68.198.65:9000`;
-                        detinationAccessKeyId = `admin`;
-                        detinationSecretAccessKey = `tpsxj0812`;
-
-                        let migrationsCreate =  {
-                            "src": {
-                                "storageType": "s3",
-                                "endpoint": sourceEndpoint,
-                                "accessKeyId": sourceAccessKeyId,
-                                "secretAccessKey": sourceSecretAccessKey
-                            },
-                            "dst": {
-                                "storageType": "s3",
-                                "endpoint": detinationEndpoint,
-                                "accessKeyId": detinationAccessKeyId,
-                                "secretAccessKey": detinationSecretAccessKey
-                            }
+                        if(sourceBucket.value === "") {
+                            func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
+                        } else if (detinationBucket.value === "") {
+                            func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
+                        } else if (sourceBucket.value === "" && detinationBucket.value === "") {
+                            func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
+                        } else if (sourceMigration.value !== 0 && detinationMigration.value !== 0 && sourceBucket.value !== 0 && detinationBucket.value !== 0) {
+                            func.alertPopup('COPY', MSG_CHECK_TO_COPY, true, MSG_CONFIRM, migrationsCreate.copy);
                         }
 
-                        func.saveData('POST', `${func.migrationUrl}v1/migration/sync/copy`, JSON.stringify(migrationsCreate), true, 'application/json');
                     }, false);
                 },
+
+                sync () {
+                    let sourceMigration = document.querySelector('#sourceMigration > option:checked');
+                    let sourceEndpoint = ``;
+                    let sourceAccessKeyId = ``;
+                    let sourceSecretAccessKey = ``;
+                    let sourceBucket = document.querySelector('#sourceBucket > option:checked');
+
+                    alert(sourceMigration.innerHTML)
+                    alert(sourceBucket.innerHTML)
+                    //vault에서 src account 정보 상세 조회 하기
+                    /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
+                        document.getElementById('createTemplatesDetail').value = e.hclScript;
+                    })*/
+
+                    //const source = map[storage_type:s3 endpoint:http://115.68.198.175:9000 access_key_id:admin secret_access_key:tpsxj0812]
+
+                    sourceEndpoint = `http://115.68.198.175:9000`;
+                    sourceAccessKeyId = `admin`;
+                    sourceSecretAccessKey = `tpsxj0812`;
+
+
+                    let detinationMigration = document.querySelector('#destinationMigration > option:checked');
+                    let detinationEndpoint = ``;
+                    let detinationAccessKeyId = ``;
+                    let detinationSecretAccessKey = ``;
+                    let detinationBucket = document.querySelector('#destinationBucket > option:checked');
+                    alert(detinationMigration.innerHTML)
+                    alert(detinationBucket.innerHTML)
+
+                    //vault에서 dest account 정보 상세 조회 하기
+                    /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
+                        document.getElementById('createTemplatesDetail').value = e.hclScript;
+                    })*/
+
+                    //map[storage_type:s3 endpoint:http://115.68.198.65:9000 access_key_id:admin secret_access_key:tpsxj0812]
+
+                    detinationEndpoint = `http://115.68.198.65:9000`;
+                    detinationAccessKeyId = `admin`;
+                    detinationSecretAccessKey = `tpsxj0812`;
+
+                    let migrationsCreate =  {
+                        "src": {
+                            "storageType": "s3",
+                            "endpoint": sourceEndpoint,
+                            "accessKeyId": sourceAccessKeyId,
+                            "secretAccessKey": sourceSecretAccessKey
+                        },
+                        "dst": {
+                            "storageType": "s3",
+                            "endpoint": detinationEndpoint,
+                            "accessKeyId": detinationAccessKeyId,
+                            "secretAccessKey": detinationSecretAccessKey
+                        }
+                    }
+
+
+                    func.saveData('POST', `${func.migrationUrl}v1/migration/sync/sync`, JSON.stringify(migrationsCreate), true, 'application/json');
+
+                },
+                copy () {
+                    let sourceMigration = document.querySelector('#sourceMigration > option:checked');
+                    let sourceEndpoint = ``;
+                    let sourceAccessKeyId = ``;
+                    let sourceSecretAccessKey = ``;
+                    let sourceBucket = document.querySelector('#sourceBucket > option:checked');
+                    alert(sourceMigration.innerHTML)
+                    alert(sourceBucket.innerHTML)
+
+                    //vault에서 src account 정보 상세 조회 하기
+                    /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
+                        document.getElementById('createTemplatesDetail').value = e.hclScript;
+                    })*/
+
+                    //const source = map[storage_type:s3 endpoint:http://115.68.198.175:9000 access_key_id:admin secret_access_key:tpsxj0812]
+
+                    sourceEndpoint = `http://115.68.198.175:9000`;
+                    sourceAccessKeyId = `admin`;
+                    sourceSecretAccessKey = `tpsxj0812`;
+
+
+                    let detinationMigration = document.querySelector('#destinationMigration > option:checked');
+                    let detinationEndpoint = ``;
+                    let detinationAccessKeyId = ``;
+                    let detinationSecretAccessKey = ``;
+                    let detinationBucket = document.querySelector('#destinationBucket > option:checked');
+                    alert(detinationMigration.innerHTML)
+                    alert(detinationBucket.innerHTML)
+
+                    //vault에서 dest account 정보 상세 조회 하기
+                    /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
+                        document.getElementById('createTemplatesDetail').value = e.hclScript;
+                    })*/
+
+                    //map[storage_type:s3 endpoint:http://115.68.198.65:9000 access_key_id:admin secret_access_key:tpsxj0812]
+
+                    detinationEndpoint = `http://115.68.198.65:9000`;
+                    detinationAccessKeyId = `admin`;
+                    detinationSecretAccessKey = `tpsxj0812`;
+
+                    let migrationsCreate =  {
+                        "src": {
+                            "storageType": "s3",
+                            "endpoint": sourceEndpoint,
+                            "accessKeyId": sourceAccessKeyId,
+                            "secretAccessKey": sourceSecretAccessKey
+                        },
+                        "dst": {
+                            "storageType": "s3",
+                            "endpoint": detinationEndpoint,
+                            "accessKeyId": detinationAccessKeyId,
+                            "secretAccessKey": detinationSecretAccessKey
+                        }
+                    }
+
+                    func.saveData('POST', `${func.migrationUrl}v1/migration/sync/copy`, JSON.stringify(migrationsCreate), true, 'application/json');
+                }
             };
             migrationsCreate.init();
             migrationsCreate.event();

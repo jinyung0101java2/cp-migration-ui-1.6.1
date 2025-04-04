@@ -12,7 +12,7 @@
                 <li type="notice-accounts" id="tab-accounts"><a onclick="movePage(URI_CP_ACCOUNTS_LIST)">Accounts</a></li>
             </ul>
             <div class="creat" style="overflow: auto">
-                <h3 th:text="|Migrations #{M0020}|"></h3>
+                <h3 th:text="|Migrations #{M0022}|"></h3>
                 <div class="source" style="float: left;width: 45%;margin-right: 40px;">
                     <h3 th:text="Soucre"></h3>
                     <dl>
@@ -59,10 +59,10 @@
             <!-- btn -->
             <div class="btn02" style="margin-top: 0">
                 <div>
-                    <button type="submit" id="sync" th:text="#{M0025}"></button>
+                    <button type="submit" id="sync" th:text="#{M0027}"></button>
                 </div>
                 <div>
-                    <button type="submit" id="copy" th:text="#{M0026}"></button>
+                    <button type="submit" id="copy" th:text="#{M0028}"></button>
                 </div>
             </div>
         </article>
@@ -129,8 +129,6 @@
                         let sourceSecretAccessKey = ``;
                         let sourceBucket = document.querySelector('#sourceBucket > option:checked').innerHTML;
 
-                        alert(sourceMigration)
-                        alert(sourceBucket)
                         //vault에서 src account 정보 상세 조회 하기
                         /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
                             document.getElementById('createTemplatesDetail').value = e.hclScript;
@@ -175,8 +173,6 @@
                             }
                         }
 
-                        alert(JSON.stringify(migrationsCreate))
-
                         func.saveData('POST', `${func.migrationUrl}v1/migration/sync/sync`, JSON.stringify(migrationsCreate), true, 'application/json');
 
 
@@ -207,7 +203,6 @@
                         let detinationAccessKeyId = ``;
                         let detinationSecretAccessKey = ``;
                         let detinationBucket = document.querySelector('#destinationBucket > option:checked').innerHtml;
-                        alert(detinationMigration)
 
                         //vault에서 dest account 정보 상세 조회 하기
                         /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
