@@ -43,10 +43,10 @@
             </div>
             <!-- btn -->
             <div class="btn02">
-                <button type="submit" id="delete" th:text="#{M0026}"></button>
+                <button onclick="movePage(URI_CP_ACCOUNTS_LIST)" th:text="#{M0028}"></button>
                 <div>
-                    <a href="javascript:;" id="modify" data-role="configMaps" th:text="#{M0025}"></a>
-                    <a onclick="movePage(URI_CP_ACCOUNTS_LIST)" th:text="#{M0028}"></a>
+                    <a href="javascript:;" id="modify" th:text="#{M0025}"></a>
+                    <a href="javascript:;" id="delete" th:text="#{M0026}"></a>
                 </div>
             </div>
         </article>
@@ -142,17 +142,22 @@
             }, false);
 
                 document.getElementById('modify').addEventListener('click', (e) => {
+                    func.alertPopup('MODIFY', MSG_CHECK_TO_MODIFY, true, MSG_CONFIRM, migrationsDetail.save);
                     // Resource yaml 정보 조회
-                    func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/configMaps/${sessionStorage.getItem('commonName')}/yaml`, 'application/json', func.modify);
+                    //func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/configMaps/${sessionStorage.getItem('commonName')}/yaml`, 'application/json', func.modify);
             }, false);
             },
 
             delete(){
-                func.saveData('DELETE', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/configMaps/${sessionStorage.getItem('commonName')}`, '', true, 'application/json', func.historyBack);
+                //func.saveData('DELETE', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/configMaps/${sessionStorage.getItem('commonName')}`, '', true, 'application/json', func.historyBack);
             },
+            save(){
+
+            }
         }
 
         migrationsDetail.init();
+        migrationsDetail.event();
     }
 </script>
 </th:block>

@@ -312,8 +312,6 @@ public class RestTemplateService {
 
     }
 
-
-
     /**
      * HttpEntity 값 업데이트 (Update HttpEntity)
      *
@@ -330,6 +328,11 @@ public class RestTemplateService {
         return reqEntity;
     }
 
+    /**
+     * KeyCloak Token 값 조회 (Get KeyCloak Token)
+     *
+     * @return the OAuthTokens
+     */
     public OAuthTokens getKeyCloakToken () {
         OAuthTokens oAuthTokens = null;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

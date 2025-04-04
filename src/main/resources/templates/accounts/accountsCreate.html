@@ -53,7 +53,7 @@
             <div class="btn02">
                 <button onclick="movePage(URI_CP_ACCOUNTS_LIST);" th:text="#{M0028}"></button>
                 <div>
-                    <button type="submit" id="check" th:text="#{M0940}"></button>
+                    <button type="submit" id="confirm" th:text="#{M0940}"></button>
                     <button type="submit" id="save" th:text="#{M0030}"></button>
                 </div>
             </div>
@@ -110,6 +110,26 @@
 
                     }, false);
                     //changeProviderSelect();
+                    document.getElementById('confirm').addEventListener('click', () => {
+                        func.alertPopup('CONFIRM', MSG_CHECK_TO_CONFIRM, true, MSG_CONFIRM, accountsCreate.save);
+                        /* let accountsName = document.getElementById('accountsName').value;
+                         let storageType = document.getElementById('storageType').value;
+                         let endpoint = document.getElementById('endpoint').value;
+                         let accessKeyId = document.getElementById('accessKeyId').value;
+                         let secretAccessKey = document.getElementById('secretAccessKey').value;
+
+                         let accountsCreate = {
+                             "configName": accountsName,
+                             "storageType": storageType,
+                             "endpoint": endpoint,
+                             "accessKeyId": accessKeyId,
+                             "secretAccessKey": secretAccessKey
+                         }
+
+                         alert(JSON.stringify(accountsCreate))*/
+
+
+                    }, false);
                 },
 
                 save() {

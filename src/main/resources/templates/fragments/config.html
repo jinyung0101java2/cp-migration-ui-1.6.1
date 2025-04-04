@@ -39,6 +39,8 @@
      var MSG_INTEGRATED_SIGN_OUT_TAKES_PLACE = [[#{M0016}]];
      var MSG_CHECK_TO_DELETE =  [[#{M0018}]];
      var MSG_CHECK_TO_SAVE =  [[#{M0020}]];
+     var MSG_CHECK_TO_CONFIRM =  [[#{M0941}]];
+     var MSG_CHECK_TO_MODIFY =  [[#{M0942}]];
 
      // MESSAGE PROPERTIES
      var MSG_CONFIRM = [[#{M0022}]];
@@ -68,8 +70,9 @@
  }
 
  function changeLocaleLanguage() {
-     var u_locale_lang = document.getElementById("u_locale_lang").value;
-     var reqUrl =  URL_API_LOCALE_LANGUAGE+"?"+ URL_API_CHANGE_LOCALE_PARAM + "=" + u_locale_lang;
+     var u_locale_lang = document.getElementById("u_locale_lang").value
+     alert(u_locale_lang)
+     var reqUrl = URL_API_LOCALE_LANGUAGE + "?" + URL_API_CHANGE_LOCALE_PARAM + "=" + u_locale_lang;
      func.setLocaleLang(reqUrl);
  }
 
@@ -78,6 +81,7 @@
  }
 
  function reloadPage() {
+     alert("reload")
      location.reload();
  }
 
