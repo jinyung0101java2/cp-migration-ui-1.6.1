@@ -1,14 +1,13 @@
 package org.container.platform.web.ui.common;
 
 /**
- * Constants 클래스
+ * Constants Url 클래스
  *
- * @author kjhoon
+ * @author jjy
  * @version 1.0
- * @since 2021.06.14
+ * @since 2025.03.19
  */
 public class ConstantsUrl {
-    public static final String URI_CP_CONFIGS_CONFIGMAPS = "/container-platform/configMaps";//
     public static final String URI_CP_DETAILS = "/details";
     public static final String URI_CP_GET_USER_LOGIN_DATA = "/container-platform/userLoginData";
     public static final String URI_CP_REFRESH_TOKEN = "/container-platform/refreshToken";

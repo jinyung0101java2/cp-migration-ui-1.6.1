@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 /**
  * Authentication Response Model 클래스
  *
- * @author kjhoon
+ * @author jjy
  * @version 1.0
- * @since 2020.09.28
+ * @since 2025.03.19
  */
 @Data
 @NoArgsConstructor

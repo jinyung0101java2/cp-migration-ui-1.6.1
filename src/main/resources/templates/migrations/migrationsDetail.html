@@ -72,7 +72,7 @@
                 <button type="submit" id="delete" th:text="#{M0026}"></button>
                 <div>
                     <a href="javascript:;" id="modify" data-role="configMaps" th:text="#{M0025}"></a>
-                    <a onclick="movePage(URI_CP_CONFIGS_CONFIGMAPS)" th:text="#{M0028}"></a>
+                    <!--<a onclick="movePage(URI_CP_CONFIGS_CONFIGMAPS)" th:text="#{M0028}"></a>-->
                 </div>
             </div>
         </article>
@@ -81,7 +81,7 @@
 
 <th:block layout:fragment="script">
     <script type="text/javascript">
-    window.onload = () => {
+   /* window.onload = () => {
 
         const migrationsDetail = {
             init(){
@@ -169,7 +169,7 @@
         }
 
         migrationsDetail.init();
-    }
+    }*/
 </script>
 </th:block>
 </html>

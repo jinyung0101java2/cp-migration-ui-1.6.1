@@ -17,7 +17,7 @@
         </encoder>
     </appender>
 
-    <logger name="org.container.platform.migration.ui" level="info"/>
+    <logger name="org.cp.migration.ui" level="info"/>
     <logger name="org.apache.catalina.session.ManagerBase" level="info"/>
 
     <root level="INFO">

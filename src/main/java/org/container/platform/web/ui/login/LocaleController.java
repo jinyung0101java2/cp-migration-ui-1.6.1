@@ -11,16 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.LocaleResolver;
-
 import java.util.Locale;
-
 
 /**
  * Locale Controller 클래스
  *
- * @author kjhoon
+ * @author jjy
  * @version 1.0
- * @since 2021.06.15
+ * @since 2025.03.19
  **/
 @Tag(name = "LocaleController v1")
 @RestController

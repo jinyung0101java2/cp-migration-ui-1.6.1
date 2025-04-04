@@ -5,12 +5,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * kpaasDeliveryPipelineApi
- * kpaas.delivery.pipeline.ui.config
+ * RestTemplate Config 클래스
  *
- * @author REX
+ * @author jjy
  * @version 1.0
- * @since 5 /10/2017
+ * @since 2025.03.19
  */
 @Configuration
 public class RestTemplateConfig {

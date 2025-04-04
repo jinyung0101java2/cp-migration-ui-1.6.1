@@ -4,11 +4,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 
 /**
- * RequestWrapper 클래스
+ * Request Wrapper 클래스
  *
- * @author kjhoon
+ * @author jjy
  * @version 1.0
- * @since 2021.03.03
+ * @since 2025.03.19
  */
 public class RequestWrapper extends HttpServletRequestWrapper {
 

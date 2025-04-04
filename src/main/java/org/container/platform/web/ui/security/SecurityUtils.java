@@ -12,6 +12,13 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Component;
 
+/**
+ * Security Utils 클래스
+ *
+ * @author jjy
+ * @version 1.0
+ * @since 2025.03.19
+ **/
 @Component
 @RequiredArgsConstructor
 public class SecurityUtils {

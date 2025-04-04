@@ -3,8 +3,7 @@
 <aside th:fragment="asideFragment">
     <nav>
         <ul>
-            <li class="plus" aside_d1="global" sec:authorize="hasAnyAuthority('SUPER_ADMIN', 'CLUSTER_ADMIN')">
-                <a href="javascript:" class="dep01">Global</a>
+            <li class="plus" aside_d1="global">
                 <ul class="sub">
                     <li><a onclick="movePage(URI_CP_BASE_URL)" aside_d2="g_overview">Overview</a></li>
                 </ul>

@@ -6,11 +6,11 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Result Status Model 클래스
+ * ResultStatus Model 클래스
  *
- * @author hrjin
+ * @author jjy
  * @version 1.0
- * @since 2020.08.28
+ * @since 2025.03.19
  **/
 @Data
 @Builder

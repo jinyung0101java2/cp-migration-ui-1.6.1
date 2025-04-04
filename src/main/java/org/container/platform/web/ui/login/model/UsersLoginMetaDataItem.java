@@ -5,9 +5,9 @@ import lombok.Data;
 /**
  * Users Login MetaData Item Model 클래스
  *
- * @author kjhoon
+ * @author jjy
  * @version 1.0
- * @since 2021.03.15
+ * @since 2025.03.19
  **/
 @Data
 public class UsersLoginMetaDataItem {

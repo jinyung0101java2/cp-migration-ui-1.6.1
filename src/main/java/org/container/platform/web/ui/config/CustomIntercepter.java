@@ -7,7 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-
+/**
+ * Custom Intercepter 클래스
+ *
+ * @author jjy
+ * @version 1.0
+ * @since 2025.03.19
+ */
 public class CustomIntercepter implements HandlerInterceptor {
 
     @Autowired

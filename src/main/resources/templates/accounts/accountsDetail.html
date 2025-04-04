@@ -23,19 +23,19 @@
                         </tr>
                         <tr>
                             <th scope="row" class="left">Storage Type</th>
-                            <td class="left" id="uid"></td>
+                            <td class="left" id="storageType"></td>
                         </tr>
                         <tr>
                             <th scope="row" class="left">Endpoint</th>
-                            <td class="left" id="space"></td>
+                            <td class="left" id="endpoint"></td>
                         </tr>
-                        <tr style="display: none">
+                        <tr>
                             <th scope="row" class="left">Access Key Id</th>
-                            <td class="box left" id="label"></td>
+                            <td class="box left" id="accessKeyId"></td>
                         </tr>
                         <tr>
                             <th scope="row" class="left">Secret Access Key</th>
-                            <td class="left box" id="annot"></td>
+                            <td class="left box" id="secretAccessKey"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -60,20 +60,30 @@
         const migrationsDetail = {
             init(){
 
-                // nameSpace 정보 조회
-                func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/configMaps/${sessionStorage.getItem('commonName')}`, 'application/json', migrationsDetail.draw);
+                // accounts 상세 조회
+                //func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/configMaps/${sessionStorage.getItem('commonName')}`, 'application/json', migrationsDetail.draw);
+                migrationsDetail.draw();
             },
 
-            draw(data){
+            draw(data2){
+                let data = {
+                    'name': 'minio1',
+                    'storageType': 's3',
+                    'endpoint': 'http://115.68.198.175:9000',
+                    'accessKeyId': 'admin',
+                    'secretAccessKey': 'tpsxj0812'
+                }
 
                 // Details data
                 document.getElementById('name').innerText = data.name;
-                document.getElementById('uid').innerText = data.uid;
-                document.getElementById('space').innerText = data.namespace;
-                document.getElementById('time').innerText = data.creationTimestamp;
-                document.getElementById('immutable').innerText = data.immutable;
+                document.getElementById('storageType').innerText = data.storageType;
+                document.getElementById('endpoint').innerText = data.endpoint;
+                document.getElementById('accessKeyId').innerText = data.accessKeyId.replaceAll(/./gi, "*");
+                // document.getElementById('accessKeyId').innerText = MASKED_DATA;
+                document.getElementById('secretAccessKey').innerText = data.secretAccessKey.replaceAll(/./gi, "*");
+                // document.getElementById('secretAccessKey').innerText = MASKED_DATA;
 
-                if(data.labels != null){
+                /*if(data.labels != null){
                     for(var i=0; i<=Object.getOwnPropertyNames(data.labels).length-1; i++){
                         var html = `<dl><dt>${Object.getOwnPropertyNames(data.labels)[i]}</dt><dd>${data.labels[Object.keys(data.labels)[i]]}</dd></dl>`;
 
@@ -123,7 +133,7 @@
                     func.appendHtml(document.querySelector('.detailList'), html, 'tbody');
                 };
 
-                migrationsDetail.event()
+                migrationsDetail.event()*/
             },
 
             event(){

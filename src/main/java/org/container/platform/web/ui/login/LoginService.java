@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 /**
  * Login Service 클래스
  *
- * @author kjhoon
+ * @author jjy
  * @version 1.0
- * @since 2021.03.16
+ * @since 2025.03.19
  **/
 @Service
 public class LoginService {
@@ -25,7 +25,7 @@ public class LoginService {
     public UsersLoginMetaData getAuthenticationUserMetaData() {
         UsersLoginMetaData usersLoginMetaData = null;
         try {
-            PortalOAuth2User portalOAuth2User  = (PortalOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            PortalOAuth2User portalOAuth2User = (PortalOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             usersLoginMetaData = portalOAuth2User.getUsersLoginMetaData();
         } catch (NullPointerException e) {
             return null;

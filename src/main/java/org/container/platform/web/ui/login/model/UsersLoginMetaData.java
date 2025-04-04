@@ -10,9 +10,9 @@ import java.util.List;
 /**
  * Users Login MetaData Model 클래스
  *
- * @author kjhoon
+ * @author jjy
  * @version 1.0
- * @since 2021.03.15
+ * @since 2025.03.19
  **/
 @Data
 @NoArgsConstructor

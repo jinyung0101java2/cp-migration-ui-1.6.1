@@ -17,6 +17,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * Custom Intercepter Service 클래스
+ *
+ * @author jjy
+ * @version 1.0
+ * @since 2025.03.19
+ **/
 @Service
 public class CustomIntercepterService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomIntercepterService.class);

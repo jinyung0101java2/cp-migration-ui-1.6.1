@@ -3,10 +3,10 @@ package org.container.platform.web.ui.common;
 /**
  * Common Utils 클래스
  *
- * @author hrjin
+ * @author jjy
  * @version 1.0
- * @since 2020.09.25
- */
+ * @since 2025.03.19
+ **/
 public class CommonUtils {
 
     /**

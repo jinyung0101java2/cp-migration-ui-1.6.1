@@ -21,11 +21,11 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Rest Template Service 클래스
+ * RestTemplate Service 클래스
  *
  * @author jjy
  * @version 1.0
- * @since 2020.08.25
+ * @since 2025.03.19
  */
 @Service
 public class RestTemplateService {

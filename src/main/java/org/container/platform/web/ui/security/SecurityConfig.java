@@ -16,6 +16,13 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+/**
+ * Security Config 클래스
+ *
+ * @author jjy
+ * @version 1.0
+ * @since 2025.03.19
+ **/
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity

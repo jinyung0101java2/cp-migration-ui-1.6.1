@@ -6,13 +6,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
 /**
  * Intro Controller 클래스
  *
  * @author jjy
  * @version 1.0
- * @since 2021.05.06
+ * @since 2025.03.19
  */
 @Controller
 public class IntroController {

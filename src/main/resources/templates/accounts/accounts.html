@@ -20,9 +20,9 @@
                         <table>
                             <caption>Accounts List</caption>
                             <colgroup >
-                                <col width="35%" />
-                                <col width="30%" />
-                                <col width="35%" />
+                                <col width="40%" />
+                                <col width="20%" />
+                                <col width="40%" />
                             </colgroup>
                             <thead>
                             <tr>
@@ -67,7 +67,33 @@
                 // nameSpace 정보 조회
                 func.loadData('GET', `${func.url}clusters/${sessionStorage.getItem('cluster')}/namespaces/${sessionStorage.getItem('nameSpace')}/configMaps`, 'application/json', accounts.draw);
             },
+            */
 
+            draw(){
+                let items = [
+                    {'name': 'minio1', 'storageType': 's3', 'endpoint': 'http://115.68.198.175:9000'},
+                    {'name': 'minio2', 'storageType': 's3', 'endpoint': 'http://115.68.198.80:9000'},
+                    {'name': 'minio3', 'storageType': 's3', 'endpoint': 'http://115.68.198.65:9000'},
+                ]
+
+                if(items.length > 0){
+                    for(var i=0; i<=items.length-1; i++){
+                        var html = `<tr>
+                                        <td class="left"><a href="javascript:;" data-name="${items[i].name}">${items[i].name}</a></td>
+                                        <td>${items[i].storageType}</td>
+                                        <td>${items[i].endpoint}</td>
+                                    </tr>`;
+
+                        func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                    };
+                } else {
+                    var html = `<tr><td colspan="3">No Data.</td></tr>`;
+
+                    func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                };
+
+            },
+            /*
             //draw(data){
             draw(data){
 
@@ -142,6 +168,7 @@
 
         accounts.init();
         accounts.event();
+        accounts.draw();
     }
 </script>
 </th:block>

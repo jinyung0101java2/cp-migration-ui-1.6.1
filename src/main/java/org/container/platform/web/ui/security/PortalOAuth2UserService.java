@@ -21,10 +21,16 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Portal OAuth2 User Service 클래스
+ *
+ * @author jjy
+ * @version 1.0
+ * @since 2025.03.19
+ **/
 @RequiredArgsConstructor
 @Service
 public class PortalOAuth2UserService implements OAuth2UserService {

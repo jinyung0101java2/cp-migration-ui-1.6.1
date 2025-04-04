@@ -2,12 +2,13 @@ package org.container.platform.web.ui.login.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 /**
  * User Model 클래스
  *
- * @author hrjin
+ * @author jjy
  * @version 1.0
- * @since 2020.09.22
+ * @since 2025.03.19
  **/
 @Data
 @NoArgsConstructor

@@ -2,10 +2,16 @@ package org.container.platform.web.ui.security.model;
 
 import lombok.Builder;
 import lombok.Data;
-
 import java.util.List;
 import java.util.Map;
 
+/**
+ * OAuth Attributes Model 클래스
+ *
+ * @author jjy
+ * @version 1.0
+ * @since 2025.03.19
+ **/
 @Data
 public class OAuthAttributes {
     private Map<String, Object> attributes;

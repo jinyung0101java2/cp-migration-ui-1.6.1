@@ -13,9 +13,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
 
+/**
+ * Portal Oauth2 Security Filter 클래스
+ *
+ * @author jjy
+ * @version 1.0
+ * @since 2025.03.19
+ **/
 @Component
 public class PortalOauth2SecurityFilter extends OncePerRequestFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(PortalOauth2SecurityFilter.class);

@@ -1,11 +1,11 @@
 package org.container.platform.web.ui.common.model;
 
 /**
- * Common Status Code 클래스
+ * Common Status Code Enum
  *
- * @author hrjin
+ * @author jjy
  * @version 1.0
- * @since 2020.08.27
+ * @since 2025.03.19
  **/
 public enum CommonStatusCode {
     OK(200, "정상적으로 처리 되었습니다."),

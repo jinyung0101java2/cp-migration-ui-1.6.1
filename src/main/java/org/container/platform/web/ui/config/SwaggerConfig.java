@@ -7,16 +7,12 @@ import io.swagger.v3.oas.models.info.License;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 /**
- * Swagger Config
+ * Swagger Config 클래스
  *
- * @author kjh
+ * @author jjy
  * @version 1.0
- * @since 2020.10.16
+ * @since 2025.03.19
  **/
 @Configuration
 public class SwaggerConfig {
@@ -30,7 +26,7 @@ public class SwaggerConfig {
 
     private Info apiInfo() {
         return new Info()
-                .title("K-PaaS Container Platform UI Docs")
+                .title("K-PaaS CP Migration UI Docs")
                 .version("v1.0")
                 .description("This is a UI Document created with swagger.")
                 .license(getLicense());

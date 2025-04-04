@@ -8,9 +8,9 @@ import java.lang.annotation.Target;
 /**
  * Custom Annotation to pass Auth AOP Logic
  *
- * @author hrjin
+ * @author jjy
  * @version 1.0
- * @since 2020.10.20
+ * @since 2025.03.19
  **/
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

@@ -7,15 +7,14 @@ import org.container.platform.web.ui.login.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-
 import static org.container.platform.web.ui.common.Constants.TARGET_CP_API;
 
 /**
  * User Service 클래스
  *
- * @author hrjin
+ * @author jjy
  * @version 1.0
- * @since 2020.09.22
+ * @since 2025.03.19
  **/
 @Service
 public class ProviderService {
