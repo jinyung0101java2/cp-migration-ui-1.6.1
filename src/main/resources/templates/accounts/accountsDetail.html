@@ -104,11 +104,11 @@
 
             delete(){
                 // accounts 삭제
-                func.loadData('GET', `${func.url}vault/storage/${sessionStorage.getItem('userGuid')}}`, 'application/json', func.historyBack);
+                func.saveData('GET', `${func.url}vault/storage/${sessionStorage.getItem('userGuid')}}`, 'application/json', func.historyBack);
             },
 
             modify(){
-                func.loadData('GET', `${func.url}vault/storage/${sessionStorage.getItem('userGuid')}}`, 'application/json', func.saveComp);
+                func.saveData('GET', `${func.url}vault/storage/${sessionStorage.getItem('userGuid')}}`, 'application/json', func.refresh);
             }
         }
         migrationsDetail.init();

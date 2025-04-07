@@ -216,7 +216,7 @@
                     detinationAccessKeyId = `admin`;
                     detinationSecretAccessKey = `tpsxj0812`;
 
-                    let migrationsCreate =  {
+                    let migrationsCreate = {
                         "src": {
                             "storageType": "s3",
                             "endpoint": sourceEndpoint,
@@ -230,7 +230,6 @@
                             "secretAccessKey": detinationSecretAccessKey
                         }
                     }
-
 
                     func.saveData('POST', `${func.migrationUrl}v1/migration/sync/sync`, JSON.stringify(migrationsCreate), true, 'application/json');
 

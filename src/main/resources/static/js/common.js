@@ -402,25 +402,36 @@ const func = {
 
 
 	saveData(method, url, data, bull, header){
+		func.loading();
+
 		httpRequest = new XMLHttpRequest();
 
 		httpRequest.open(method, url, bull);
 		httpRequest.setRequestHeader('Content-type', header);
 		httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('accessToken'));
 		httpRequest.responseType = "json"
-		httpRequest.send(data)
+
 		//httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
 		//httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
 
 		httpRequest.onreadystatechange = () => {
 			if (httpRequest.readyState === XMLHttpRequest.DONE){
 				if (httpRequest.status === 200) {
-					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, "closed");
+					if(document.getElementById('loading')){
+						document.getElementById('wrap').removeChild(document.getElementById('loading'));
+					};
+					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  'closed');
 				} else {
-					return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, func.moveToMain);
+					if(document.getElementById('loading')){
+						document.getElementById('wrap').removeChild(document.getElementById('loading'));
+					};
+					return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');
 				}
 			}
 		}
+		httpRequest.send(data)
+
+
 	},
 	/////////////////////////////////////////////////////////////////////////////////////
 	// 데이터 SAVE - dryRun(method, url, data, bull, callFunc)
