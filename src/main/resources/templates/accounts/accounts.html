@@ -70,6 +70,7 @@
             */
 
             draw(){
+
                 let items = [
                     {'name': 'minio1', 'storageType': 's3', 'endpoint': 'http://115.68.198.175:9000'},
                     {'name': 'minio2', 'storageType': 's3', 'endpoint': 'http://115.68.198.80:9000'},
@@ -92,6 +93,23 @@
                     func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                 };
 
+                accounts.listEvent();
+
+            },
+
+            listEvent(){
+                var listAll = document.querySelector('.listTable').querySelectorAll('a');
+                console.log(JSON.stringify(listAll.length));
+
+                for(var i=0; i<=listAll.length-1; i++){
+
+                    listAll[i].addEventListener('click', (e) => {
+                        alert("click")
+                        sessionStorage.setItem('accountsName', e.target.getAttribute('data-name'));
+
+                        document.location.href = URI_CP_ACCOUNTS_LIST + URI_CP_DETAILS;
+                    }, true);
+                };
             },
             /*
             //draw(data){
@@ -152,18 +170,7 @@
             }, false);
             },
 
-            /*listEvent(){
-                var listAll = document.querySelector('.listTable').querySelectorAll('a');
 
-                for(var i=accounts.offset*10; i<=listAll.length-1; i++){
-                    listAll[i].addEventListener('click', (e) => {
-                        sessionStorage.setItem('commonName', e.target.getAttribute('data-name'));
-                    sessionStorage.setItem('nameSpace', e.target.getAttribute('data-spac'));
-
-                    document.location.href = URI_CP_CONFIGS_CONFIGMAPS + URI_CP_DETAILS;
-                }, true);
-                };
-            },*/
         }
 
         accounts.init();

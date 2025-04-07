@@ -5,7 +5,7 @@ const func = {
 	ui : 'http://localhost:8090/',
 
 	init() {
-
+		//func.getLocaleLang();
 	},
 
 	event(){
@@ -284,7 +284,7 @@ const func = {
 		var request = new XMLHttpRequest();
 		request.open('PUT', reqUrl, false);
 		request.setRequestHeader('Content-type', 'application/json');
-
+		alert(":::" + reqUrl)
 		request.onreadystatechange = () => {
 			if (request.readyState === XMLHttpRequest.DONE){
 				if(request.status === 200){

@@ -35,6 +35,6 @@ public class ConstantsUrl {
     public static final String  URI_CP_MIGRATIONS_CREATE = "/migrations/create";
 
     public static final String  URI_CP_ACCOUNTS_LIST = "/accounts";
-    public static final String  URI_CP_ACCOUNTS_DETAIL = "/accounts/detail";
+    public static final String  URI_CP_ACCOUNTS_DETAIL = "/accounts/details";
     public static final String  URI_CP_ACCOUNTS_CREATE = "/accounts/create";
 }
