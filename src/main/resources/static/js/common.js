@@ -284,7 +284,6 @@ const func = {
 		var request = new XMLHttpRequest();
 		request.open('PUT', reqUrl, false);
 		request.setRequestHeader('Content-type', 'application/json');
-		alert(":::" + reqUrl)
 		request.onreadystatechange = () => {
 			if (request.readyState === XMLHttpRequest.DONE){
 				if(request.status === 200){
@@ -334,10 +333,10 @@ const func = {
 		httpRequest.onreadystatechange = () => {
 			if (httpRequest.readyState === XMLHttpRequest.DONE){
 				if (httpRequest.status === 200) {
-					alert("send 완료")
-				} else (
-					alert("request에 문제가 있습니다.")
-				)
+					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, "closed");
+				} else {
+					return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, func.moveToMain);
+				}
 			}
 		}
 	},
@@ -416,10 +415,10 @@ const func = {
 		httpRequest.onreadystatechange = () => {
 			if (httpRequest.readyState === XMLHttpRequest.DONE){
 				if (httpRequest.status === 200) {
-					alert("send 완료")
-				} else (
-					alert("request에 문제가 있습니다.")
-				)
+					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, "closed");
+				} else {
+					return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, func.moveToMain);
+				}
 			}
 		}
 	},

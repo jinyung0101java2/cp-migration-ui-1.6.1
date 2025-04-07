@@ -217,8 +217,6 @@
                         "secretAccessKey": secretAccessKey
                     }
 
-                    alert(JSON.stringify(accountsCreate))
-
                     //check FILE
                     func.saveData('POST', `${func.url}accounts`, JSON.stringify(accountsCreate), true, 'application/json', accountsCreate.saveComp);
 

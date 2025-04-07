@@ -96,18 +96,19 @@
             }, false);
 
                 document.getElementById('modify').addEventListener('click', (e) => {
-                    func.alertPopup('MODIFY', MSG_CHECK_TO_MODIFY, true, MSG_CONFIRM, migrationsDetail.save);
+                    func.alertPopup('MODIFY', MSG_CHECK_TO_MODIFY, true, MSG_CONFIRM, migrationsDetail.modify);
 
-                    //func.loadData('GET', `${func.url}vault/storage/${sessionStorage.getItem('userGuid')}}`/이름, 'application/json', func.historyBack);
+
             }, false);
             },
 
             delete(){
                 // accounts 삭제
-                //func.loadData('GET', `${func.url}vault/storage/${sessionStorage.getItem('userGuid')}}`/이름, 'application/json', func.historyBack);
+                func.loadData('GET', `${func.url}vault/storage/${sessionStorage.getItem('userGuid')}}`, 'application/json', func.historyBack);
             },
-            save(){
 
+            modify(){
+                func.loadData('GET', `${func.url}vault/storage/${sessionStorage.getItem('userGuid')}}`, 'application/json', func.saveComp);
             }
         }
         migrationsDetail.init();

@@ -37,13 +37,15 @@
      //var NAMESPACE_ALL_VALUE ='ALL';
      var MSG_WANT_TO_SIGN_OUT = [[#{M0010}]];
      var MSG_INTEGRATED_SIGN_OUT_TAKES_PLACE = [[#{M0011}]];
-     var MSG_CHECK_TO_DELETE =  [[#{M0014}]];
-     var MSG_CHECK_TO_SAVE =  [[#{M0015}]];
-     var MSG_CHECK_TO_CONFIRM =  [[#{M0017}]];
-     var MSG_CHECK_TO_MODIFY =  [[#{M0016}]];
-     var MSG_CHECK_TO_SYNC =  [[#{M0018}]];
-     var MSG_CHECK_TO_COPY =  [[#{M0019}]];
-     var MSG_CHECK_TO_SELECT_BOX =  [[#{M0030}]];
+     var MSG_CHECK_TO_DELETE = [[#{M0014}]];
+     var MSG_CHECK_TO_SAVE = [[#{M0015}]];
+     var MSG_CHECK_TO_CONFIRM = [[#{M0017}]];
+     var MSG_CHECK_TO_MODIFY = [[#{M0016}]];
+     var MSG_CHECK_TO_SYNC = [[#{M0018}]];
+     var MSG_CHECK_TO_COPY = [[#{M0019}]];
+     var MSG_CHECK_TO_SELECT_BOX = [[#{M0030}]];
+     var MSG_CHECK_TO_SUCCESS = [[#{M0031}]];
+     var MSG_CHECK_TO_FAIL = [[#{M0031}]];
 
      // MESSAGE PROPERTIES
      var MSG_CONFIRM = [[#{M0020}]];
@@ -72,7 +74,6 @@
 
  function changeLocaleLanguage() {
      var u_locale_lang = document.getElementById("u_locale_lang").value
-     alert(u_locale_lang)
      var reqUrl = URL_API_LOCALE_LANGUAGE + "?" + URL_API_CHANGE_LOCALE_PARAM + "=" + u_locale_lang;
      func.setLocaleLang(reqUrl);
  }
@@ -82,7 +83,6 @@
  }
 
  function reloadPage() {
-     alert("reload")
      location.reload();
  }
 
