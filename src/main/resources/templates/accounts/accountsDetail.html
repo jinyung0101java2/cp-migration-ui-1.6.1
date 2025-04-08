@@ -64,29 +64,38 @@
         const migrationsDetail = {
             init(){
 
-                // accounts 상세 조회
-                //func.loadData('GET', `${func.url}vault/storage/${sessionStorage.getItem('userGuid')}}`, 'application/json', migrationsDetail.draw);
+               // func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', migrationsDetail.draw);
                 migrationsDetail.draw();
             },
 
             draw(dataa){
 
                 let data = {
-                    'name': 'minio1',
-                    'storage_type': 's3',
-                    'endpoint': 'http://115.68.198.175:9000',
-                    'access_key_id': 'admin',
-                    'secret_access_key': 'tpsxj0812',
-                    'created_time': '2025.3.19'
+                    "data": {
+                        "accessKeyId": "jjy",
+                        "endpoint": "https://jjy.com",
+                        "secretAccessKey": "jjy",
+                        "storageType": "s3"
+                    },
+                    "metadata": {
+                        "created_time": "2025-04-08T05:34:30.656987556Z",
+                        "custom_metadata": null,
+                        "deletion_time": "",
+                        "destroyed": false,
+                        "version": 3
+                    }
                 }
 
-                //document.getElementById('name').innerText = data.name;
                 document.getElementById('name').innerText = sessionStorage.getItem('accountsName');
-                document.getElementById('storageType').innerText = data.storage_type;
-                document.getElementById('endpoint').innerText = data.endpoint;
-                document.getElementById('accessKeyId').innerText = data.access_key_id.replaceAll(/./gi, "*");
-                document.getElementById('secretAccessKey').innerText = data.secret_access_key.replaceAll(/./gi, "*");
-                document.getElementById('createdTime').innerText = data.created_time;
+                document.getElementById('storageType').innerText = data.data.storageType;
+                document.getElementById('endpoint').innerText = data.data.endpoint;
+                document.getElementById('accessKeyId').innerText = data.data.accessKeyId.replaceAll(/./gi, "*");
+                document.getElementById('secretAccessKey').innerText = data.data.secretAccessKey.replaceAll(/./gi, "*");
+
+                let originTime = data.metadata.created_time;
+                let createdTime1 = originTime.substr(0, 10)
+                let createdTime2 = originTime.substr(11, 8)
+                document.getElementById('createdTime').innerText = createdTime1 + " " + createdTime2;
 
             },
 
@@ -98,17 +107,15 @@
                 document.getElementById('modify').addEventListener('click', (e) => {
                     func.alertPopup('MODIFY', MSG_CHECK_TO_MODIFY, true, MSG_CONFIRM, migrationsDetail.modify);
 
-
             }, false);
             },
 
             delete(){
-                // accounts 삭제
-                func.saveData('GET', `${func.url}vault/storage/${sessionStorage.getItem('userGuid')}}`, 'application/json', func.historyBack);
+                func.saveData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBack);
             },
 
             modify(){
-                func.saveData('GET', `${func.url}vault/storage/${sessionStorage.getItem('userGuid')}}`, 'application/json', func.refresh);
+                func.saveData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.refresh);
             }
         }
         migrationsDetail.init();
