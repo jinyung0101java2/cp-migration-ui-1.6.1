@@ -14,32 +14,38 @@
                         <caption>Details</caption>
                         <colgroup >
                             <col width="20%" />
-                            <col width="80%" />
+                            <col width="70%" />
+                            <col width="10%" />
                         </colgroup>
                         <tbody class="listTable">
                         <tr>
                             <th scope="row" class="left">Name</th>
-                            <td class="left" id="name"></td>
+                            <td class="left" id="name">
+                                <div id="editValueName" style="outline:none" disabled="true"></div>
+                            </td>
+                            <td>
+                                <i id="editValueBtnName" class="fa-solid fa-pen-to-square custom-access-button" ></i>
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row" class="left">Storage Type</th>
-                            <td class="left" id="storageType"></td>
+                            <td class="left" id="storageType"></td><td>-</td>
                         </tr>
                         <tr>
                             <th scope="row" class="left">Endpoint</th>
-                            <td class="left" id="endpoint"></td>
+                            <td class="left" id="endpoint"></td><td>-</td>
                         </tr>
                         <tr>
                             <th scope="row" class="left">Access Key Id</th>
-                            <td class="box left" id="accessKeyId"></td>
+                            <td class="box left" id="accessKeyId"></td><td>-</td>
                         </tr>
                         <tr>
                             <th scope="row" class="left">Secret Access Key</th>
-                            <td class="left box" id="secretAccessKey"></td>
+                            <td class="left box" id="secretAccessKey"></td><td>-</td>
                         </tr>
                         <tr>
                             <th scope="row" class="left">Created Time</th>
-                            <td class="left box" id="createdTime"></td>
+                            <td class="left box" id="createdTime"></td><td>-</td>
                         </tr>
                         </tbody>
                     </table>
@@ -61,30 +67,17 @@
     <script type="text/javascript">
     window.onload = () => {
 
-        const migrationsDetail = {
-            init(){
+        const accountsDetail = {
+            init() {
 
                // func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', migrationsDetail.draw);
-                migrationsDetail.draw();
+                // func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', migrationsDetail.draw);
+                func.loadData('GET', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', accountsDetail.draw);
             },
 
-            draw(dataa){
+            draw(data){
 
-                let data = {
-                    "data": {
-                        "accessKeyId": "jjy",
-                        "endpoint": "https://jjy.com",
-                        "secretAccessKey": "jjy",
-                        "storageType": "s3"
-                    },
-                    "metadata": {
-                        "created_time": "2025-04-08T05:34:30.656987556Z",
-                        "custom_metadata": null,
-                        "deletion_time": "",
-                        "destroyed": false,
-                        "version": 3
-                    }
-                }
+                console.log(JSON.stringify(data))
 
                 document.getElementById('name').innerText = sessionStorage.getItem('accountsName');
                 document.getElementById('storageType').innerText = data.data.storageType;
@@ -101,25 +94,35 @@
 
             event(){
                 document.getElementById('delete').addEventListener('click', (e) => {
-                    func.alertPopup('DELETE', MSG_CHECK_TO_DELETE, true, MSG_CONFIRM, migrationsDetail.delete);
+                    func.alertPopup('DELETE', MSG_CHECK_TO_DELETE, true, MSG_CONFIRM, accountsDetail.delete);
             }, false);
 
                 document.getElementById('modify').addEventListener('click', (e) => {
-                    func.alertPopup('MODIFY', MSG_CHECK_TO_MODIFY, true, MSG_CONFIRM, migrationsDetail.modify);
+                    func.alertPopup('MODIFY', MSG_CHECK_TO_MODIFY, true, MSG_CONFIRM, accountsDetail.modify);
 
-            }, false);
+            }, false)
+
+                document.addEventListener('click', (e) => {
+                    if (e.target && e.target.id === 'editValueBtnName') {
+                        document.getElementById('editValueName').setAttribute("contenteditable", true);
+                        document.getElementById('editValueName').setAttribute("disabled", false);
+                    }
+                });
+
             },
 
             delete(){
-                func.saveData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBack);
+                //func.saveData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBack);
+                func.saveData('DELETE', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBack);
             },
 
             modify(){
-                func.saveData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.refresh);
+                //func.saveData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.refresh);
+                func.saveData('PUT', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.refresh);
             }
         }
-        migrationsDetail.init();
-        migrationsDetail.event();
+        accountsDetail.init();
+        accountsDetail.event();
     }
 </script>
 </th:block>

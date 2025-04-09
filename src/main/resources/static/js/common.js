@@ -57,41 +57,10 @@ const func = {
 	},
 
 	// 로그인 체크 ////////////////////////////////////////////////////////////////
-	loginCheck(){
-		var request = new XMLHttpRequest();
 
-		request.open('GET', URI_CP_GET_USER_LOGIN_DATA, false);
-		request.setRequestHeader('Content-type', 'application/json');
-
-		request.onreadystatechange = () => {
-			if (request.readyState === XMLHttpRequest.DONE){
-				if(request.status === 200){
-					if(JSON.parse(request.responseText).httpStatusCode != 401){
-
-						if(JSON.parse(request.responseText).accessToken == '-') {
-							func.logout();
-							return false;
-						}
-
-					/*	sessionStorage.setItem('user' , JSON.parse(request.responseText).userId);
-						sessionStorage.setItem('userType' , JSON.parse(request.responseText).userType);
-						sessionStorage.setItem('token' , 'Bearer ' + JSON.parse(request.responseText).accessToken);*/
-
-
-					} else {
-						func.alertPopup('ERROR', JSON.parse(request.responseText).detailMessage, true, MSG_CLOSE, func.refresh);
-					}
-				} else {
-					func.alertPopup('ERROR', JSON.parse(request.responseText).detailMessage, true, MSG_CLOSE);
-				};
-			};
-		};
-
-		request.send();
-	},
 
 	// Refresh 토큰 조회 ////////////////////////////////////////////////////////////////
-	refreshToken(){
+	/*refreshToken(){
 		var request = new XMLHttpRequest();
 
 		request.open('GET', URI_CP_REFRESH_TOKEN, false);
@@ -109,7 +78,7 @@ const func = {
 		};
 
 		request.send();
-	},
+	},*/
 
 	// Locale Language 조회 ////////////////////////////////////////////////////////////////
 	getLocaleLang(){
@@ -171,15 +140,22 @@ const func = {
 	// 데이터 로드 - loadData(method, url, callbackFunction)
 	// (전송타입, url, 콜백함수)
 	/////////////////////////////////////////////////////////////////////////////////////
-	loadData(method, url, header, callbackFunction, list, token) {
-		httpRequest = new XMLHttpRequest();
+	loadData(method, url, header, callbackFunction, list) {
 
-		httpRequest.open(method, url, bull);
-		httpRequest.setRequestHeader('Content-type', header);
-		httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('token'));
-		httpRequest.responseType = "json"
-		httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
-		httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
+		if(url == null) {
+			callbackFunction();
+			return false;
+		}
+
+		var httpRequest = new XMLHttpRequest();
+
+		setTimeout(function() {
+			httpRequest.open(method, url, false);
+			httpRequest.setRequestHeader('Content-type', header);
+			httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('accessToken'));
+			httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
+			httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
+
 
 		/*httpRequest.onreadystatechange = () => {
 			if (httpRequest.readyState === XMLHttpRequest.DONE){
@@ -190,22 +166,37 @@ const func = {
 				}
 			}
 		}*/
-		httpRequest.onreadystatechange = () => {
-			if (httpRequest.readyState === XMLHttpRequest.DONE){
-				if (httpRequest.status === 200) {
-					if(document.getElementById('loading')){
-						document.getElementById('wrap').removeChild(document.getElementById('loading'));
-					};
-					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  'closed');
-				} else {
-					if(document.getElementById('loading')){
-						document.getElementById('wrap').removeChild(document.getElementById('loading'));
-					};
-					return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');
+			httpRequest.onreadystatechange = () => {
+				if (httpRequest.readyState === XMLHttpRequest.DONE) {
+					if (httpRequest.status === 200  && httpRequest.responseText !== '') {
+						//callbackFunction(JSON.parse(request.responseText), list);
+						/*if(document.getElementById('loading')){
+							document.getElementById('wrap').removeChild(document.getElementById('loading'));
+						};
+						return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  'closed');*/
+						callbackFunction(JSON.parse(httpRequest.responseText), list);
+					} /*else if (httpRequest.status === 500) {
+						if (httpRequest.responseText === 'secret is nil') {
+							callbackFunction(list)
+						}
+						console.log(httpRequest.responseText)
+						/!*try {
+
+						} catch (e) {
+
+						}*!/*/
+
+					/*}*/ else {
+
+						if(document.getElementById('loading')) {
+							document.getElementById('wrap').removeChild(document.getElementById('loading'));
+						};
+						return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');
+					}
 				}
 			}
-		}
-		httpRequest.send(data)
+			httpRequest.send();
+		}, 0)
 	},
 
 
@@ -213,7 +204,7 @@ const func = {
 	// 상태 데이터 로드 - statusLoadData(method, url, callbackFunction)
 	// (전송타입, url, 콜백함수)
 	/////////////////////////////////////////////////////////////////////////////////////
-	statusLoadData(method, url, header, callbackFunction, list){
+	/*statusLoadData(method, url, header, callbackFunction, list){
 		if(sessionStorage.getItem('token') == null){
 			func.loginCheck();
 		};
@@ -231,6 +222,7 @@ const func = {
 			request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
 			request.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
 			request.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
+
 
 			request.onreadystatechange = () => {
 				if (request.readyState === XMLHttpRequest.DONE){
@@ -265,13 +257,16 @@ const func = {
 
 			request.send(); },0);
 
-	},
+	},*/
 
-
+	/////////////////////////////////////////////////////////////////////////////////////
+	// 데이터 SAVE - saveData(method, url, data, bull, callFunc)
+	// (전송타입, url, 데이터, 분기, 콜백함수)
+	/////////////////////////////////////////////////////////////////////////////////////
 	saveData(method, url, data, bull, header){
 		func.loading();
 
-		httpRequest = new XMLHttpRequest();
+		var httpRequest = new XMLHttpRequest();
 
 		httpRequest.open(method, url, bull);
 		httpRequest.setRequestHeader('Content-type', header);
@@ -283,7 +278,7 @@ const func = {
 
 		httpRequest.onreadystatechange = () => {
 			if (httpRequest.readyState === XMLHttpRequest.DONE){
-				if (httpRequest.status === 200) {
+				if (httpRequest.status === 200 && httpRequest.responseText !== '') {
 					if(document.getElementById('loading')){
 						document.getElementById('wrap').removeChild(document.getElementById('loading'));
 					};
@@ -297,8 +292,6 @@ const func = {
 			}
 		}
 		httpRequest.send(data)
-
-
 	},
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -307,7 +300,7 @@ const func = {
 	/////////////////////////////////////////////////////////////////////////////////////
 	alertPopup(title, text, bull, name, callback){
 		var html = `<div class='modal-wrap' id='alertModal'><div class='modal'><h5>${title}</h5><p>${text}</p>`;
-		if(bull){
+		if(bull) {
 			html += `<a class='confirm' href='javascript:;'>${name}</a>`;
 		};
 		html += `<a class='close' href='javascript:;'>` + MSG_CLOSE + `</a></div></div>`;
@@ -322,9 +315,9 @@ const func = {
 			document.getElementById('wrap').removeChild(document.getElementById('alertModal'));
 		}, false);
 
-		if(callback){
+		if(callback) {
 			document.getElementById('alertModal').querySelector('.confirm').addEventListener('click', (e) => {
-				if(callback != 'closed'){
+				if(callback !== 'closed'){
 					callback();
 				};
 

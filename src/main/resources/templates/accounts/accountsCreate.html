@@ -67,22 +67,37 @@
             const accountsCreate = {
 
                 init() {
-                    sessionStorage.setItem('check','False');
-                    //sessionStorage.setItem('check','TRUE');
+                    sessionStorage.setItem('check', 'true');
                 },
 
                 event() {
+                    let accountsName = document.querySelector('#accountsName');
+                    let storageType = document.querySelector('#storageType');
+                    let endpoint = document.querySelector('#endpoint');
+                    let accessKeyId = document.querySelector('#accessKeyId');
+                    let secretAccessKey = document.querySelector('#secretAccessKey');
+
                     document.getElementById('save').addEventListener('click', () => {
-                        if (sessionStorage.getItem('check') === 'TRUE') {
-                            func.alertPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, accountsCreate.save);
-                        } else {
-                            func.alertPopup('CHECK', MSG_CHECK_TO_VERIFICATION_FIRST, true, MSG_CONFIRM, 'closed');
+
+                        if (accountsName.value === '' || storageType.value === '' || endpoint.value === '' || accessKeyId.value === '' || secretAccessKey.value === '') {
+                            func.alertPopup('CHECK', MSG_CHECK_TO_VALUE, true, MSG_CONFIRM, 'closed');
+                        } else if (accountsName.value !== '' && storageType.value !== '' && endpoint.value !== '' && accessKeyId.value !== '' && secretAccessKey.value !== '') {
+                            if (sessionStorage.getItem('check') === 'true') {
+                                func.alertPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, accountsCreate.save);
+                            } else if (sessionStorage.getItem('check') === 'false') {
+                                func.alertPopup('CHECK', MSG_CHECK_TO_VERIFICATION_FIRST, true, MSG_CONFIRM, 'closed');
+                            }
                         }
 
                     }, false);
 
                     document.getElementById('check').addEventListener('click', () => {
-                        func.alertPopup('CHECK', MSG_CHECK_TO_CHECK, true, MSG_CONFIRM, accountsCreate.check);
+
+                        if (accountsName.value === '' || storageType.value === '' || endpoint.value === '' || accessKeyId.value === '' || secretAccessKey.value === '') {
+                            func.alertPopup('CHECK', MSG_CHECK_TO_VALUE, true, MSG_CONFIRM, 'closed');
+                        } else if (accountsName.value !== '' && storageType.value !== '' && endpoint.value !== '' && accessKeyId.value !== '' && secretAccessKey.value !== '') {
+                            func.alertPopup('CHECK', MSG_CHECK_TO_CHECK, true, MSG_CONFIRM, accountsCreate.check);
+                        }
 
                     }, false);
                 },
@@ -103,7 +118,7 @@
                     console.log(JSON.stringify(accountsCheck))
 
                     //func.saveData('POST', `${func.vaultUrl}v1/migration/operations/list`, JSON.stringify(accountsCheck), true, 'application/json', func.historyBack);
-                    func.saveData('POST', `http://192.168.0.5:8901/v1/migration/operations/list`, JSON.stringify(accountsCheck), true, 'application/json', accountsCreate.verify);
+                    func.saveData('GET', `http://192.168.0.5:8901/v1/migration/operations/list`, JSON.stringify(accountsCheck), true, 'application/json', accountsCreate.verify);
 
                 },
 
@@ -112,7 +127,7 @@
 
                     if (data.list.length > 1) {
                         func.alertPopup('SAVE', MSG_CHECK_TO_VERIFIED, true, MSG_CONFIRM, 'closed');
-                        sessionStorage.setItem('check','TRUE');
+                        sessionStorage.setItem('check', 'true');
                     } else if (data.list.length === 0) {
                         func.alertPopup('SAVE', MSG_CHECK_TO_BUCKET, true, MSG_CONFIRM, 'closed');
                     }
