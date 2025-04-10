@@ -52,19 +52,30 @@
         const accounts = {
 
             init(){
+                /*if (!location.hash) {
+                    location.hash = '#reload';
+                    location.href = location.href;
+                }*/
+                //1
+                //location.reload(true);
+
+//2
+                //location.href = location.href;
+
+//3
+                //history.go(0);
                 //func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}`, 'application/json', accounts.draw);
-                func.loadData('GET', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}?detail=true`, 'application/json', accounts.draw);
+                func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=true`, 'application/json', accounts.draw);
             },
 
             draw(data){
-
-                alert(data)
 
                 if (data === undefined) {
                     var html = `<tr><td colspan="4">No Data.</td></tr>`;
 
                     func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                 } else {
+                    func.removeHtml(document.querySelector('.listTable'), html, 'tbody');
                     if(data.length > 0){
                         for(var i=0; i<=data.length-1; i++){
                             let originTime = '';
@@ -77,7 +88,7 @@
 
                             var html = `<tr>
                                         <td class="left"><a href="javascript:;" data-name="${data[i].name}">${data[i].name}</a></td>
-                                        <td>${data[i].data.storage_type}</td>
+                                        <td>${data[i].data.storageType}</td>
                                         <td>${data[i].data.endpoint}</td>
                                         <td>${createdTime1 + " " + createdTime2}</td>
                                     </tr>`;

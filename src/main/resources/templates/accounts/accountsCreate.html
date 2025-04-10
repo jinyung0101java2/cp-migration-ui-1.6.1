@@ -51,7 +51,6 @@
             <div class="btn02">
                 <button onclick="movePage(URI_CP_ACCOUNTS_LIST);" th:text="#{M0025}"></button>
                 <div>
-                    <button type="submit" id="check" th:text="#{M0029}"></button>
                     <button type="submit" id="save" th:text="#{M0026}"></button>
                 </div>
             </div>
@@ -66,10 +65,6 @@
 
             const accountsCreate = {
 
-                init() {
-                    sessionStorage.setItem('check', 'true');
-                },
-
                 event() {
                     let accountsName = document.querySelector('#accountsName');
                     let storageType = document.querySelector('#storageType');
@@ -82,55 +77,10 @@
                         if (accountsName.value === '' || storageType.value === '' || endpoint.value === '' || accessKeyId.value === '' || secretAccessKey.value === '') {
                             func.alertPopup('CHECK', MSG_CHECK_TO_VALUE, true, MSG_CONFIRM, 'closed');
                         } else if (accountsName.value !== '' && storageType.value !== '' && endpoint.value !== '' && accessKeyId.value !== '' && secretAccessKey.value !== '') {
-                            if (sessionStorage.getItem('check') === 'true') {
-                                func.alertPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, accountsCreate.save);
-                            } else if (sessionStorage.getItem('check') === 'false') {
-                                func.alertPopup('CHECK', MSG_CHECK_TO_VERIFICATION_FIRST, true, MSG_CONFIRM, 'closed');
-                            }
+                            func.alertPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, accountsCreate.save);
                         }
 
                     }, false);
-
-                    document.getElementById('check').addEventListener('click', () => {
-
-                        if (accountsName.value === '' || storageType.value === '' || endpoint.value === '' || accessKeyId.value === '' || secretAccessKey.value === '') {
-                            func.alertPopup('CHECK', MSG_CHECK_TO_VALUE, true, MSG_CONFIRM, 'closed');
-                        } else if (accountsName.value !== '' && storageType.value !== '' && endpoint.value !== '' && accessKeyId.value !== '' && secretAccessKey.value !== '') {
-                            func.alertPopup('CHECK', MSG_CHECK_TO_CHECK, true, MSG_CONFIRM, accountsCreate.check);
-                        }
-
-                    }, false);
-                },
-
-                check() {
-                    let storageType = document.getElementById('storageType').value;
-                    let endpoint = document.getElementById('endpoint').value;
-                    let accessKeyId = document.getElementById('accessKeyId').value;
-                    let secretAccessKey = document.getElementById('secretAccessKey').value;
-
-                    let accountsCheck = {
-                        "storageType": storageType,
-                        "endpoint": endpoint,
-                        "accessKeyId": accessKeyId,
-                        "secretAccessKey": secretAccessKey
-                    }
-
-                    console.log(JSON.stringify(accountsCheck))
-
-                    //func.saveData('POST', `${func.vaultUrl}v1/migration/operations/list`, JSON.stringify(accountsCheck), true, 'application/json', func.historyBack);
-                    func.saveData('GET', `http://192.168.0.5:8901/v1/migration/operations/list`, JSON.stringify(accountsCheck), true, 'application/json', accountsCreate.verify);
-
-                },
-
-                verify(data) {
-                    alert(JSON.stringify(data))
-
-                    if (data.list.length > 1) {
-                        func.alertPopup('SAVE', MSG_CHECK_TO_VERIFIED, true, MSG_CONFIRM, 'closed');
-                        sessionStorage.setItem('check', 'true');
-                    } else if (data.list.length === 0) {
-                        func.alertPopup('SAVE', MSG_CHECK_TO_BUCKET, true, MSG_CONFIRM, 'closed');
-                    }
 
                 },
 
@@ -142,7 +92,7 @@
                     let secretAccessKey = document.getElementById('secretAccessKey').value;
 
                     let accountsCreate = {
-                        "basePath": "storage",
+                        "basePath": "jjyStorage",
                         "userAccount": sessionStorage.getItem('userGuid'),
                         "configName": accountsName,
                         "content": {
@@ -153,14 +103,11 @@
                         }
                     }
 
-                    console.log(JSON.stringify(accountsCreate))
-
                     //func.saveData('POST', `${func.vaultUrl}v1/vault`, JSON.stringify(accountsCreate), true, 'application/json', func.historyBack);
-                    func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(accountsCreate), true, 'application/json', func.historyBack);
+                    func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(accountsCreate), true, 'application/json', func.historyBackRefresh);
 
                 },
             };
-            accountsCreate.init();
             accountsCreate.event();
         };
 

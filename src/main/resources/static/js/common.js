@@ -5,7 +5,12 @@ const func = {
 	ui : 'http://localhost:8090/',
 
 	init() {
-		//func.getLocaleLang();
+
+		/*if (self.name !== 'reload') {
+			self.name = 'reload';
+			self.location.reload(true);
+		}
+		else self.name = '';*/
 	},
 
 	event(){
@@ -168,26 +173,19 @@ const func = {
 		}*/
 			httpRequest.onreadystatechange = () => {
 				if (httpRequest.readyState === XMLHttpRequest.DONE) {
-					if (httpRequest.status === 200  && httpRequest.responseText !== '') {
+					if (httpRequest.status === 200) {
 						//callbackFunction(JSON.parse(request.responseText), list);
 						/*if(document.getElementById('loading')){
 							document.getElementById('wrap').removeChild(document.getElementById('loading'));
 						};
 						return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  'closed');*/
 						callbackFunction(JSON.parse(httpRequest.responseText), list);
-					} /*else if (httpRequest.status === 500) {
+					} else if (httpRequest.status === 500) {
+						alert(httpRequest.responseText)
 						if (httpRequest.responseText === 'secret is nil') {
-							callbackFunction(list)
+							console.warn = console.error = () => {};
 						}
-						console.log(httpRequest.responseText)
-						/!*try {
-
-						} catch (e) {
-
-						}*!/*/
-
-					/*}*/ else {
-
+					} else {
 						if(document.getElementById('loading')) {
 							document.getElementById('wrap').removeChild(document.getElementById('loading'));
 						};
@@ -199,6 +197,58 @@ const func = {
 		}, 0)
 	},
 
+	bucketData(method, url, data, bull, header, callbackFunction, list) {
+
+		if(url == null) {
+			callbackFunction();
+			return false;
+		}
+
+		var httpRequest = new XMLHttpRequest();
+
+		setTimeout(function() {
+			httpRequest.open(method, url, false);
+			httpRequest.setRequestHeader('Content-type', header);
+			httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('accessToken'));
+			httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
+			httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
+
+
+			/*httpRequest.onreadystatechange = () => {
+                if (httpRequest.readyState === XMLHttpRequest.DONE){
+                    if (httpRequest.status === 200) {
+                        return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, "closed");
+                    } else {
+                        return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, func.moveToMain);
+                    }
+                }
+            }*/
+			httpRequest.onreadystatechange = () => {
+				if (httpRequest.readyState === XMLHttpRequest.DONE) {
+					if (httpRequest.status === 200) {
+						//callbackFunction(JSON.parse(request.responseText), list);
+						/*if(document.getElementById('loading')){
+							document.getElementById('wrap').removeChild(document.getElementById('loading'));
+						};
+						return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  'closed');*/
+						callbackFunction(JSON.parse(httpRequest.responseText), list);
+					} else if (httpRequest.status === 500) {
+						alert(httpRequest.responseText)
+						if (httpRequest.responseText === 'secret is nil') {
+							console.warn = console.error = () => {};
+						}
+					} else {
+						if(document.getElementById('loading')) {
+							document.getElementById('wrap').removeChild(document.getElementById('loading'));
+						};
+						return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');
+					}
+				}
+			}
+			alert(JSON.stringify(data))
+			httpRequest.send(data);
+		}, 0)
+	},
 
 	/////////////////////////////////////////////////////////////////////////////////////
 	// 상태 데이터 로드 - statusLoadData(method, url, callbackFunction)
@@ -278,11 +328,11 @@ const func = {
 
 		httpRequest.onreadystatechange = () => {
 			if (httpRequest.readyState === XMLHttpRequest.DONE){
-				if (httpRequest.status === 200 && httpRequest.responseText !== '') {
+				if (httpRequest.status === 200) {
 					if(document.getElementById('loading')){
 						document.getElementById('wrap').removeChild(document.getElementById('loading'));
 					};
-					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  'closed');
+					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  func.historyBack);
 				} else {
 					if(document.getElementById('loading')){
 						document.getElementById('wrap').removeChild(document.getElementById('loading'));
@@ -334,6 +384,11 @@ const func = {
 
 	historyBack(){
 		window.history.back();
+	},
+
+	historyBackRefresh(){
+		location.href = document.referrer;
+
 	},
 
 	refresh(){

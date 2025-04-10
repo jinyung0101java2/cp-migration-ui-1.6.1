@@ -14,8 +14,7 @@
                         <caption>Details</caption>
                         <colgroup >
                             <col width="20%" />
-                            <col width="70%" />
-                            <col width="10%" />
+                            <col width="80%" />
                         </colgroup>
                         <tbody class="listTable">
                         <tr>
@@ -23,29 +22,26 @@
                             <td class="left" id="name">
                                 <div id="editValueName" style="outline:none" disabled="true"></div>
                             </td>
-                            <td>
-                                <i id="editValueBtnName" class="fa-solid fa-pen-to-square custom-access-button" ></i>
-                            </td>
                         </tr>
                         <tr>
                             <th scope="row" class="left">Storage Type</th>
-                            <td class="left" id="storageType"></td><td>-</td>
+                            <td class="left" id="storageType"></td>
                         </tr>
                         <tr>
                             <th scope="row" class="left">Endpoint</th>
-                            <td class="left" id="endpoint"></td><td>-</td>
+                            <td class="left" id="endpoint"></td>
                         </tr>
                         <tr>
                             <th scope="row" class="left">Access Key Id</th>
-                            <td class="box left" id="accessKeyId"></td><td>-</td>
+                            <td class="box left" id="accessKeyId"></td>
                         </tr>
                         <tr>
                             <th scope="row" class="left">Secret Access Key</th>
-                            <td class="left box" id="secretAccessKey"></td><td>-</td>
+                            <td class="left box" id="secretAccessKey"></td>
                         </tr>
                         <tr>
                             <th scope="row" class="left">Created Time</th>
-                            <td class="left box" id="createdTime"></td><td>-</td>
+                            <td class="left box" id="createdTime"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -55,7 +51,6 @@
             <div class="btn02">
                 <button onclick="movePage(URI_CP_ACCOUNTS_LIST)" th:text="#{M0025}"></button>
                 <div>
-                    <a href="javascript:;" id="modify" th:text="#{M0023}"></a>
                     <a href="javascript:;" id="delete" th:text="#{M0024}"></a>
                 </div>
             </div>
@@ -72,7 +67,7 @@
 
                // func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', migrationsDetail.draw);
                 // func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', migrationsDetail.draw);
-                func.loadData('GET', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', accountsDetail.draw);
+                func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', accountsDetail.draw);
             },
 
             draw(data){
@@ -97,11 +92,6 @@
                     func.alertPopup('DELETE', MSG_CHECK_TO_DELETE, true, MSG_CONFIRM, accountsDetail.delete);
             }, false);
 
-                document.getElementById('modify').addEventListener('click', (e) => {
-                    func.alertPopup('MODIFY', MSG_CHECK_TO_MODIFY, true, MSG_CONFIRM, accountsDetail.modify);
-
-            }, false)
-
                 document.addEventListener('click', (e) => {
                     if (e.target && e.target.id === 'editValueBtnName') {
                         document.getElementById('editValueName').setAttribute("contenteditable", true);
@@ -113,13 +103,9 @@
 
             delete(){
                 //func.saveData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBack);
-                func.saveData('DELETE', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBack);
+                func.saveData('DELETE', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBack);
             },
 
-            modify(){
-                //func.saveData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.refresh);
-                func.saveData('PUT', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.refresh);
-            }
         }
         accountsDetail.init();
         accountsDetail.event();
