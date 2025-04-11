@@ -314,7 +314,7 @@
 
                 let bucketsData = {
                     "storageType": "s3",
-                    "endpoint": "http://115.68.198.175:9000",
+                    "endpoint": "http://115.68.198.65:9000",
                     "accessKeyId": "admin",
                     "secretAccessKey": "tpsxj0812"
                 }
@@ -335,143 +335,27 @@
 
 
           function bucketsDraw(data) {
-              console.log('data==' +  data) // 문자열
+              //console.log('data==' +  data) // 문자열
+              func.removeHtml(document.querySelector('#sourceBucket'));
+
               data = data.substr(12);
               data = data.slice(0,-2)
               data.replace(/\n|\r|\s*/g, '')
 
-              console.log('data수정==' +  data)
-              //console.log('data제이슨:::' +  JSON.parse(data[0]))
-              //console.log('data제이슨[0]:::' +  JSON.parse(data)[0])
-              //console.dir('data제이슨dir:::' + data[0])
-
-               //data = JSON.stringify(data)
-              //data = JSON.parse(data)
-
               let datLength = JSON.parse(data)
-              console.log('길이'+ datLength.length)
 
-
-              //let text = [];
-
-              let name = /Name/g;
               const text = data.split('Size')
               for(var i=0; i<=datLength.length-1; i++) {
-                  //text[i];
-                  //console.log('자르기자르기::' + text[i])
-                  //text[i].split('Name');
-                  //console.log('인덱스 찾기::' + text[i].indexOf('Name'))
                   text[i] = text[i].substring(text[i].indexOf(`"Name": "`));
-                  console.log('인덱스 자르기 자르기::' + text[i].substring(text[i].indexOf(`"Name": "`)))
                   text[i] = text[i].substr(9);
-                  console.log('이름 자르기 자르기::' + text[i].substr(9));
-                  text[i]= text[i].slice(0, -2);
-                  console.log('마지막 문자 자르기 자르기:: ' + text[i].slice(0, -5));
-
-
-
-                 /* data.match(name).index;
-                  console.log('자르기'+i+'::::' + data.replace(/\n|\r|\s*!/g, '').split('Name'))*/
+                  text[i] = text[i].slice(0, -7);
+                  console.log(text[i])
               }
-
-
-              /*for(var i=0; i<=datLength.length-1; i++) {
-
-              }*/
-
-
-          /*    console.log(data.match(/Name/));
-              console.log(data.indexOf("Name"));
-              for (const match of data) {
-                  console.log(data.indexOf("Name"));
-                  console.log(`${match.index}`)
-              }*/
-
-
-              /*for(var i=0; i<=datLength.length-1; i++){
-                  console.log('for문' + data[i])
-              }*/
-
-
-
-              //console.log('data:::' +  JSON.parse(data))
-              // let bucketsList = data.substr(12);
-              // bucketsList = bucketsList.slice(0,-2)
-              // console.log('bucketsList==' +  bucketsList)
-              // console.log('bucketsListparse==' +  JSON.parse(bucketsList))
-              // console.log('bucketsListstringify==' +  JSON.stringify(bucketsList))
-              //bucketsList = JSON.parse(bucketsList)
-              //console.log('bucketsList[0]:::' +  JSON.stringify(bucketsList))
-              // const bucketsList0 = bucketsList[0];
-              // const bucketsList1 = bucketsList[1];
-              // const bucketsList2 = bucketsList[2];
-
-
-              //
-              // console.log('bucketsList=' + JSON.parse(bucketsList))
-              // console.log('bucketsList[0]=' + bucketsList[0])
-              // console.log('bucketsList[0]=' + JSON.stringify(bucketsList[1]))
-              //console.log('bucketsList[0]=' + JSON.parse(bucketsList[0]))
-
-
-             /* console.log('bucketsList[0]=' +  JSON.parse(bucketsList0))
-              console.log('bucketsList[1]=' +  JSON.parse(bucketsList1))
-              console.log('bucketsList[2]=' +  JSON.parse(bucketsList2))*/
-              /*console.log('bucketsList[0]=' + bucketsList0)
-              console.log('bucketsList[1]=' + bucketsList1)
-              console.log('bucketsList[2]=' + bucketsList2)*/
-
-
-
-         /*     console.log('data:::' +  data)
-            //let bucketsList = JSON.parse(data);
-            console.log('bucketsList::' + bucketsList)
-            //let bucketsJson = bucketsList.substr(1);
-            console.log('bucketsList22::' + JSON.parse(bucketsJson));
-            console.log('length' + JSON.parse(bucketsJson).length)
-*/
-             /* let list = JSON.parse(data);
-              // list = JSON.stringify(list)
-              console.log(":::"+ list)*/
-
-
-                  let bucket = [
-                  {
-                      "Path": "abc",
-                      "Name": "abc",
-                      "Size": -1,
-                      "MimeType": "inode/directory",
-                      "ModTime": "2025-04-10T04:38:19.021000000Z",
-                      "IsDir": true,
-                      "IsBucket": true
-                  },
-                      {
-                          "Path": "jjy",
-                          "Name": "jjy",
-                          "Size": -1,
-                          "MimeType": "inode/directory",
-                          "ModTime": "2025-04-01T04:34:27.491000000Z",
-                          "IsDir": true,
-                          "IsBucket": true
-                      },
-                      {
-                          "Path": "test2",
-                          "Name": "test2",
-                          "Size": -1,
-                          "MimeType": "inode/directory",
-                          "ModTime": "2025-03-26T04:14:11.246000000Z",
-                          "IsDir": true,
-                          "IsBucket": true
-                      }
-                  ]
-
-              console.log(JSON.stringify(bucketsList))
-              console.log("jsonParse=" + JSON.parse(bucketsList))
 
               let sourceBucketHtml = ``;
 
-              for(var i=0; i<=bucketsList.length-1; i++){
-                  sourceBucketHtml += `<option value="${bucketsList[i].Name}">${bucketsList[i].Name}</option>`;
+              for(var i=0; i<=text.length-2; i++){
+                  sourceBucketHtml += `<option value="${text[i]}">${text[i]}</option>`;
               }
 
               func.appendHtml(document.getElementById('sourceBucket'), sourceBucketHtml);
@@ -483,7 +367,7 @@
                     })*/
 
 
-            func.removeHtml(document.querySelector('#sourceBucket'));
+           /* func.removeHtml(document.querySelector('#sourceBucket'));
 
             const bucket1 = ['bucket1', 'bucket1', 'bucket3', 'bucket3', 'bucket5'];
             let sourceBucketHtml = ``;
@@ -492,7 +376,7 @@
                 sourceBucketHtml += `<option value="${key}">${key}</option>`;
             }
 
-            func.appendHtml(document.getElementById('sourceBucket'), sourceBucketHtml);
+            func.appendHtml(document.getElementById('sourceBucket'), sourceBucketHtml);*/
 
 
         }
