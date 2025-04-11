@@ -212,6 +212,7 @@ const func = {
 			httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('accessToken'));
 			httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
 			httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
+			//httpRequest.responseType = "json"
 
 
 			/*httpRequest.onreadystatechange = () => {
@@ -231,7 +232,8 @@ const func = {
 							document.getElementById('wrap').removeChild(document.getElementById('loading'));
 						};
 						return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  'closed');*/
-						callbackFunction(JSON.parse(httpRequest.responseText), list);
+						//callbackFunction(JSON.stringify(httpRequest.responseText), list);
+						callbackFunction(httpRequest.responseText, list);
 					} else if (httpRequest.status === 500) {
 						alert(httpRequest.responseText)
 						if (httpRequest.responseText === 'secret is nil') {
@@ -245,8 +247,7 @@ const func = {
 					}
 				}
 			}
-			alert(JSON.stringify(data))
-			httpRequest.send(data);
+			httpRequest.send(JSON.stringify(data));
 		}, 0)
 	},
 

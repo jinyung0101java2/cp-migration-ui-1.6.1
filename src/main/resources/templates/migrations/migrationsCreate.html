@@ -302,9 +302,7 @@
                     "secretAccessKey": secretAccessKey
                 }
 
-                alert('bucketsDraw::::' + JSON.stringify(bucketsData))
-
-                //func.bucketData('POST', `http://192.168.0.5:8911/v1/migration/operations/list`, bucketsData, true, 'application/json', bucketsDraw);*/
+                func.bucketData('POST', `http://192.168.0.5:8901/v1/migration/operations/list`, bucketsData, true, 'application/json', bucketsDraw);
             }
 
            /* let bucketsData = {
@@ -319,10 +317,37 @@
             func.bucketData('POST', `http://192.168.0.5:8911/v1/migration/operations/list`, bucketsData, true, 'application/json', bucketsDraw);*/
 
 
-          /* function bucketsDraw(data) {
-               alert('bucketsDraw::::' + JSON.stringify(data))
+          function bucketsDraw(data) {
 
-           }*/
+              console.log('data:::' +  data)
+              let bucketsList = data.substr(1);
+              bucketsList = JSON.stringify(bucketsList)
+              bucketsList = JSON.parse(bucketsList)
+              console.log('key::' + Object.keys(bucketsList))
+              console.log('value::' + Object.values(bucketsList))
+              console.log("bucketsList::" + bucketsList)
+
+
+
+         /*     console.log('data:::' +  data)
+            //let bucketsList = JSON.parse(data);
+            console.log('bucketsList::' + bucketsList)
+            //let bucketsJson = bucketsList.substr(1);
+            console.log('bucketsList22::' + JSON.parse(bucketsJson));
+            console.log('length' + JSON.parse(bucketsJson).length)
+*/
+             /* let list = JSON.parse(data);
+              // list = JSON.stringify(list)
+              console.log(":::"+ list)*/
+              let sourceBucketHtml = ``;
+
+              for(var i=0; i<=list.length-1; i++){
+                  sourceBucketHtml += `<option value="${list[i].Name}">${list[i].Name}</option>`;
+              }
+
+              func.appendHtml(document.getElementById('sourceBucket'), sourceBucketHtml);
+
+          }
 
             /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
                         document.getElementById('createTemplatesDetail').value = e.hclScript;
