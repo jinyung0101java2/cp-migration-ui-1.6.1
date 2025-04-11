@@ -77,6 +77,8 @@
             const migrationsCreate = {
 
                 init() {
+                    sessionStorage.setItem('accountsData', 'N')
+                    sessionStorage.setItem('accountsCnt', 0)
                     sessionStorage.setItem('accessToken' , 'Bearer ' + [[${accessToken}]]);
                     sessionStorage.setItem('userGuid' , [[${userGuid}]]);
 

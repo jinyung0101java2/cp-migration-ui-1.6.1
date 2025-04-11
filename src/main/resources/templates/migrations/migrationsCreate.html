@@ -20,8 +20,9 @@
                         <dd>
                             <fieldset>
                                 <select id="sourceMigration" onchange="changeSourceMigrationSelect()">
-                                    <option value="minio1">minio1</option>
-                                    <option value="minio2">minio2</option>
+                                    <option value=""></option>
+                                    <!--<option value="minio1">minio1</option>
+                                    <option value="minio2">minio2</option>-->
                                 </select>
                             </fieldset>
                         </dd>
@@ -44,6 +45,7 @@
                         <dd>
                             <fieldset>
                                 <select id="destinationMigration" onchange="changeDestinationMigrationSelect()">
+                                    <option value=""></option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -80,6 +82,9 @@
 
                 init() {
 
+                    if (localStorage.getItem('migrationsData') === 'Y') {
+                        func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=false`, 'application/json', migrationsCreate.draw);
+                    }
                     //vault에서 migration list 불러오기
                     //func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=false`, 'application/json', migrationsCreate.draw);
                     //풀기func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=false`, 'application/json', migrationsCreate.draw);
@@ -126,10 +131,9 @@
                          if(sourceMigration.value !== 0 && detinationMigration.value !== 0 && sourceBucket.value !== 0 && detinationBucket.value !== 0) {
                              alert
                          }*/
-
-
-
-                        if(sourceBucket.value === "") {
+                        if (sessionStorage.getItem('accountsData') === 'N') {
+                            func.alertPopup('ALERT', MSG_CHECK_TO_REGISTER_ACCOUNT, true, MSG_CONFIRM, "closed");
+                        } else if(sourceBucket.value === "") {
                             func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
                         } else if (detinationBucket.value === "") {
                             func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
@@ -148,7 +152,9 @@
                         let detinationMigration = document.querySelector('#destinationMigration');
                         let detinationBucket = document.querySelector('#destinationBucket');
 
-                        if(sourceBucket.value === "") {
+                        if (sessionStorage.getItem('accountsData') === 'N') {
+                            func.alertPopup('ALERT', MSG_CHECK_TO_REGISTER_ACCOUNT, true, MSG_CONFIRM, "closed");
+                        } else if(sourceBucket.value === "") {
                             func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
                         } else if (detinationBucket.value === "") {
                             func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");

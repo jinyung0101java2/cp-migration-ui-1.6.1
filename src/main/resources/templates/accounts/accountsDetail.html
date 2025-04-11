@@ -104,6 +104,10 @@
             delete(){
                 //func.saveData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBack);
                 func.saveData('DELETE', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBack);
+
+                if (sessionStorage.getItem('accountsCnt') === 1) {
+                    sessionStorage.setItem('accountsData', 'N')
+                }
             },
 
         }

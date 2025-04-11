@@ -106,6 +106,7 @@
                     //func.saveData('POST', `${func.vaultUrl}v1/vault`, JSON.stringify(accountsCreate), true, 'application/json', func.historyBack);
                     func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(accountsCreate), true, 'application/json', func.historyBackRefresh);
 
+                    sessionStorage.setItem('accountsData', 'Y')
                 },
             };
             accountsCreate.event();
