@@ -232,7 +232,16 @@ const func = {
 							document.getElementById('wrap').removeChild(document.getElementById('loading'));
 						};
 						return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  'closed');*/
-						//callbackFunction(JSON.stringify(httpRequest.responseText), list);
+						/*const responseList = JSON.stringify(httpRequest.responseText)
+						responseList.substr(12);
+						responseList.slice(0,-2)
+
+						const responseList2=responseList
+
+						alert('값 넘길때' + responseList2)
+						callbackFunction(JSON.parse(responseList2), list);
+*/
+
 						callbackFunction(httpRequest.responseText, list);
 					} else if (httpRequest.status === 500) {
 						alert(httpRequest.responseText)
