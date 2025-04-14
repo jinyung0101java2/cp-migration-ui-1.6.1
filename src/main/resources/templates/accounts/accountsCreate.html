@@ -61,6 +61,7 @@
 <th:block layout:fragment="script">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha256.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64-min.js"></script>
+    <script type="text/javascript" src="/js/jsencrypt.min.js"></script>
     <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>-->
     <script type="text/javascript">
     /*<script type="module">*/
@@ -102,11 +103,10 @@
                     let accessKeyId = document.getElementById('accessKeyId').value;
                     let secretAccessKey = document.getElementById('secretAccessKey').value;
 
-                    let accountsCreate = {
+                    /*let accountsCreate = {
                         "basePath": "jjyStorage",
                         "userAccount": sessionStorage.getItem('userGuid'),
                         "configName": accountsName,
-                        "timestamp": timestamp,
                         "content": {
                             "storageType": storageType,
                             "endpoint": endpoint,
@@ -115,12 +115,73 @@
                         }
                     }
 
+                    let includeTimestampData = {
+                        accountsCreate,
+                        "timestamp": timestamp
+                    }*/
+
+                    let accountsCreate = {
+                        "basePath": "asd",
+                        "userAccount": "sdf",
+                        "configName": "dfg",
+                        "content": {
+                            "storageType": "qwe",
+                            "endpoint": "wer",
+                            "accessKeyId": "ert",
+                            "secretAccessKey": "rty"
+                        }
+                    }
+
+                    let includeTimestampData = {
+                        "data": {
+                            "basePath": "asd",
+                            "userAccount": "sdf",
+                            "configName": "dfg",
+                            "content": {
+                                "storageType": "qwe",
+                                "endpoint": "wer",
+                                "accessKeyId": "ert",
+                                "secretAccessKey": "rty"
+                            }
+                        },
+                        "timestamp": "1744597671569076100"
+                    }
+
+                    alert("includeTimestampData::: " + JSON.stringify(includeTimestampData))
+                    console.log("includeTimestampData::: " + JSON.stringify(includeTimestampData))
+
                     alert("accountsCreate::: " + JSON.stringify(accountsCreate))
                     console.log("accountsCreate::: " + JSON.stringify(accountsCreate))
 
-                    let hmacData = func.createHmacSha256(JSON.stringify(accountsCreate));
+                    let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData));
                     alert("hmacData::: "+ hmacData)
                     console.log("hmacData::: "+ hmacData)
+
+                    let includeHmacData = {
+                        "data": accountsCreate,
+                        "hmac_data": hmacData,
+                        //"timestamp": 1744597671569076100 //timestamp,
+                        "timestamp": "1744597671569076100" //timestamp,
+                    }
+                    alert("includeHmacData::: "+ JSON.stringify(includeHmacData))
+                    console.log("includeHmacData::: "+ JSON.stringify(includeHmacData))
+
+
+                    let rsaData = func.encodeRsa(includeHmacData)
+                    alert("RsaData::: "+ JSON.stringify(rsaData))
+                    console.log("RsaData::: "+ JSON.stringify(rsaData))
+
+                    let decodeRsaData = func.decodeRsa(rsaData)
+                    alert("decodeRsaData::: "+ JSON.stringify(decodeRsaData))
+                    console.log("decodeRsaData::: "+ JSON.stringify(decodeRsaData))
+
+                    let security = {
+                        "payload": rsaData
+                    }
+
+                    alert("security::: "+ JSON.stringify(security))
+                    console.log("security::: "+ JSON.stringify(security))
+
 
                     //createHmac()
 
@@ -154,6 +215,10 @@
 
         var textString=CryptoJS.HmacSHA256("message","secret").toString(CryptoJS.enc.Hex);
         alert("hmac::: " + textString)
+    }*/
+   /* function rsa () {
+        const rsa = new JSEncrypt();
+        rsa.encrypt(data).toString();
     }*/
 
 
