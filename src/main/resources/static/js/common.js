@@ -443,4 +443,35 @@ const func = {
 		};
 	},
 
+	createUnixTimestamp() {
+
+		return Math.floor(new Date().getTime() / 1000);
+	},
+
+	createHmacSha256(data) {
+
+		let key = "secret";
+		return CryptoJS.HmacSHA256(data,key).toString(CryptoJS.enc.Hex);
+
+	}
+
+	/*unixTimestamp() {
+		var date = new Date(t*1000);
+		var year = date.getFullYear();
+		var month = "0" + (date.getMonth()+1);
+		var day = "0" + date.getDate();
+		var hour = "0" + date.getHours();
+		var minute = "0" + date.getMinutes();
+		var second = "0" + date.getSeconds();
+		return year + "-" + month.substr(-2) + "-" + day.substr(-2) + " " + hour.substr(-2) + ":" + minute.substr(-2) + ":" + second.substr(-2);
+	},*/
+
+	/*createHmacData(obj) {
+		//const cryptojs = require("crypto-js");
+		//import cryptojs from "crypto-js";
+		/!*const data = obj;
+		const key = "secret";
+		return cryptojs.HmacSHA256(data, key).toString(cryptojs.enc.Hex);*!/
+	}*/
+
 }

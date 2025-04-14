@@ -59,7 +59,11 @@
 </div>
 
 <th:block layout:fragment="script">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha256.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64-min.js"></script>
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>-->
     <script type="text/javascript">
+    /*<script type="module">*/
 
         window.onload = () => {
 
@@ -85,6 +89,13 @@
                 },
 
                 save() {
+
+                    let timestamp = func.createUnixTimestamp();
+                    alert("timestamp::: " + timestamp)
+                    console.log("timestamp::: " + JSON.stringify(timestamp))
+
+
+
                     let accountsName = document.getElementById('accountsName').value;
                     let storageType = document.getElementById('storageType').value;
                     let endpoint = document.getElementById('endpoint').value;
@@ -95,13 +106,35 @@
                         "basePath": "jjyStorage",
                         "userAccount": sessionStorage.getItem('userGuid'),
                         "configName": accountsName,
+                        "timestamp": timestamp,
                         "content": {
                             "storageType": storageType,
                             "endpoint": endpoint,
                             "accessKeyId": accessKeyId,
-                            "secretAccessKey": secretAccessKey
+                            "secretAccessKey": secretAccessKey,
                         }
                     }
+
+                    alert("accountsCreate::: " + JSON.stringify(accountsCreate))
+                    console.log("accountsCreate::: " + JSON.stringify(accountsCreate))
+
+                    let hmacData = func.createHmacSha256(JSON.stringify(accountsCreate));
+                    alert("hmacData::: "+ hmacData)
+                    console.log("hmacData::: "+ hmacData)
+
+                    //createHmac()
+
+                    /*let hmacData = func.createHmacData(accountsCreate)
+                    alert("hmacData::: " + hmacData)*/
+                    //import cryptojs from "crypto-js";
+                    /*const cryptojs = require("crypto-js");
+                    const data = accountsCreate;
+                    const key = "secret";
+                    alert(cryptojs.HmacSHA256(data, key).toString(cryptojs.enc.Hex));*/
+
+
+
+
 
                     //func.saveData('POST', `${func.vaultUrl}v1/vault`, JSON.stringify(accountsCreate), true, 'application/json', func.historyBack);
                     func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(accountsCreate), true, 'application/json', func.historyBackRefresh);
@@ -111,6 +144,18 @@
             };
             accountsCreate.event();
         };
+
+        /*function Unix_timestampConv()
+        {
+            alert("타임스탬프::" + Math.floor(new Date().getTime() / 1000))
+            return Math.floor(new Date().getTime() / 1000);
+        }*/
+   /* function createHmac() {
+
+        var textString=CryptoJS.HmacSHA256("message","secret").toString(CryptoJS.enc.Hex);
+        alert("hmac::: " + textString)
+    }*/
+
 
     </script>
 </th:block>
