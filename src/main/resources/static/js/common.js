@@ -455,9 +455,13 @@ const func = {
 
 	},
 
-	encodeRsa(data) {
-		const rsa = new JSEncrypt();
-		const key = "-----BEGIN PUBLIC KEY-----\n" +
+	//원본
+	//JSEncrypt 인코더
+	/*encodeRsa(data) {
+
+		const encodeRsa = new JSEncrypt();
+
+		const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
 			"MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
 			"020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
 			"a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
@@ -471,14 +475,387 @@ const func = {
 			"ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
 			"/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
 			"-----END PUBLIC KEY-----"
-		rsa.setKey(key);
-		return rsa.encrypt(data).toString();
+		encodeRsa.setPublicKey(publicKey);
+		//return encodeRsa.encrypt(JSON.stringify(data));X
+		//return encodeRsa.encrypt(JSON.stringify(data)).toString();X
+		//return encodeRsa.encrypt(JSON.stringify(data)).toString;X
+		//return encodeRsa.encrypt(data);X
+		return encodeRsa.encrypt(data);
+
+	},*/
+
+	//
+	/*async encodeRsa2(data) {
+		let text = JSON.stringify(data);
+		const pemHF = {
+			public: {
+				header: '-----BEGIN PUBLIC KEY-----',
+				footer: '-----END PUBLIC KEY-----',
+			},
+			private: {
+				header: '-----BEGIN PRIVATE KEY-----',
+				footer: '-----END PRIVATE KEY-----',
+			},
+		};
+
+		const arrayBufferToStr = (buf) => {
+			return String.fromCharCode.apply(null, new Uint8Array(buf));
+		};
+
+		const strToArrayBuffer = (str) => {
+			const encoder = new TextEncoder();
+			return encoder.encode(str).buffer;
+		};
+
+		const publicKeyb64 = "-----BEGIN PUBLIC KEY-----\n" +
+			"MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
+			"020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
+			"a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
+			"iotzXgx87eVPLt9cWI5RyWsfmtioyuiKip5HD3tN0MAO3guUtq90ucwObjR2VHX0\n" +
+			"PLdG1eAAmoQgfpIPOJLaS/26PR8zf5vmfso3udoWg78S93Dqflp0Q0RYe1WvWVtp\n" +
+			"B/RZhea6/qlnGlJCuGyKV8vUAUIaMdv3PFSAjeAqlZS232R0VQPWxy1S7m2G+D2F\n" +
+			"04+PUoQzCw8npBQEiDVzrGL/+osB7ezscfx/xCFTH3ihuun2K5QknT6Y0wWQ9NI8\n" +
+			"ZSAiSK3krhQ/pgXKcmS7nt00nMdZ4ojykK0M0DS270GMHpPg8vwYCQ50shqMM5TX\n" +
+			"IOl5QPNc13XzVct2/fgjhc+pYqcJQlEvyi8A0x8Hy9XB447ekAcWNMFgPzfXxmrL\n" +
+			"jV19s9LEeFuNdsZrVI1McofX+qTOMmQdu5Wi+RxfKX/yVTQNeozowblC32h89BFI\n" +
+			"ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
+			"/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
+			"-----END PUBLIC KEY-----";
+
+		const binaryDerString = window.atob(publicKeyb64.replace(pemHF.public.footer, '').replace(pemHF.public.header, ''));
+		const binaryDer = strToArrayBuffer(binaryDerString);
+		const publicKey = await window.crypto.subtle.importKey(
+			'spki',
+			binaryDer,
+			{
+				name: 'RSA-OAEP',
+				hash: 'SHA-256',
+			},
+			true,
+			['encrypt']
+		);
+		const cipher = await window.crypto.subtle.encrypt(
+			{
+				name: 'RSA-OAEP',
+			},
+			publicKey,
+			strToArrayBuffer(text)
+		);
+		//return window.btoa(arrayBufferToStr(cipher));
+
+
+		return await crypto.subtle.encrypt({name: 'RSA-OAEP'}, publicKey, cipher);
+	},*/
+
+	async encodeRsa2(data, publicKey) {
+		 return await crypto.subtle.encrypt({name: 'RSA-OAEP'}, publicKey, data)
+	},
+
+
+
+	//jsrsasign::: https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Cipher.html
+	encodeRsa3(data) {
+		const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
+			"MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
+			"020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
+			"a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
+			"iotzXgx87eVPLt9cWI5RyWsfmtioyuiKip5HD3tN0MAO3guUtq90ucwObjR2VHX0\n" +
+			"PLdG1eAAmoQgfpIPOJLaS/26PR8zf5vmfso3udoWg78S93Dqflp0Q0RYe1WvWVtp\n" +
+			"B/RZhea6/qlnGlJCuGyKV8vUAUIaMdv3PFSAjeAqlZS232R0VQPWxy1S7m2G+D2F\n" +
+			"04+PUoQzCw8npBQEiDVzrGL/+osB7ezscfx/xCFTH3ihuun2K5QknT6Y0wWQ9NI8\n" +
+			"ZSAiSK3krhQ/pgXKcmS7nt00nMdZ4ojykK0M0DS270GMHpPg8vwYCQ50shqMM5TX\n" +
+			"IOl5QPNc13XzVct2/fgjhc+pYqcJQlEvyi8A0x8Hy9XB447ekAcWNMFgPzfXxmrL\n" +
+			"jV19s9LEeFuNdsZrVI1McofX+qTOMmQdu5Wi+RxfKX/yVTQNeozowblC32h89BFI\n" +
+			"ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
+			"/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
+			"-----END PUBLIC KEY-----";
+
+		/*const rsaPublickey = KEYUTIL.getKey(publicKey)
+
+		//return KJUR.crypto.Cipher.encrypt(data, publicKey, "RSA");
+		return KJUR.crypto.Cipher.encrypt(data, rsaPublickey);*/
+		return CryptoJS.AES.encrypt(JSON.stringify(data), publicKey).toString();
+	},
+
+
+	decodeRsa3(data) {
+		const privateKey = "-----BEGIN PRIVATE KEY-----\n" +
+			"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\n" +
+			"oTnDWnK1WK/CVIVxWbb2EmHr9tgX\n" +
+			"-----END PRIVATE KEY-----";
+
+		/*const rsaPublickey = KEYUTIL.getKey(publicKey)
+
+		//return KJUR.crypto.Cipher.encrypt(data, publicKey, "RSA");
+		return KJUR.crypto.Cipher.encrypt(data, rsaPublickey);*/
+		return CryptoJS.AES.decrypt(data, privateKey).toString();
+	},
+
+
+	//rsa.js
+	encodeRsa4(data) {
+		const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
+			"MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
+			"020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
+			"a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
+			"iotzXgx87eVPLt9cWI5RyWsfmtioyuiKip5HD3tN0MAO3guUtq90ucwObjR2VHX0\n" +
+			"PLdG1eAAmoQgfpIPOJLaS/26PR8zf5vmfso3udoWg78S93Dqflp0Q0RYe1WvWVtp\n" +
+			"B/RZhea6/qlnGlJCuGyKV8vUAUIaMdv3PFSAjeAqlZS232R0VQPWxy1S7m2G+D2F\n" +
+			"04+PUoQzCw8npBQEiDVzrGL/+osB7ezscfx/xCFTH3ihuun2K5QknT6Y0wWQ9NI8\n" +
+			"ZSAiSK3krhQ/pgXKcmS7nt00nMdZ4ojykK0M0DS270GMHpPg8vwYCQ50shqMM5TX\n" +
+			"IOl5QPNc13XzVct2/fgjhc+pYqcJQlEvyi8A0x8Hy9XB447ekAcWNMFgPzfXxmrL\n" +
+			"jV19s9LEeFuNdsZrVI1McofX+qTOMmQdu5Wi+RxfKX/yVTQNeozowblC32h89BFI\n" +
+			"ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
+			"/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
+			"-----END PUBLIC KEY-----";
+
+		console.log("rsa:::"+ publicKey)
+		const rsa = new RSAKey();
+		rsa.setPublic(publicKey)
+		return rsa.encrypt(data);
+	},
+
+	//CryptoJS
+	encodeRsa5(data) {
+		const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
+			"MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
+			"020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
+			"a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
+			"iotzXgx87eVPLt9cWI5RyWsfmtioyuiKip5HD3tN0MAO3guUtq90ucwObjR2VHX0\n" +
+			"PLdG1eAAmoQgfpIPOJLaS/26PR8zf5vmfso3udoWg78S93Dqflp0Q0RYe1WvWVtp\n" +
+			"B/RZhea6/qlnGlJCuGyKV8vUAUIaMdv3PFSAjeAqlZS232R0VQPWxy1S7m2G+D2F\n" +
+			"04+PUoQzCw8npBQEiDVzrGL/+osB7ezscfx/xCFTH3ihuun2K5QknT6Y0wWQ9NI8\n" +
+			"ZSAiSK3krhQ/pgXKcmS7nt00nMdZ4ojykK0M0DS270GMHpPg8vwYCQ50shqMM5TX\n" +
+			"IOl5QPNc13XzVct2/fgjhc+pYqcJQlEvyi8A0x8Hy9XB447ekAcWNMFgPzfXxmrL\n" +
+			"jV19s9LEeFuNdsZrVI1McofX+qTOMmQdu5Wi+RxfKX/yVTQNeozowblC32h89BFI\n" +
+			"ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
+			"/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
+			"-----END PUBLIC KEY-----";
+
+		//return CryptoJS.AES.encrypt(JSON.stringify(data), publicKey);X
+		//return CryptoJS.AES.encrypt(data, publicKey);X
+		//return CryptoJS.AES.encrypt(JSON.stringify(data), publicKey).toString();X
+		//return CryptoJS.AES.encrypt(JSON.stringify(data), publicKey).toString;X
 
 	},
 
-	decodeRsa(data) {
-		const rsa = new JSEncrypt();
-		const key = "-----BEGIN PRIVATE KEY-----\n" +
+
+
+	/*encodeRsa(data) {
+
+		const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
+			"MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
+			"020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
+			"a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
+			"iotzXgx87eVPLt9cWI5RyWsfmtioyuiKip5HD3tN0MAO3guUtq90ucwObjR2VHX0\n" +
+			"PLdG1eAAmoQgfpIPOJLaS/26PR8zf5vmfso3udoWg78S93Dqflp0Q0RYe1WvWVtp\n" +
+			"B/RZhea6/qlnGlJCuGyKV8vUAUIaMdv3PFSAjeAqlZS232R0VQPWxy1S7m2G+D2F\n" +
+			"04+PUoQzCw8npBQEiDVzrGL/+osB7ezscfx/xCFTH3ihuun2K5QknT6Y0wWQ9NI8\n" +
+			"ZSAiSK3krhQ/pgXKcmS7nt00nMdZ4ojykK0M0DS270GMHpPg8vwYCQ50shqMM5TX\n" +
+			"IOl5QPNc13XzVct2/fgjhc+pYqcJQlEvyi8A0x8Hy9XB447ekAcWNMFgPzfXxmrL\n" +
+			"jV19s9LEeFuNdsZrVI1McofX+qTOMmQdu5Wi+RxfKX/yVTQNeozowblC32h89BFI\n" +
+			"ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
+			"/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
+			"-----END PUBLIC KEY-----";
+		return crypto.Cipher.encrypt(data, publicKey, "RSA");
+
+
+	},*/
+
+	//원본
+	/*decodeRsa(data) {
+
+		const decodeRsa = new JSEncrypt();
+
+		const privateKey = "-----BEGIN PRIVATE KEY-----\n" +
+			"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\n" +
+			"oTnDWnK1WK/CVIVxWbb2EmHr9tgX\n" +
+			"-----END PRIVATE KEY-----";
+
+		decodeRsa.setPrivateKey(privateKey);
+		return decodeRsa.decrypt(JSON.stringify(data));
+	}*/
+
+
+
+	//JSEncrypt 인코더
+	/*async encodeRsa(data) {
+		const encodeRsa = data;
+		const encodeRsa = new JSEncrypt();
+
+		const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
+			"MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
+			"020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
+			"a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
+			"iotzXgx87eVPLt9cWI5RyWsfmtioyuiKip5HD3tN0MAO3guUtq90ucwObjR2VHX0\n" +
+			"PLdG1eAAmoQgfpIPOJLaS/26PR8zf5vmfso3udoWg78S93Dqflp0Q0RYe1WvWVtp\n" +
+			"B/RZhea6/qlnGlJCuGyKV8vUAUIaMdv3PFSAjeAqlZS232R0VQPWxy1S7m2G+D2F\n" +
+			"04+PUoQzCw8npBQEiDVzrGL/+osB7ezscfx/xCFTH3ihuun2K5QknT6Y0wWQ9NI8\n" +
+			"ZSAiSK3krhQ/pgXKcmS7nt00nMdZ4ojykK0M0DS270GMHpPg8vwYCQ50shqMM5TX\n" +
+			"IOl5QPNc13XzVct2/fgjhc+pYqcJQlEvyi8A0x8Hy9XB447ekAcWNMFgPzfXxmrL\n" +
+			"jV19s9LEeFuNdsZrVI1McofX+qTOMmQdu5Wi+RxfKX/yVTQNeozowblC32h89BFI\n" +
+			"ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
+			"/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
+			"-----END PUBLIC KEY-----"
+		// encodeRsa.setKey(publicKey);
+		//encodeRsa.setPublicKey(publicKey);
+
+		//return rsa.encrypt(data).toString();
+		//return encodeRsa.encrypt(data);
+		//let sha256 = CryptoJS.SHA256(data);
+		//return encodeRsa.encrypt(JSON.stringify(data));
+
+		//return encodeRsa.encrypt(data);
+		//window.crypto.
+		const arrayBufferToStr = (buf) => {
+			return String.fromCharCode.apply(null, new Uint8Array(buf));
+		};
+
+		const strToArrayBuffer = (str) => {
+			const encoder = new TextEncoder();
+			return encoder.encode(str).buffer;
+		};
+		/!*const publicKey = await window.crypto.subtle.importKey(
+			'spki',
+			binaryDer,
+			{
+				name: 'RSA-OAEP',
+				hash: 'SHA-256',
+			},
+			true,
+			['encrypt']
+		);*!/
+		const publicKey = await window.crypto.subtle.importKey(
+			"-----BEGIN PUBLIC KEY-----\n" +
+			"MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
+			"020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
+			"a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
+			"iotzXgx87eVPLt9cWI5RyWsfmtioyuiKip5HD3tN0MAO3guUtq90ucwObjR2VHX0\n" +
+			"PLdG1eAAmoQgfpIPOJLaS/26PR8zf5vmfso3udoWg78S93Dqflp0Q0RYe1WvWVtp\n" +
+			"B/RZhea6/qlnGlJCuGyKV8vUAUIaMdv3PFSAjeAqlZS232R0VQPWxy1S7m2G+D2F\n" +
+			"04+PUoQzCw8npBQEiDVzrGL/+osB7ezscfx/xCFTH3ihuun2K5QknT6Y0wWQ9NI8\n" +
+			"ZSAiSK3krhQ/pgXKcmS7nt00nMdZ4ojykK0M0DS270GMHpPg8vwYCQ50shqMM5TX\n" +
+			"IOl5QPNc13XzVct2/fgjhc+pYqcJQlEvyi8A0x8Hy9XB447ekAcWNMFgPzfXxmrL\n" +
+			"jV19s9LEeFuNdsZrVI1McofX+qTOMmQdu5Wi+RxfKX/yVTQNeozowblC32h89BFI\n" +
+			"ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
+			"/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
+			"-----END PUBLIC KEY-----"
+		);
+
+		const cipher = await window.crypto.subtle.encrypt(
+			{
+				name: 'RSA-OAEP'
+			},
+			publicKey,
+			strToArrayBuffer(data)
+		);
+		return window.btoa(arrayBufferToStr(cipher));
+
+	},*/
+
+
+
+ 	//JSEncrypt 디코더
+	/*decodeRsa(data) {
+		//const decodeRsa = data;
+		const decodeRsa = new JSEncrypt();
+		const privateKey = "-----BEGIN PRIVATE KEY-----\n" +
 			"MIIJQQIBADANBgkqhkiG9w0BAQEFAASCCSswggknAgEAAoICAQCUzOtV/h2Gj1Jm\n" +
 			"ITsT/LTTbSPMX8/8ccghEc2diFzI7f7WkprjNJHR8SNT4DDU7tdsC/WmuF8jz5hn\n" +
 			"yKoKQq5rwstXsS1A0mwcpll7A5fWLpyzNyun1RWnp33+RmA+wfwwPMo4+/NbPahW\n" +
@@ -530,10 +907,12 @@ const func = {
 			"gZlATHt35kKk9zY+8XA6Fb6VrwG0zvjsk5hEBJ/onrYH22g9MsHaKF2B8C4dMwPZ\n" +
 			"oTnDWnK1WK/CVIVxWbb2EmHr9tgX\n" +
 			"-----END PRIVATE KEY-----"
-		rsa.setKey(key);
-		return rsa.decrypt(data).toString();
+		decodeRsa.setPrivateKey(privateKey);
+		//return rsa.decrypt(data).toString();
+		return decodeRsa.decrypt(data);
 
-	}
+		//return CryptoJS.sha256.decodeRsa(data, privateKey).toString();
+	}*/
 
 
 
@@ -555,5 +934,273 @@ const func = {
 		const key = "secret";
 		return cryptojs.HmacSHA256(data, key).toString(cryptojs.enc.Hex);*!/
 	}*/
+
+	encodeRsaCP(data) {
+
+		const encodeRsa = new JSEncrypt();
+
+		const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
+			"MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
+			"020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
+			"a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
+			"iotzXgx87eVPLt9cWI5RyWsfmtioyuiKip5HD3tN0MAO3guUtq90ucwObjR2VHX0\n" +
+			"PLdG1eAAmoQgfpIPOJLaS/26PR8zf5vmfso3udoWg78S93Dqflp0Q0RYe1WvWVtp\n" +
+			"B/RZhea6/qlnGlJCuGyKV8vUAUIaMdv3PFSAjeAqlZS232R0VQPWxy1S7m2G+D2F\n" +
+			"04+PUoQzCw8npBQEiDVzrGL/+osB7ezscfx/xCFTH3ihuun2K5QknT6Y0wWQ9NI8\n" +
+			"ZSAiSK3krhQ/pgXKcmS7nt00nMdZ4ojykK0M0DS270GMHpPg8vwYCQ50shqMM5TX\n" +
+			"IOl5QPNc13XzVct2/fgjhc+pYqcJQlEvyi8A0x8Hy9XB447ekAcWNMFgPzfXxmrL\n" +
+			"jV19s9LEeFuNdsZrVI1McofX+qTOMmQdu5Wi+RxfKX/yVTQNeozowblC32h89BFI\n" +
+			"ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
+			"/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
+			"-----END PUBLIC KEY-----"
+		encodeRsa.setPublicKey(publicKey);
+		return encodeRsa.encrypt(data);
+
+	},
+
+	decodeRsaCP(data) {
+
+		const decodeRsa = new JSEncrypt();
+		console.log("decodeRsa인풋" + data)
+
+		const privateKey = "-----BEGIN PRIVATE KEY-----\n" +
+			"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\n" +
+			"oTnDWnK1WK/CVIVxWbb2EmHr9tgX\n" +
+			"-----END PRIVATE KEY-----";
+
+		decodeRsa.setKey(privateKey);
+		return decodeRsa.decrypt(data);
+	},
+
+	encodeRsa6(data){
+
+		let text = JSON.stringify(data)
+
+		const pemHF = {
+			public: {
+				header: '-----BEGIN PUBLIC KEY-----',
+				footer: '-----END PUBLIC KEY-----',
+			},
+			private: {
+				header: '-----BEGIN PRIVATE KEY-----',
+				footer: '-----END PRIVATE KEY-----',
+			},
+		};
+
+		const arrayBufferToStr = (buf) => {
+			return String.fromCharCode.apply(null, new Uint8Array(buf));
+		};
+
+		const strToArrayBuffer = (str) => {
+			const encoder = new TextEncoder();
+			return encoder.encode(str).buffer;
+		};
+
+		const encryptRSA = async () => {
+
+			const publicKeyb64 = "-----BEGIN PUBLIC KEY-----\n" +
+				"MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
+				"020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
+				"a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
+				"iotzXgx87eVPLt9cWI5RyWsfmtioyuiKip5HD3tN0MAO3guUtq90ucwObjR2VHX0\n" +
+				"PLdG1eAAmoQgfpIPOJLaS/26PR8zf5vmfso3udoWg78S93Dqflp0Q0RYe1WvWVtp\n" +
+				"B/RZhea6/qlnGlJCuGyKV8vUAUIaMdv3PFSAjeAqlZS232R0VQPWxy1S7m2G+D2F\n" +
+				"04+PUoQzCw8npBQEiDVzrGL/+osB7ezscfx/xCFTH3ihuun2K5QknT6Y0wWQ9NI8\n" +
+				"ZSAiSK3krhQ/pgXKcmS7nt00nMdZ4ojykK0M0DS270GMHpPg8vwYCQ50shqMM5TX\n" +
+				"IOl5QPNc13XzVct2/fgjhc+pYqcJQlEvyi8A0x8Hy9XB447ekAcWNMFgPzfXxmrL\n" +
+				"jV19s9LEeFuNdsZrVI1McofX+qTOMmQdu5Wi+RxfKX/yVTQNeozowblC32h89BFI\n" +
+				"ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
+				"/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
+				"-----END PUBLIC KEY-----";
+
+			const binaryDerString = window.atob(publicKeyb64.replace(pemHF.public.footer, '').replace(pemHF.public.header, ''));
+			const binaryDer = strToArrayBuffer(binaryDerString);
+			const publicKey = await window.crypto.subtle.importKey(
+				'spki',
+				binaryDer,
+				{
+					name: 'RSA-OAEP',
+					hash: 'SHA-256',
+				},
+				true,
+				['encrypt']
+			);
+			const cipher = await window.crypto.subtle.encrypt(
+				{
+					name: 'RSA-OAEP',
+				},
+				publicKey,
+				strToArrayBuffer(text)
+			);
+			return window.btoa(arrayBufferToStr(cipher));
+		};
+
+		console.log("encryptRSA:::" + encryptRSA)
+		alert("encryptRSA:::" + encryptRSA)
+
+		const decryptRSA = async (cipher, privateKeyb64) => {
+			const binaryDerString = window.atob(privateKeyb64.replace(pemHF.private.footer, '').replace(pemHF.private.header, ''));
+			const binaryDer = strToArrayBuffer(binaryDerString);
+			const privateKey = await window.crypto.subtle.importKey(
+				'pkcs8',
+				binaryDer,
+				{
+					name: 'RSA-OAEP',
+					hash: 'SHA-256',
+				},
+				true,
+				['decrypt']
+			);
+			const text = await window.crypto.subtle.decrypt(
+				{
+					name: 'RSA-OAEP',
+				},
+				privateKey,
+				strToArrayBuffer(window.atob(cipher))
+			);
+			return arrayBufferToStr(text);
+		};
+	},
+
+
+
+
+	encodeRsa7(data) {
+		const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
+			"MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
+			"020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
+			"a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
+			"iotzXgx87eVPLt9cWI5RyWsfmtioyuiKip5HD3tN0MAO3guUtq90ucwObjR2VHX0\n" +
+			"PLdG1eAAmoQgfpIPOJLaS/26PR8zf5vmfso3udoWg78S93Dqflp0Q0RYe1WvWVtp\n" +
+			"B/RZhea6/qlnGlJCuGyKV8vUAUIaMdv3PFSAjeAqlZS232R0VQPWxy1S7m2G+D2F\n" +
+			"04+PUoQzCw8npBQEiDVzrGL/+osB7ezscfx/xCFTH3ihuun2K5QknT6Y0wWQ9NI8\n" +
+			"ZSAiSK3krhQ/pgXKcmS7nt00nMdZ4ojykK0M0DS270GMHpPg8vwYCQ50shqMM5TX\n" +
+			"IOl5QPNc13XzVct2/fgjhc+pYqcJQlEvyi8A0x8Hy9XB447ekAcWNMFgPzfXxmrL\n" +
+			"jV19s9LEeFuNdsZrVI1McofX+qTOMmQdu5Wi+RxfKX/yVTQNeozowblC32h89BFI\n" +
+			"ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
+			"/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
+			"-----END PUBLIC KEY-----";
+
+		/*const rsaPublickey = KEYUTIL.getKey(publicKey)
+
+		//return KJUR.crypto.Cipher.encrypt(data, publicKey, "RSA");
+		return KJUR.crypto.Cipher.encrypt(data, rsaPublickey);*/
+		return CryptoJS.SHA256.encrypt(JSON.stringify(data), publicKey).toString();
+	},
+
+
+	decodeRsa7(data) {
+		const privateKey = "-----BEGIN PRIVATE KEY-----\n" +
+			"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\n" +
+			"oTnDWnK1WK/CVIVxWbb2EmHr9tgX\n" +
+			"-----END PRIVATE KEY-----";
+
+		/*const rsaPublickey = KEYUTIL.getKey(publicKey)
+
+		//return KJUR.crypto.Cipher.encrypt(data, publicKey, "RSA");
+		return KJUR.crypto.Cipher.encrypt(data, rsaPublickey);*/
+		return CryptoJS.SHA256.decrypt(data, privateKey).toString();
+	},
+
+
+
+
+
 
 }
