@@ -510,20 +510,14 @@
             },
         };
 
-        const arrayBufferToStr = (buf) => {
-            return String.fromCharCode.apply(null, new Uint8Array(buf));
-        };
-
-        const strToArrayBuffer = (str) => {
-            const encoder = new TextEncoder();
-            return encoder.encode(str).buffer;
-        };
-
         const binaryDerString = window.atob(publicKey64.replace(pemHF.public.footer, '').replace(pemHF.public.header, ''));
         const buffer = new Uint8Array(binaryDerString.length);
+        for (let i = 0; i < binaryDerString.length; i++) {
+            buffer[i] = binaryDerString.charCodeAt(i);
+        }
         const publicKey = await window.crypto.subtle.importKey(
-            'spki', //SubjectPublicKeyInfo
-            binaryDer,
+            'spki',
+            buffer.buffer,
             {
                 name: 'RSA-OAEP',
                 hash: 'SHA-256',
@@ -531,29 +525,19 @@
             true,
             ['encrypt']
         );
-        alert("알람:publicKey::: "+ publicKey)
+        const data1 = new TextEncoder().encode(data);
+
         const cipher = await window.crypto.subtle.encrypt(
             {
                 name: 'RSA-OAEP',
             },
             publicKey,
-            strToArrayBuffer(data)
+            data1
         );
-        alert("알람:cipher::: "+ cipher)
-        return window.btoa(arrayBufferToStr(cipher));
+        return btoa(String.fromCharCode(...new Uint8Array(cipher)));
     }
 
 
-    function encryptMessage(data, publicKey) {
-        alert("data:::::::" + JSON.stringify(data))
-        alert("publicKey:::::::" + publicKey)
-
-        return window.crypto.subtle.encrypt(
-            {name: "RSA-OAEP"},
-            publicKey,
-            data
-        )
-    }
 
     </script>
 </th:block>
