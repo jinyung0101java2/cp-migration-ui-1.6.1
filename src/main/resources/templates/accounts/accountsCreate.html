@@ -189,24 +189,6 @@
                     console.log("includeHmacData::: " + JSON.stringify(includeHmacData))
 
 
-                    const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
-                        "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
-                        "020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
-                        "a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
-                        "iotzXgx87eVPLt9cWI5RyWsfmtioyuiKip5HD3tN0MAO3guUtq90ucwObjR2VHX0\n" +
-                        "PLdG1eAAmoQgfpIPOJLaS/26PR8zf5vmfso3udoWg78S93Dqflp0Q0RYe1WvWVtp\n" +
-                        "B/RZhea6/qlnGlJCuGyKV8vUAUIaMdv3PFSAjeAqlZS232R0VQPWxy1S7m2G+D2F\n" +
-                        "04+PUoQzCw8npBQEiDVzrGL/+osB7ezscfx/xCFTH3ihuun2K5QknT6Y0wWQ9NI8\n" +
-                        "ZSAiSK3krhQ/pgXKcmS7nt00nMdZ4ojykK0M0DS270GMHpPg8vwYCQ50shqMM5TX\n" +
-                        "IOl5QPNc13XzVct2/fgjhc+pYqcJQlEvyi8A0x8Hy9XB447ekAcWNMFgPzfXxmrL\n" +
-                        "jV19s9LEeFuNdsZrVI1McofX+qTOMmQdu5Wi+RxfKX/yVTQNeozowblC32h89BFI\n" +
-                        "ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
-                        "/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
-                        "-----END PUBLIC KEY-----";
-
-
-
-
                     /* //원본
                      let encodeRsaData = func.encodeRsa(JSON.stringify(includeHmacData))
                      //let encodeRsaData = encodeRsa(includeHmacData)
@@ -242,23 +224,48 @@
                      alert("Web Crypto API encodeRsaData6::: "+ JSON.stringify(encodeRsaData6))
                      console.log("Web Crypto API encodeRsaData6::: "+ JSON.stringify(encodeRsaData6))*/
 
-                    //Web Crypto API
-                    const encodeRsaData11 = await encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
-                    const encodeRsaData11Result = await encodeRsaData11.json()
 
+                    const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
+                        "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
+                        "020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
+                        "a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
+                        "iotzXgx87eVPLt9cWI5RyWsfmtioyuiKip5HD3tN0MAO3guUtq90ucwObjR2VHX0\n" +
+                        "PLdG1eAAmoQgfpIPOJLaS/26PR8zf5vmfso3udoWg78S93Dqflp0Q0RYe1WvWVtp\n" +
+                        "B/RZhea6/qlnGlJCuGyKV8vUAUIaMdv3PFSAjeAqlZS232R0VQPWxy1S7m2G+D2F\n" +
+                        "04+PUoQzCw8npBQEiDVzrGL/+osB7ezscfx/xCFTH3ihuun2K5QknT6Y0wWQ9NI8\n" +
+                        "ZSAiSK3krhQ/pgXKcmS7nt00nMdZ4ojykK0M0DS270GMHpPg8vwYCQ50shqMM5TX\n" +
+                        "IOl5QPNc13XzVct2/fgjhc+pYqcJQlEvyi8A0x8Hy9XB447ekAcWNMFgPzfXxmrL\n" +
+                        "jV19s9LEeFuNdsZrVI1McofX+qTOMmQdu5Wi+RxfKX/yVTQNeozowblC32h89BFI\n" +
+                        "ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
+                        "/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
+                        "-----END PUBLIC KEY-----";
+
+                    const something = async ()=> {
+                        return encryptMessage(includeHmacData, publicKey);
+                    }
+                    console.log("something::::   " + something)
+
+
+
+                    const encodeRsaData12 = encryptMessage(includeHmacData, publicKey)
+                    alert("encodeRsaData12:::::::::::::::::: "+ encodeRsaData12)
+
+
+                    //Web Crypto API
+                    const encodeRsaData11 = encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
                     //let encodeRsaData11 = encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
-                   /* encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey).then(response => console.log("response:::" + response))
-                    encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey).then(result => console.log("result:::" + result))
+                    //encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey).then(response => console.log("response:::" + response))
+                    //encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey).then(result => console.log("result:::" + result))
 
                     let aa = encodeRsaData11.then(response => console.log("response:::" + response))
                     let bb = encodeRsaData11.then(result => console.log("result:::" + result))
                     alert("Web Crypto API aa:: " + aa)
-                    alert("Web Crypto API bb:: " + bb)*/
+                    alert("Web Crypto API bb:: " + bb)
 
-                    alert("Web Crypto API encodeRsaData11:: " + encodeRsaData11Result)
+                    /*alert("Web Crypto API encodeRsaData11:: " + encodeRsaData11)
                     alert("Web Crypto API encodeRsaData11 JSON:: " + JSON.stringify(encodeRsaData11))
                     console.log("Web Crypto API encodeRsaData11:: " + encodeRsaData11)
-                    console.log("Web Crypto API encodeRsaData11 JSON:: " + JSON.stringify(encodeRsaData11))
+                    console.log("Web Crypto API encodeRsaData11 JSON:: " + JSON.stringify(encodeRsaData11))*/
 
 
 
@@ -492,7 +499,6 @@
 
     //async function encodeRsaWebCryptoAPI(data, publicKey64) {
     async function encodeRsaWebCryptoAPI(data, publicKey64) {
-        alert("알람:encodeRsaWebCryptoAPI")
         const pemHF = {
             public: {
                 header: '-----BEGIN PUBLIC KEY-----',
@@ -514,9 +520,9 @@
         };
 
         const binaryDerString = window.atob(publicKey64.replace(pemHF.public.footer, '').replace(pemHF.public.header, ''));
-        const binaryDer = strToArrayBuffer(binaryDerString);
+        const buffer = new Uint8Array(binaryDerString.length);
         const publicKey = await window.crypto.subtle.importKey(
-            'spki',
+            'spki', //SubjectPublicKeyInfo
             binaryDer,
             {
                 name: 'RSA-OAEP',
@@ -525,6 +531,7 @@
             true,
             ['encrypt']
         );
+        alert("알람:publicKey::: "+ publicKey)
         const cipher = await window.crypto.subtle.encrypt(
             {
                 name: 'RSA-OAEP',
@@ -532,7 +539,20 @@
             publicKey,
             strToArrayBuffer(data)
         );
+        alert("알람:cipher::: "+ cipher)
         return window.btoa(arrayBufferToStr(cipher));
+    }
+
+
+    function encryptMessage(data, publicKey) {
+        alert("data:::::::" + JSON.stringify(data))
+        alert("publicKey:::::::" + publicKey)
+
+        return window.crypto.subtle.encrypt(
+            {name: "RSA-OAEP"},
+            publicKey,
+            data
+        )
     }
 
     </script>
