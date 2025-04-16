@@ -62,6 +62,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha256.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/10.2.0/jsrsasign-all-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.js"></script>
     <script type="text/javascript" src="/js/jsencrypt.min.js"></script>
     <script type="text/javascript" src="/js/rsa/rsa.js"></script>
     <script type="text/javascript" src="/js/rsa/jsbn.js"></script>
@@ -96,12 +97,11 @@
 
                 },
 
-                save() {
+                async save() {
 
                     let timestamp = func.createUnixTimestamp();
                     alert("timestamp::: " + timestamp)
                     console.log("timestamp::: " + JSON.stringify(timestamp))
-
 
 
                     let accountsName = document.getElementById('accountsName').value;
@@ -176,8 +176,8 @@
                     console.log("accountsCreate::: " + JSON.stringify(accountsCreate))
 
                     let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData));
-                    alert("hmacData::: "+ hmacData)
-                    console.log("hmacData::: "+ hmacData)
+                    alert("hmacData::: " + hmacData)
+                    console.log("hmacData::: " + hmacData)
 
                     let includeHmacData = {
                         "data": accountsCreate,
@@ -185,33 +185,51 @@
                         //"timestamp": 1744597671569076100 //timestamp,
                         "timestamp": "1744597671569076100" //timestamp,
                     }
-                    alert("includeHmacData::: "+ JSON.stringify(includeHmacData))
-                    console.log("includeHmacData::: "+ JSON.stringify(includeHmacData))
+                    alert("includeHmacData::: " + JSON.stringify(includeHmacData))
+                    console.log("includeHmacData::: " + JSON.stringify(includeHmacData))
 
 
-                   /* //원본
-                    let encodeRsaData = func.encodeRsa(JSON.stringify(includeHmacData))
-                    //let encodeRsaData = encodeRsa(includeHmacData)
-                    alert("JSEncrypt encodeRsaData::: "+ JSON.stringify(encodeRsaData))
-                    console.log("JSEncrypt encodeRsaData::: "+ JSON.stringify(encodeRsaData))
+                    const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
+                        "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
+                        "020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
+                        "a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
+                        "iotzXgx87eVPLt9cWI5RyWsfmtioyuiKip5HD3tN0MAO3guUtq90ucwObjR2VHX0\n" +
+                        "PLdG1eAAmoQgfpIPOJLaS/26PR8zf5vmfso3udoWg78S93Dqflp0Q0RYe1WvWVtp\n" +
+                        "B/RZhea6/qlnGlJCuGyKV8vUAUIaMdv3PFSAjeAqlZS232R0VQPWxy1S7m2G+D2F\n" +
+                        "04+PUoQzCw8npBQEiDVzrGL/+osB7ezscfx/xCFTH3ihuun2K5QknT6Y0wWQ9NI8\n" +
+                        "ZSAiSK3krhQ/pgXKcmS7nt00nMdZ4ojykK0M0DS270GMHpPg8vwYCQ50shqMM5TX\n" +
+                        "IOl5QPNc13XzVct2/fgjhc+pYqcJQlEvyi8A0x8Hy9XB447ekAcWNMFgPzfXxmrL\n" +
+                        "jV19s9LEeFuNdsZrVI1McofX+qTOMmQdu5Wi+RxfKX/yVTQNeozowblC32h89BFI\n" +
+                        "ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
+                        "/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
+                        "-----END PUBLIC KEY-----";
 
-                    //원본
-                    let decodeRsaData = func.decodeRsa(encodeRsaData)
-                    //let decodeRsaData = decodeRsa(encodeRsaData)
-                    alert("decodeRsaData::: "+ JSON.stringify(JSON.parse(decodeRsaData)))
-                    console.log("decodeRsaData::: "+ JSON.stringify(JSON.parse(decodeRsaData)))*/
+
+
+
+                    /* //원본
+                     let encodeRsaData = func.encodeRsa(JSON.stringify(includeHmacData))
+                     //let encodeRsaData = encodeRsa(includeHmacData)
+                     alert("JSEncrypt encodeRsaData::: "+ JSON.stringify(encodeRsaData))
+                     console.log("JSEncrypt encodeRsaData::: "+ JSON.stringify(encodeRsaData))
+
+                     //원본
+                     let decodeRsaData = func.decodeRsa(encodeRsaData)
+                     //let decodeRsaData = decodeRsa(encodeRsaData)
+                     alert("decodeRsaData::: "+ JSON.stringify(JSON.parse(decodeRsaData)))
+                     console.log("decodeRsaData::: "+ JSON.stringify(JSON.parse(decodeRsaData)))*/
 
 
                     let encodeRsaData = func.encodeRsaCP(JSON.stringify(includeHmacData))
                     //let encodeRsaData = encodeRsa(includeHmacData)
-                    alert("JSEncrypt encodeRsaData::: "+ JSON.stringify(encodeRsaData))
-                    console.log("JSEncrypt encodeRsaData::: "+ JSON.stringify(encodeRsaData))
+                    alert("JSEncrypt encodeRsaData::: " + JSON.stringify(encodeRsaData))
+                    console.log("JSEncrypt encodeRsaData::: " + JSON.stringify(encodeRsaData))
 
 
                     let decodeRsaData = func.decodeRsaCP(encodeRsaData)
                     //let decodeRsaData = decodeRsa(encodeRsaData)
-                    alert("JSEncrypt decodeRsaData::: "+ JSON.stringify(JSON.parse(decodeRsaData)))
-                    console.log("JSEncrypt decodeRsaData::: "+ JSON.stringify(JSON.parse(decodeRsaData)))
+                    alert("JSEncrypt decodeRsaData::: " + JSON.stringify(JSON.parse(decodeRsaData)))
+                    console.log("JSEncrypt decodeRsaData::: " + JSON.stringify(JSON.parse(decodeRsaData)))
 
 
                     /*let encrypt = encrypt2(JSON.stringify(includeHmacData))
@@ -220,9 +238,31 @@
                     console.log("encrypt::: "+ JSON.stringify(JSON.parse(encrypt)))*/
 
                     //Web Crypto API
-                   /* let encodeRsaData6 = func.encodeRsa6(JSON.stringify(includeHmacData))
-                    alert("Web Crypto API encodeRsaData6::: "+ JSON.stringify(encodeRsaData6))
-                    console.log("Web Crypto API encodeRsaData6::: "+ JSON.stringify(encodeRsaData6))*/
+                    /* let encodeRsaData6 = func.encodeRsa6(JSON.stringify(includeHmacData))
+                     alert("Web Crypto API encodeRsaData6::: "+ JSON.stringify(encodeRsaData6))
+                     console.log("Web Crypto API encodeRsaData6::: "+ JSON.stringify(encodeRsaData6))*/
+
+                    //Web Crypto API
+                    const encodeRsaData11 = await encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
+                    const encodeRsaData11Result = await encodeRsaData11.json()
+
+                    //let encodeRsaData11 = encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
+                   /* encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey).then(response => console.log("response:::" + response))
+                    encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey).then(result => console.log("result:::" + result))
+
+                    let aa = encodeRsaData11.then(response => console.log("response:::" + response))
+                    let bb = encodeRsaData11.then(result => console.log("result:::" + result))
+                    alert("Web Crypto API aa:: " + aa)
+                    alert("Web Crypto API bb:: " + bb)*/
+
+                    alert("Web Crypto API encodeRsaData11:: " + encodeRsaData11Result)
+                    alert("Web Crypto API encodeRsaData11 JSON:: " + JSON.stringify(encodeRsaData11))
+                    console.log("Web Crypto API encodeRsaData11:: " + encodeRsaData11)
+                    console.log("Web Crypto API encodeRsaData11 JSON:: " + JSON.stringify(encodeRsaData11))
+
+
+
+
 
 
                     /*let encodeRsaData5 = func.encodeRsa5(JSON.stringify(includeHmacData))
@@ -252,47 +292,41 @@
                     alert("encodeRsaData2::: "+ JSON.stringify(encodeRsaData2))
                     console.log("encodeRsaData2::: "+ JSON.stringify(encodeRsaData2))*/
 
-                    let encodeRsaData3 = func.encodeRsa3(JSON.stringify(includeHmacData))
+                    /*let encodeRsaData3 = func.encodeRsa3(JSON.stringify(includeHmacData))
                     //let encodeRsaData = encodeRsa(includeHmacData)
                     alert("jsrsasign encodeRsaData3::: "+ JSON.stringify(encodeRsaData3))
-                    console.log("jsrsasign encodeRsaData3::: "+ JSON.stringify(encodeRsaData3))
+                    console.log("jsrsasign encodeRsaData3::: "+ JSON.stringify(encodeRsaData3))*/
 
 
-                    let decodeRsaData3 = func.decodeRsa3(encodeRsaData3)
+                    /*let decodeRsaData3 = func.decodeRsa3(encodeRsaData3)
                     //let decodeRsaData = decodeRsa(encodeRsaData)
                     alert("jsrsasign decodeRsaData3::: "+ JSON.stringify(decodeRsaData3))
-                    console.log("jsrsasign decodeRsaData3::: "+ JSON.stringify(decodeRsaData3))
+                    console.log("jsrsasign decodeRsaData3::: "+ JSON.stringify(decodeRsaData3))*/
 
-                   /* let encodeRsaData4 = func.encodeRsa4(JSON.stringify(includeHmacData))
-                    //let encodeRsaData = encodeRsa(includeHmacData)
-                    alert("encodeRsaData4::: "+ JSON.stringify(encodeRsaData4))
-                    console.log("encodeRsaData4::: "+ JSON.stringify(encodeRsaData4))*/
+                    /* let encodeRsaData4 = func.encodeRsa4(JSON.stringify(includeHmacData))
+                     //let encodeRsaData = encodeRsa(includeHmacData)
+                     alert("encodeRsaData4::: "+ JSON.stringify(encodeRsaData4))
+                     console.log("encodeRsaData4::: "+ JSON.stringify(encodeRsaData4))*/
 
 
-
-                    let encodeRsaData7 = func.encodeRsa7(JSON.stringify(includeHmacData))
+                    /*let encodeRsaData7 = func.encodeRsa7(JSON.stringify(includeHmacData))
                     //let encodeRsaData = encodeRsa(includeHmacData)
                     alert("jsrsasign encodeRsaData3::: "+ JSON.stringify(encodeRsaData7))
-                    console.log("jsrsasign encodeRsaData3::: "+ JSON.stringify(encodeRsaData7))
+                    console.log("jsrsasign encodeRsaData3::: "+ JSON.stringify(encodeRsaData7))*/
 
 
-                    let decodeRsaData7 = func.decodeRsa7(encodeRsaData7)
+                    /*let decodeRsaData7 = func.decodeRsa7(encodeRsaData7)
                     //let decodeRsaData = decodeRsa(encodeRsaData)
                     alert("jsrsasign decodeRsaData::: "+ JSON.stringify(JSON.parse(decodeRsaData7)))
-                    console.log("jsrsasign decodeRsaData::: "+ JSON.stringify(JSON.parse(decodeRsaData7)))
+                    console.log("jsrsasign decodeRsaData::: "+ JSON.stringify(JSON.parse(decodeRsaData7)))*/
 
 
+                    /* let security = {
+                         "payload": encodeRsaData
+                     }
 
-
-
-
-
-                   /* let security = {
-                        "payload": encodeRsaData
-                    }
-
-                    alert("security::: "+ JSON.stringify(security))
-                    console.log("security::: "+ JSON.stringify(security))*/
+                     alert("security::: "+ JSON.stringify(security))
+                     console.log("security::: "+ JSON.stringify(security))*/
 
 
                     //createHmac()
@@ -306,11 +340,8 @@
                     alert(cryptojs.HmacSHA256(data, key).toString(cryptojs.enc.Hex));*/
 
 
-
-
-
                     //func.saveData('POST', `${func.vaultUrl}v1/vault`, JSON.stringify(accountsCreate), true, 'application/json', func.historyBack);
-                    func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(accountsCreate), true, 'application/json', func.historyBackRefresh);
+                    //func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(accountsCreate), true, 'application/json', func.historyBackRefresh);
 
                     sessionStorage.setItem('accountsData', 'Y')
                 },
@@ -419,7 +450,7 @@
 
 	}*/
 
-    async function encrypt2(message) {
+    /*async function encrypt2(message) {
         const publicKeyJwk = "-----BEGIN PUBLIC KEY-----\n" +
             "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
             "020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
@@ -453,8 +484,56 @@
         );
 
         return encrypted;
-    }
+    }*/
 
+
+
+
+
+    //async function encodeRsaWebCryptoAPI(data, publicKey64) {
+    async function encodeRsaWebCryptoAPI(data, publicKey64) {
+        alert("알람:encodeRsaWebCryptoAPI")
+        const pemHF = {
+            public: {
+                header: '-----BEGIN PUBLIC KEY-----',
+                footer: '-----END PUBLIC KEY-----',
+            },
+            private: {
+                header: '-----BEGIN PRIVATE KEY-----',
+                footer: '-----END PRIVATE KEY-----',
+            },
+        };
+
+        const arrayBufferToStr = (buf) => {
+            return String.fromCharCode.apply(null, new Uint8Array(buf));
+        };
+
+        const strToArrayBuffer = (str) => {
+            const encoder = new TextEncoder();
+            return encoder.encode(str).buffer;
+        };
+
+        const binaryDerString = window.atob(publicKey64.replace(pemHF.public.footer, '').replace(pemHF.public.header, ''));
+        const binaryDer = strToArrayBuffer(binaryDerString);
+        const publicKey = await window.crypto.subtle.importKey(
+            'spki',
+            binaryDer,
+            {
+                name: 'RSA-OAEP',
+                hash: 'SHA-256',
+            },
+            true,
+            ['encrypt']
+        );
+        const cipher = await window.crypto.subtle.encrypt(
+            {
+                name: 'RSA-OAEP',
+            },
+            publicKey,
+            strToArrayBuffer(data)
+        );
+        return window.btoa(arrayBufferToStr(cipher));
+    }
 
     </script>
 </th:block>

@@ -574,7 +574,7 @@ const func = {
 
 		//return KJUR.crypto.Cipher.encrypt(data, publicKey, "RSA");
 		return KJUR.crypto.Cipher.encrypt(data, rsaPublickey);*/
-		return CryptoJS.AES.encrypt(JSON.stringify(data), publicKey).toString();
+		return CryptoJS.SHA256.encrypt(JSON.stringify(data), publicKey, 'RSA-OAEP').toString();
 	},
 
 
@@ -636,7 +636,10 @@ const func = {
 
 		//return KJUR.crypto.Cipher.encrypt(data, publicKey, "RSA");
 		return KJUR.crypto.Cipher.encrypt(data, rsaPublickey);*/
-		return CryptoJS.AES.decrypt(data, privateKey).toString();
+		/*let decryptedWA = CryptoJS.AES.decrypt(data, privateKey);
+		return console.log(decryptedWA.toString(CryptoJS.enc.Utf8));*/
+		return CryptoJS.AES.decrypt(JSON.stringify(data), privateKey, 'RSA-OAEP').toString();
+
 	},
 
 
@@ -679,7 +682,7 @@ const func = {
 			"ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
 			"/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
 			"-----END PUBLIC KEY-----";
-
+		crypto
 		//return CryptoJS.AES.encrypt(JSON.stringify(data), publicKey);X
 		//return CryptoJS.AES.encrypt(data, publicKey);X
 		//return CryptoJS.AES.encrypt(JSON.stringify(data), publicKey).toString();X
@@ -953,7 +956,15 @@ const func = {
 			"ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
 			"/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
 			"-----END PUBLIC KEY-----"
+
+		/*const hashedPassword = CryptoJS.SHA256(publicKey).toString();
+		console.log(JSON.stringify(hashedPassword))*/
+
+
+		//encodeRsa.sign(CryptoJS.SHA256, "sha256")
+
 		encodeRsa.setPublicKey(publicKey);
+
 		return encodeRsa.encrypt(data);
 
 	},
@@ -1016,7 +1027,7 @@ const func = {
 			"oTnDWnK1WK/CVIVxWbb2EmHr9tgX\n" +
 			"-----END PRIVATE KEY-----";
 
-		decodeRsa.setKey(privateKey);
+		decodeRsa.setPrivateKey(privateKey);
 		return decodeRsa.decrypt(data);
 	},
 
@@ -1197,10 +1208,5 @@ const func = {
 		return KJUR.crypto.Cipher.encrypt(data, rsaPublickey);*/
 		return CryptoJS.SHA256.decrypt(data, privateKey).toString();
 	},
-
-
-
-
-
 
 }
