@@ -104,11 +104,11 @@
                     console.log("timestamp::: " + JSON.stringify(timestamp))
 
 
-                    let accountsName = document.getElementById('accountsName').value;
+                    /*let accountsName = document.getElementById('accountsName').value;
                     let storageType = document.getElementById('storageType').value;
                     let endpoint = document.getElementById('endpoint').value;
                     let accessKeyId = document.getElementById('accessKeyId').value;
-                    let secretAccessKey = document.getElementById('secretAccessKey').value;
+                    let secretAccessKey = document.getElementById('secretAccessKey').value;*/
 
                     /*let accountsCreate = {
                         "basePath": "jjyStorage",
@@ -120,24 +120,24 @@
                             "accessKeyId": accessKeyId,
                             "secretAccessKey": secretAccessKey,
                         }
-                    }
-
-                    let includeTimestampData = {
-                        accountsCreate,
-                        "timestamp": timestamp
                     }*/
 
-                    let accountsCreate = {
-                        "basePath": "asd",
-                        "userAccount": "sdf",
-                        "configName": "dfg",
-                        "content": {
-                            "storageType": "qwe",
-                            "endpoint": "wer",
-                            "accessKeyId": "ert",
-                            "secretAccessKey": "rty"
-                        }
-                    }
+                    let accountsName = "dfg";
+                    let storageType = "qwe";
+                    let endpoint = "wer";
+                    let accessKeyId = "ert";
+                    let secretAccessKey = "rty";
+                    timestamp = "1744597671569076100";
+
+
+                    let accountsCreate = {"basePath":"asd","userAccount":"sdf","configName":accountsName,"content":{"storageType":storageType,"endpoint":endpoint,"accessKeyId":accessKeyId,"secretAccessKey":secretAccessKey}};
+                    //let accountsCreate = {"data":{"basePath":"jjyStorage","userAccount":sessionStorage.getItem('userGuid'),"configName":accountsName,"content":{"storageType":storageType,"endpoint":endpoint,"accessKeyId":accessKeyId,"secretAccessKey":secretAccessKey}}}
+                    //let accountsCreate = {"data":{"basePath":"asd","userAccount":"sdf","configName":"dfg","content":{"storageType":"qwe","endpoint":"wer","accessKeyId":"ert","secretAccessKey":"rty"}}}
+
+                    let includeTimestampData = {"data":accountsCreate,"timestamp":timestamp}
+
+
+
 
                     /*let includeTimestampData = {
                         "data": {
@@ -154,7 +154,7 @@
                         "timestamp": "1744597671569076100"
                     }*/
 
-                    let includeTimestampData = {
+                    /*let includeTimestampData = {
                         "data": {
                             "basePath": "asd",
                             "userAccount": "sdf",
@@ -166,8 +166,11 @@
                                 "secretAccessKey": "rty"
                             }
                         },
-                        "timestamp": timestamp
-                    }
+                        "timestamp": "1744597671569076100"
+                    }*/
+
+                    //let includeTimestampData = {"data":{"basePath":"asd","userAccount":"sdf","configName":"dfg","content":{"storageType":"qwe","endpoint":"wer","accessKeyId":"ert","secretAccessKey":"rty"}},"timestamp":"1744597671569076100"}
+
 
                     alert("includeTimestampData::: " + JSON.stringify(includeTimestampData))
                     console.log("includeTimestampData::: " + JSON.stringify(includeTimestampData))
@@ -180,10 +183,10 @@
                     console.log("hmacData::: " + hmacData)
 
                     let includeHmacData = {
-                        "data": accountsCreate,
-                        "hmac_data": hmacData,
+                        "data":accountsCreate,
+                        "hmac_data":hmacData,
                         //"timestamp": 1744597671569076100 //timestamp,
-                        "timestamp": "1744597671569076100" //timestamp,
+                        "timestamp":"1744597671569076100" //timestamp,
                     }
                     alert("includeHmacData::: " + JSON.stringify(includeHmacData))
                     console.log("includeHmacData::: " + JSON.stringify(includeHmacData))
