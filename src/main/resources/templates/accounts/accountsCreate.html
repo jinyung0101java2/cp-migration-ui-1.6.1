@@ -302,11 +302,11 @@
 
         //암호화 문자열로 들어온 것을 privateKey랑 같이 넣어서 디코딩하면 객체가 나와야한다.
 
-        /*const binaryDerString2 = new ArrayBuffer(data.length)
-        const buffer2 = new Uint8Array(binaryDerString2);
-        for (let i=0, strLen=data.length; i < strLen; i++) {
-            buffer2[i] = data.charCodeAt(i);
-        }*/
+        const binaryDerString2 = window.atob(data);
+        const buffer2 = new Uint8Array(binaryDerString2.length);
+        for (let i = 0; i < binaryDerString2.length; i++) {
+            buffer2[i] = binaryDerString2.charCodeAt(i);
+        }
 
         //const data1 = new TextEncoder().encode(data);
 
@@ -315,8 +315,7 @@
                 name: 'RSA-OAEP',
             },
             privateKey,
-            data
-            // strToArrayBuffer(window.atob(data))
+            buffer2.buffer
         );
         console.log("디코딩 text" + text)
 
