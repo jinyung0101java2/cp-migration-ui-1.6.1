@@ -444,9 +444,7 @@ const func = {
 	},
 
 	createUnixTimestamp() {
-
-		return Math.floor(new Date().getTime() / 1000);
-		return Math.floor(Date.now());
+		return Math.floor(new Date().getTime());
 	},
 
 	encodeHmacSha256(data) {
