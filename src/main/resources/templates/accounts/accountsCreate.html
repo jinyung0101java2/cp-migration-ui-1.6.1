@@ -70,7 +70,6 @@
     <script type="text/javascript" src="/js/rsa/rng.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 
-
     <script type="text/javascript">
     /*<script type="module">*/
 
@@ -103,25 +102,6 @@
                     alert("timestamp::: " + timestamp)
                     console.log("timestamp::: " + JSON.stringify(timestamp))
 
-
-                    /*let accountsName = document.getElementById('accountsName').value;
-                    let storageType = document.getElementById('storageType').value;
-                    let endpoint = document.getElementById('endpoint').value;
-                    let accessKeyId = document.getElementById('accessKeyId').value;
-                    let secretAccessKey = document.getElementById('secretAccessKey').value;*/
-
-                    /*let accountsCreate = {
-                        "basePath": "jjyStorage",
-                        "userAccount": sessionStorage.getItem('userGuid'),
-                        "configName": accountsName,
-                        "content": {
-                            "storageType": storageType,
-                            "endpoint": endpoint,
-                            "accessKeyId": accessKeyId,
-                            "secretAccessKey": secretAccessKey,
-                        }
-                    }*/
-
                     let accountsName = "dfg";
                     let storageType = "qwe";
                     let endpoint = "wer";
@@ -135,42 +115,6 @@
                     //let accountsCreate = {"data":{"basePath":"asd","userAccount":"sdf","configName":"dfg","content":{"storageType":"qwe","endpoint":"wer","accessKeyId":"ert","secretAccessKey":"rty"}}}
 
                     let includeTimestampData = {"data":accountsCreate,"timestamp":timestamp}
-
-
-
-
-                    /*let includeTimestampData = {
-                        "data": {
-                            "basePath": "asd",
-                            "userAccount": "sdf",
-                            "configName": "dfg",
-                            "content": {
-                                "storageType": "qwe",
-                                "endpoint": "wer",
-                                "accessKeyId": "ert",
-                                "secretAccessKey": "rty"
-                            }
-                        },
-                        "timestamp": "1744597671569076100"
-                    }*/
-
-                    /*let includeTimestampData = {
-                        "data": {
-                            "basePath": "asd",
-                            "userAccount": "sdf",
-                            "configName": "dfg",
-                            "content": {
-                                "storageType": "qwe",
-                                "endpoint": "wer",
-                                "accessKeyId": "ert",
-                                "secretAccessKey": "rty"
-                            }
-                        },
-                        "timestamp": "1744597671569076100"
-                    }*/
-
-                    //let includeTimestampData = {"data":{"basePath":"asd","userAccount":"sdf","configName":"dfg","content":{"storageType":"qwe","endpoint":"wer","accessKeyId":"ert","secretAccessKey":"rty"}},"timestamp":"1744597671569076100"}
-
 
                     alert("includeTimestampData::: " + JSON.stringify(includeTimestampData))
                     console.log("includeTimestampData::: " + JSON.stringify(includeTimestampData))
@@ -190,43 +134,6 @@
                     }
                     alert("includeHmacData::: " + JSON.stringify(includeHmacData))
                     console.log("includeHmacData::: " + JSON.stringify(includeHmacData))
-
-
-                    /* //원본
-                     let encodeRsaData = func.encodeRsa(JSON.stringify(includeHmacData))
-                     //let encodeRsaData = encodeRsa(includeHmacData)
-                     alert("JSEncrypt encodeRsaData::: "+ JSON.stringify(encodeRsaData))
-                     console.log("JSEncrypt encodeRsaData::: "+ JSON.stringify(encodeRsaData))
-
-                     //원본
-                     let decodeRsaData = func.decodeRsa(encodeRsaData)
-                     //let decodeRsaData = decodeRsa(encodeRsaData)
-                     alert("decodeRsaData::: "+ JSON.stringify(JSON.parse(decodeRsaData)))
-                     console.log("decodeRsaData::: "+ JSON.stringify(JSON.parse(decodeRsaData)))*/
-
-
-                    let encodeRsaData = func.encodeRsaCP(JSON.stringify(includeHmacData))
-                    //let encodeRsaData = encodeRsa(includeHmacData)
-                    alert("JSEncrypt encodeRsaData::: " + JSON.stringify(encodeRsaData))
-                    console.log("JSEncrypt encodeRsaData::: " + JSON.stringify(encodeRsaData))
-
-
-                    let decodeRsaData = func.decodeRsaCP(encodeRsaData)
-                    //let decodeRsaData = decodeRsa(encodeRsaData)
-                    alert("JSEncrypt decodeRsaData::: " + JSON.stringify(JSON.parse(decodeRsaData)))
-                    console.log("JSEncrypt decodeRsaData::: " + JSON.stringify(JSON.parse(decodeRsaData)))
-
-
-                    /*let encrypt = encrypt2(JSON.stringify(includeHmacData))
-                    //let decodeRsaData = decodeRsa(encodeRsaData)
-                    alert("encrypt::: "+ JSON.stringify(JSON.parse(encrypt)))
-                    console.log("encrypt::: "+ JSON.stringify(JSON.parse(encrypt)))*/
-
-                    //Web Crypto API
-                    /* let encodeRsaData6 = func.encodeRsa6(JSON.stringify(includeHmacData))
-                     alert("Web Crypto API encodeRsaData6::: "+ JSON.stringify(encodeRsaData6))
-                     console.log("Web Crypto API encodeRsaData6::: "+ JSON.stringify(encodeRsaData6))*/
-
 
                     const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
                         "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
@@ -297,114 +204,20 @@
                         "-----END PRIVATE KEY-----"
 
 
-
-
                     //Web Crypto API
-                    const encodeRsaData11 = encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
-                    const encodeRsaData12 = await encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
-                    alert("encodeRsaWebCryptoAPI::: " + encodeRsaData12)
-                    console.log("encodeRsaWebCryptoAPI CPCPCPCP::: " + encodeRsaData12)
-                    //let encodeRsaData11 = encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
-                    //encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey).then(response => console.log("response:::" + response))
-                    //encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey).then(result => console.log("result:::" + result))
+                    const encodeRsaData = await encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
+                    console.log(JSON.stringify(encodeRsaData))
 
-                    let aa = encodeRsaData11.then(response => console.log("response:::" + response))
-                    let bb = encodeRsaData11.then(result => console.log("result:::" + result))
-                    alert("Web Crypto API aa:: " + aa)
-                    alert("Web Crypto API bb:: " + bb)
+                    let payLoad = {
+                        "payload":encodeRsaData
+                    }
 
-
-                    const encodeRsaData13 = await decodeRsaWebCryptoAPI(JSON.stringify(encodeRsaData12), privateKey)
-                    alert("decodeRsaWebCryptoAPI::: " + encodeRsaData13)
-                    console.log("decodeRsaWebCryptoAPI::: " + encodeRsaData13)
-
-                    /*alert("Web Crypto API encodeRsaData11:: " + encodeRsaData11)
-                    alert("Web Crypto API encodeRsaData11 JSON:: " + JSON.stringify(encodeRsaData11))
-                    console.log("Web Crypto API encodeRsaData11:: " + encodeRsaData11)
-                    console.log("Web Crypto API encodeRsaData11 JSON:: " + JSON.stringify(encodeRsaData11))*/
-
-
-
-
-
-
-                    /*let encodeRsaData5 = func.encodeRsa5(JSON.stringify(includeHmacData))
-                    //let encodeRsaData = encodeRsa(includeHmacData)
-                    alert("CryptoJS encodeRsaData5::: "+ JSON.stringify(encodeRsaData5))
-                    console.log("CryptoJS encodeRsaData5::: "+ JSON.stringify(encodeRsaData5))*/
-
-
-                    /*const publickey = "-----BEGIN PUBLIC KEY-----\n" +
-                        "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
-                        "020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
-                        "a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
-                        "iotzXgx87eVPLt9cWI5RyWsfmtioyuiKip5HD3tN0MAO3guUtq90ucwObjR2VHX0\n" +
-                        "PLdG1eAAmoQgfpIPOJLaS/26PR8zf5vmfso3udoWg78S93Dqflp0Q0RYe1WvWVtp\n" +
-                        "B/RZhea6/qlnGlJCuGyKV8vUAUIaMdv3PFSAjeAqlZS232R0VQPWxy1S7m2G+D2F\n" +
-                        "04+PUoQzCw8npBQEiDVzrGL/+osB7ezscfx/xCFTH3ihuun2K5QknT6Y0wWQ9NI8\n" +
-                        "ZSAiSK3krhQ/pgXKcmS7nt00nMdZ4ojykK0M0DS270GMHpPg8vwYCQ50shqMM5TX\n" +
-                        "IOl5QPNc13XzVct2/fgjhc+pYqcJQlEvyi8A0x8Hy9XB447ekAcWNMFgPzfXxmrL\n" +
-                        "jV19s9LEeFuNdsZrVI1McofX+qTOMmQdu5Wi+RxfKX/yVTQNeozowblC32h89BFI\n" +
-                        "ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
-                        "/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
-                        "-----END PUBLIC KEY-----";
-
-
-                    let encodeRsaData2 = func.encodeRsa2(includeHmacData, publickey)
-                    //let encodeRsaData = encodeRsa(includeHmacData)
-                    alert("encodeRsaData2::: "+ JSON.stringify(encodeRsaData2))
-                    console.log("encodeRsaData2::: "+ JSON.stringify(encodeRsaData2))*/
-
-                    /*let encodeRsaData3 = func.encodeRsa3(JSON.stringify(includeHmacData))
-                    //let encodeRsaData = encodeRsa(includeHmacData)
-                    alert("jsrsasign encodeRsaData3::: "+ JSON.stringify(encodeRsaData3))
-                    console.log("jsrsasign encodeRsaData3::: "+ JSON.stringify(encodeRsaData3))*/
-
-
-                    /*let decodeRsaData3 = func.decodeRsa3(encodeRsaData3)
-                    //let decodeRsaData = decodeRsa(encodeRsaData)
-                    alert("jsrsasign decodeRsaData3::: "+ JSON.stringify(decodeRsaData3))
-                    console.log("jsrsasign decodeRsaData3::: "+ JSON.stringify(decodeRsaData3))*/
-
-                    /* let encodeRsaData4 = func.encodeRsa4(JSON.stringify(includeHmacData))
-                     //let encodeRsaData = encodeRsa(includeHmacData)
-                     alert("encodeRsaData4::: "+ JSON.stringify(encodeRsaData4))
-                     console.log("encodeRsaData4::: "+ JSON.stringify(encodeRsaData4))*/
-
-
-                    /*let encodeRsaData7 = func.encodeRsa7(JSON.stringify(includeHmacData))
-                    //let encodeRsaData = encodeRsa(includeHmacData)
-                    alert("jsrsasign encodeRsaData3::: "+ JSON.stringify(encodeRsaData7))
-                    console.log("jsrsasign encodeRsaData3::: "+ JSON.stringify(encodeRsaData7))*/
-
-
-                    /*let decodeRsaData7 = func.decodeRsa7(encodeRsaData7)
-                    //let decodeRsaData = decodeRsa(encodeRsaData)
-                    alert("jsrsasign decodeRsaData::: "+ JSON.stringify(JSON.parse(decodeRsaData7)))
-                    console.log("jsrsasign decodeRsaData::: "+ JSON.stringify(JSON.parse(decodeRsaData7)))*/
-
-
-                    /* let security = {
-                         "payload": encodeRsaData
-                     }
-
-                     alert("security::: "+ JSON.stringify(security))
-                     console.log("security::: "+ JSON.stringify(security))*/
-
-
-                    //createHmac()
-
-                    /*let hmacData = func.createHmacData(accountsCreate)
-                    alert("hmacData::: " + hmacData)*/
-                    //import cryptojs from "crypto-js";
-                    /*const cryptojs = require("crypto-js");
-                    const data = accountsCreate;
-                    const key = "secret";
-                    alert(cryptojs.HmacSHA256(data, key).toString(cryptojs.enc.Hex));*/
-
+                    const decodeRsaData = await decodeRsaWebCryptoAPI(encodeRsaData, privateKey)
+                    alert("decodeRsaWebCryptoAPI::: " + decodeRsaData)
+                    console.log("decodeRsaWebCryptoAPI::: " + decodeRsaData)
 
                     //func.saveData('POST', `${func.vaultUrl}v1/vault`, JSON.stringify(accountsCreate), true, 'application/json', func.historyBack);
-                    //func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(accountsCreate), true, 'application/json', func.historyBackRefresh);
+                    func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(payLoad), true, 'application/json', func.historyBackRefresh);
 
                     sessionStorage.setItem('accountsData', 'Y')
                 },
@@ -412,148 +225,6 @@
             accountsCreate.event();
         };
 
-        /*function Unix_timestampConv()
-        {
-            alert("타임스탬프::" + Math.floor(new Date().getTime() / 1000))
-            return Math.floor(new Date().getTime() / 1000);
-        }*/
-   /* function createHmac() {
-
-        var textString=CryptoJS.HmacSHA256("message","secret").toString(CryptoJS.enc.Hex);
-        alert("hmac::: " + textString)
-    }*/
-   /* function rsa () {
-        const rsa = new JSEncrypt();
-        rsa.encrypt(data).toString();
-    }*/
-
-    /*function encodeRsa(data) {
-
-		const encodeRsa = new RSAKey();
-		const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
-            "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
-            "020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
-            "a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
-            "iotzXgx87eVPLt9cWI5RyWsfmtioyuiKip5HD3tN0MAO3guUtq90ucwObjR2VHX0\n" +
-            "PLdG1eAAmoQgfpIPOJLaS/26PR8zf5vmfso3udoWg78S93Dqflp0Q0RYe1WvWVtp\n" +
-            "B/RZhea6/qlnGlJCuGyKV8vUAUIaMdv3PFSAjeAqlZS232R0VQPWxy1S7m2G+D2F\n" +
-            "04+PUoQzCw8npBQEiDVzrGL/+osB7ezscfx/xCFTH3ihuun2K5QknT6Y0wWQ9NI8\n" +
-            "ZSAiSK3krhQ/pgXKcmS7nt00nMdZ4ojykK0M0DS270GMHpPg8vwYCQ50shqMM5TX\n" +
-            "IOl5QPNc13XzVct2/fgjhc+pYqcJQlEvyi8A0x8Hy9XB447ekAcWNMFgPzfXxmrL\n" +
-            "jV19s9LEeFuNdsZrVI1McofX+qTOMmQdu5Wi+RxfKX/yVTQNeozowblC32h89BFI\n" +
-            "ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
-            "/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
-            "-----END PUBLIC KEY-----"
-
-        encodeRsa.setPublic(JSON.stringify(publicKey));
-		return encodeRsa.encrypt(data).toString();
-
-	}
-
-	function decodeRsa(data) {
-
-        const decodeRsa = new RSAKey();
-		const privateKey = "-----BEGIN PRIVATE KEY-----\n" +
-            "MIIJQQIBADANBgkqhkiG9w0BAQEFAASCCSswggknAgEAAoICAQCUzOtV/h2Gj1Jm\n" +
-            "ITsT/LTTbSPMX8/8ccghEc2diFzI7f7WkprjNJHR8SNT4DDU7tdsC/WmuF8jz5hn\n" +
-            "yKoKQq5rwstXsS1A0mwcpll7A5fWLpyzNyun1RWnp33+RmA+wfwwPMo4+/NbPahW\n" +
-            "9qTBSJWKi3NeDHzt5U8u31xYjlHJax+a2KjK6IqKnkcPe03QwA7eC5S2r3S5zA5u\n" +
-            "NHZUdfQ8t0bV4ACahCB+kg84ktpL/bo9HzN/m+Z+yje52haDvxL3cOp+WnRDRFh7\n" +
-            "Va9ZW2kH9FmF5rr+qWcaUkK4bIpXy9QBQhox2/c8VICN4CqVlLbfZHRVA9bHLVLu\n" +
-            "bYb4PYXTj49ShDMLDyekFASINXOsYv/6iwHt7Oxx/H/EIVMfeKG66fYrlCSdPpjT\n" +
-            "BZD00jxlICJIreSuFD+mBcpyZLue3TScx1niiPKQrQzQNLbvQYwek+Dy/BgJDnSy\n" +
-            "GowzlNcg6XlA81zXdfNVy3b9+COFz6lipwlCUS/KLwDTHwfL1cHjjt6QBxY0wWA/\n" +
-            "N9fGasuNXX2z0sR4W412xmtUjUxyh9f6pM4yZB27laL5HF8pf/JVNA16jOjBuULf\n" +
-            "aHz0EUjKb5SLvGF7w3nJZkN1Pjs06aJyZzkb8l2slOMizTFRSC3y+9027bD96sXR\n" +
-            "fNvW373+VtjvJqSAHmqmy+FpMTYctwIDAQABAoICAA3hbcSYT2XJgdzAFdQ/+xhL\n" +
-            "8o5yk6LPdGVNVVpwKYOe2+plQ6iVM1MbxPlijPuYCiVsmi5CvbFIAMYRrHcHkGDC\n" +
-            "C5jzEK8e0fH8PJWimKvkrj5zk5F06a+5iqHJK9o+20keqpiVPDbTMhxmpqjXHggO\n" +
-            "CSWJUbAZd4D+Wg1yvUNmSEz4EArZlW7n4+YYUQJ7oAdrmiROirt4QxJZt34agL2X\n" +
-            "NTbnTfccAzH7awsSe+Wh1hk0i2fIgcBrGbavFvGURe8qK928j2LlAcIDlLdntQ0G\n" +
-            "aMF6bBAsek80xD+S9HbLL0wsv+fNxqrskQ9rDV3lwQdmxglWMddjrXxLYE9Q4eZd\n" +
-            "bQtlTK8jHPehpL2AXkqGwT0mezv6yj2bPiPImGp667eibf45N+1MbjHew+MPedyb\n" +
-            "aln7lLWbUpQvnCqyBexlelPFhohWHl0By0wndfGzFRt5exOkup0OwM5JO17k+5lr\n" +
-            "LBx9QS/1NUvAkDmgzBdOH0DsJhx7mR7NB5T4ZeozgHxWh+BAoFtLwlu/luML3fvp\n" +
-            "MVXjmeEfBahQJ5UOPX1th5avbBuX5GdF9NxCoioYQYJb+YC5SF9TKZWCCVaiywBc\n" +
-            "C8vlywWfv19L1stumEt0S+JHP+KW4wiO5bTaKmwkkXn6RFGpY9o4uE7uYJMvNL11\n" +
-            "nEs2SzCA0Kh9OIDubAeZAoIBAQDIp2t9Y09lYBzyaY8CnZ8kc7F5hP775O4n8iHv\n" +
-            "pz5epFjpVsmnmHSFRz3eYbsSNK/XgMcy6K/A2RKDgB0O86l4rhxSX9dFaPFISk20\n" +
-            "98QZrLgTKDgdqF+SIrByp8Dyzcsq7m2bk/DBJ0jhACOwy+gTUvMCh7kg9bJ4Hocr\n" +
-            "l0iCrcE/Jry0C5lUMElnn3ytGy0C/tVZcSfT8g3DH6d4bie0Nq7O/noqJjv9YWOJ\n" +
-            "q9EudZixtNOJlKyiD6YsBgWrCcvxjP6KkwAmWYPmDd2ym4tEdqXLA9P3vT16FMI5\n" +
-            "FtF7pAeu0fMvsjxWoFP7eeS8yu8U61yy45OIhTHoJoJYxRnvAoIBAQC92AS+PVJG\n" +
-            "AkndOsgTQB/VrttZCRbOGMWIOgJOo+YnfG2IX9+UpYNuHL7MiUi521wJlyrC1UBs\n" +
-            "ZFtDdrp++wyC9XV4lg2qT27FSe8nEsOuwjYiUDS2BDiOOjhXp3khMFMC1qH1Hvcl\n" +
-            "eIiJEKZacuSkLG8fjYxiDaWkUUj/5ui6KnsVsSJ3l+UkTFnP27f8am8rcHCZCL9l\n" +
-            "jSio2dowFbomOhZhw8jkeuTPtqKuFvR4yDs44hjmWOS5XPHFsaHTiGorspcoLcWY\n" +
-            "RM4g64aHLOykAWCRez1EyAdXrj/BFhGLMEOKlk/ghSXYIOYO8HE8I+Dd5mtBAXt2\n" +
-            "Ffn40HCYSpG5AoIBADDHYn4s8lQ2tVLJDpcYMmPuLCrahhI+aRcU6eMUyTjAw0yW\n" +
-            "aJdxnIH5+7RgFdYrMMQ27jYWEwPSwYluT6Ie4ggQa5oq6m5ZQK7OQW3I/ccwEd+2\n" +
-            "W036bKFeBX8aAPIFzWo2ZDb6FAEgx7rLCeIk79oixCjNTdgRYr2Izltuf5YlH2F2\n" +
-            "zVEHsNKimnWyc+CxRpP/12XS+Fex9F6HB3NjdAt/b6eqfZBZkyPZ1RTWzBd7Rw+M\n" +
-            "YhCEMCOFomP5Ys9dplKmcArICbVI9aOro0WUQpr2LP/ZgmIrgxJ2kXDHd02TZrq9\n" +
-            "F110+u4kM8Zir5Sl0NFJFlP2txrtJmDFW9Kwt8kCggEAWtDW3AbLr8/yc9Fl2sen\n" +
-            "Mvp11e7iKO9yt0tAxUvkkukUINP0SdCvweIgaAoYb0h/i9rzysZnDjMn8Wr/pjUE\n" +
-            "dDVl36ywltNu4xQOQrvYPmaLrPh/br8wKuGxCEWGTZknbMkuKuuIQTWa4y7C1av2\n" +
-            "so7LDeYRzOpIXgXAjSJyHHSr8uGM4ncYV7fqkuPB7Q8hZT9hreOgY70WQUgN90i9\n" +
-            "hwHsqRIWrS4Y/UCaK/uxMYJfykNms/K8X+wVgIQMLPwqBgNmCgNzbfckQF1LOqkD\n" +
-            "/yTlhFLXKWsjEA+8Uerzs4kAFnD3fylSxERgqa7eDG4BaUWL80n5PLEgpqVX55Js\n" +
-            "iQKCAQBvKkxQJQOfyOLbZbiIgKgNNlp+5lX8wwIdkq71v7gutRY0zrpWLCoezJgw\n" +
-            "msnr8VKzIGF1FdSPqFYX5p++0tC7OCxRzsOlBgnV7e8Ax30O/rwvDDYXwys+4j+r\n" +
-            "DsKFidZTiBBQJDdKBzsXrs58956ThDc3sHiRa0YXmIYTSRgr7tFiPqF7yabW/qbb\n" +
-            "f2b4MxwLBinz0MlMyPUKmpIItiW0ISbsLWsBscT6uKsCXq9WXlcFK4ZocSSc9lFa\n" +
-            "gZlATHt35kKk9zY+8XA6Fb6VrwG0zvjsk5hEBJ/onrYH22g9MsHaKF2B8C4dMwPZ\n" +
-            "oTnDWnK1WK/CVIVxWbb2EmHr9tgX\n" +
-            "-----END PRIVATE KEY-----"
-
-        decodeRsa.
-		decodeRsa.setPrivate(privateKey);
-
-		return decodeRsa.decrypt(data).toString();
-
-	}*/
-
-    /*async function encrypt2(message) {
-        const publicKeyJwk = "-----BEGIN PUBLIC KEY-----\n" +
-            "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
-            "020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
-            "a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
-            "iotzXgx87eVPLt9cWI5RyWsfmtioyuiKip5HD3tN0MAO3guUtq90ucwObjR2VHX0\n" +
-            "PLdG1eAAmoQgfpIPOJLaS/26PR8zf5vmfso3udoWg78S93Dqflp0Q0RYe1WvWVtp\n" +
-            "B/RZhea6/qlnGlJCuGyKV8vUAUIaMdv3PFSAjeAqlZS232R0VQPWxy1S7m2G+D2F\n" +
-            "04+PUoQzCw8npBQEiDVzrGL/+osB7ezscfx/xCFTH3ihuun2K5QknT6Y0wWQ9NI8\n" +
-            "ZSAiSK3krhQ/pgXKcmS7nt00nMdZ4ojykK0M0DS270GMHpPg8vwYCQ50shqMM5TX\n" +
-            "IOl5QPNc13XzVct2/fgjhc+pYqcJQlEvyi8A0x8Hy9XB447ekAcWNMFgPzfXxmrL\n" +
-            "jV19s9LEeFuNdsZrVI1McofX+qTOMmQdu5Wi+RxfKX/yVTQNeozowblC32h89BFI\n" +
-            "ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
-            "/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
-            "-----END PUBLIC KEY-----";
-
-        const importedPublicKey = await crypto.subtle.importKey(
-            "spki",
-            publicKeyJwk,
-            {
-                name: "RSA-OAEP",
-                hash: "SHA-256",
-            },
-            true,
-            ["encrypt"],
-        );
-
-        const encrypted = await crypto.subtle.encrypt(
-            { name: "RSA-OAEP" },
-            importedPublicKey,
-            new TextEncoder().encode(message),
-        );
-
-        return encrypted;
-    }*/
-
-
-
-
-
-    //async function encodeRsaWebCryptoAPI(data, publicKey64) {
     async function encodeRsaWebCryptoAPI(data, publicKeyb64) {
         const pemHF = {
             public: {
@@ -566,6 +237,7 @@
             },
         };
 
+        //암호화
         const binaryDerString = window.atob(publicKeyb64.replace(pemHF.public.footer, '').replace(pemHF.public.header, ''));
         const buffer = new Uint8Array(binaryDerString.length);
         for (let i = 0; i < binaryDerString.length; i++) {
@@ -581,16 +253,17 @@
             true,
             ['encrypt']
         );
-        const data1 = new TextEncoder().encode(data);
+        const data1 = new TextEncoder().encode(data); //Unit8Array
 
-        const cipher = await window.crypto.subtle.encrypt(
+        const cipher = await window.crypto.subtle.encrypt( //ArrayBuffer
             {
                 name: 'RSA-OAEP',
             },
             publicKey,
             data1
         );
-        return btoa(String.fromCharCode(...new Uint8Array(cipher)));
+
+        return btoa(String.fromCharCode(...new Uint8Array(cipher)));//인코딩
     }
 
     async function decodeRsaWebCryptoAPI(data, privateKeyb64) {
@@ -610,6 +283,8 @@
         for (let i = 0; i < binaryDerString.length; i++) {
             buffer[i] = binaryDerString.charCodeAt(i);
         }
+
+        //privateKey 생성
         const privateKey = await window.crypto.subtle.importKey(
             'pkcs8',
             buffer.buffer,
@@ -620,42 +295,35 @@
             true,
             ['decrypt']
         );
+
+        /*const strToArrayBuffer = (str) => {
+            return new TextEncoder().encode(str);
+        };*/
+
+        //암호화 문자열로 들어온 것을 privateKey랑 같이 넣어서 디코딩하면 객체가 나와야한다.
+
+        /*const binaryDerString2 = new ArrayBuffer(data.length)
+        const buffer2 = new Uint8Array(binaryDerString2);
+        for (let i=0, strLen=data.length; i < strLen; i++) {
+            buffer2[i] = data.charCodeAt(i);
+        }*/
+
         //const data1 = new TextEncoder().encode(data);
-
-        /*const responseText = await fetch(prompt);
-        const buffer = await responseText.arrayBuffer();
-        const decoder = new TextDecoder("gbk");
-        const htmlString = decoder.decode(buffer);
-        const $ = cheerio.load(htmlString);*/
-
-
-       /* const responseText = await fetch(prompt);
-        const buffer1 = await responseText.arrayBuffer();
-        const decoder = new TextDecoder(data);
-        const htmlString = decoder.decode(buffer1);
-        console.log("htmlString" + htmlString)*/
-        //const $ = cheerio.load(htmlString);
-
-        const binaryDerString2 = data;
-        const buffer2 = new Uint8Array(binaryDerString2.length);
-        for (let i = 0; i < binaryDerString2.length; i++) {
-            buffer2[i] = binaryDerString2.charCodeAt(i);
-        }
-
-        const data1 = new TextDecoder().decode(buffer2.buffer)
 
         const text = await window.crypto.subtle.decrypt(
             {
                 name: 'RSA-OAEP',
             },
             privateKey,
-            data1
+            data
+            // strToArrayBuffer(window.atob(data))
         );
-        return btoa(String.fromCharCode(...new Uint8Array(text)));
+        console.log("디코딩 text" + text)
+
+        return new TextDecoder().decode(text);
     }
-
-
 
     </script>
 </th:block>
 </html>
+
