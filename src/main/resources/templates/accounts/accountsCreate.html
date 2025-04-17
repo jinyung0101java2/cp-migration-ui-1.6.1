@@ -213,8 +213,8 @@
                     }
 
                     const decodeRsaData = await decodeRsaWebCryptoAPI(encodeRsaData, privateKey)
-                    alert("decodeRsaWebCryptoAPI::: " + decodeRsaData)
-                    console.log("decodeRsaWebCryptoAPI::: " + decodeRsaData)
+                    alert("decodeRsaWebCryptoAPI 출력::: " + decodeRsaData)
+                    console.log("decodeRsaWebCryptoAPI 출력:::: " + decodeRsaData)
 
                     //func.saveData('POST', `${func.vaultUrl}v1/vault`, JSON.stringify(accountsCreate), true, 'application/json', func.historyBack);
                     func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(payLoad), true, 'application/json', func.historyBackRefresh);
@@ -237,7 +237,6 @@
             },
         };
 
-        //암호화
         const binaryDerString = window.atob(publicKeyb64.replace(pemHF.public.footer, '').replace(pemHF.public.header, ''));
         const buffer = new Uint8Array(binaryDerString.length);
         for (let i = 0; i < binaryDerString.length; i++) {
@@ -284,7 +283,6 @@
             buffer[i] = binaryDerString.charCodeAt(i);
         }
 
-        //privateKey 생성
         const privateKey = await window.crypto.subtle.importKey(
             'pkcs8',
             buffer.buffer,
@@ -296,19 +294,11 @@
             ['decrypt']
         );
 
-        /*const strToArrayBuffer = (str) => {
-            return new TextEncoder().encode(str);
-        };*/
-
-        //암호화 문자열로 들어온 것을 privateKey랑 같이 넣어서 디코딩하면 객체가 나와야한다.
-
         const binaryDerString2 = window.atob(data);
         const buffer2 = new Uint8Array(binaryDerString2.length);
         for (let i = 0; i < binaryDerString2.length; i++) {
             buffer2[i] = binaryDerString2.charCodeAt(i);
         }
-
-        //const data1 = new TextEncoder().encode(data);
 
         const text = await window.crypto.subtle.decrypt(
             {
@@ -317,7 +307,6 @@
             privateKey,
             buffer2.buffer
         );
-        console.log("디코딩 text" + text)
 
         return new TextDecoder().decode(text);
     }
