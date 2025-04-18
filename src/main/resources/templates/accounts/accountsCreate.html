@@ -63,11 +63,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/10.2.0/jsrsasign-all-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.js"></script>
-    <script type="text/javascript" src="/js/jsencrypt.min.js"></script>
-    <script type="text/javascript" src="/js/rsa/rsa.js"></script>
-    <script type="text/javascript" src="/js/rsa/jsbn.js"></script>
-    <script type="text/javascript" src="/js/rsa/prng4.js"></script>
-    <script type="text/javascript" src="/js/rsa/rng.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 
     <script type="text/javascript">
@@ -98,41 +93,36 @@
 
                 async save() {
 
+                    let accountsName = document.querySelector('#accountsName').value;
+                    let storageType = document.querySelector('#storageType').value;
+                    let endpoint = document.querySelector('#endpoint').value;
+                    let accessKeyId = document.querySelector('#accessKeyId').value;
+                    let secretAccessKey = document.querySelector('#secretAccessKey').value;
+
                     let timestamp = func.createUnixTimestamp();
-                    alert("timestamp::: " + timestamp)
+                    //alert("timestamp::: " + timestamp)
                     console.log("timestamp::: " + JSON.stringify(timestamp))
 
-                    let accountsName = "dfg";
-                    let storageType = "qwe";
-                    let endpoint = "wer";
-                    let accessKeyId = "ert";
-                    let secretAccessKey = "rty";
-                    timestamp = "1744597671569076100";
+                    //let accountsCreate = {"basePath":"asd","userAccount":"sdf","configName":accountsName,"content":{"storageType":storageType,"endpoint":endpoint,"accessKeyId":accessKeyId,"secretAccessKey":secretAccessKey}};
+                    let accountsCreate = {"basePath":"jjyStorage","userAccount":sessionStorage.getItem('userGuid'),"configName":accountsName,"content":{"storageType":storageType,"endpoint":endpoint,"accessKeyId":accessKeyId,"secretAccessKey":secretAccessKey}}
+                    //let accountsCreate = {"basePath":"asd","userAccount":"sdf","configName":"dfg","content":{"storageType":"qwe","endpoint":"wer","accessKeyId":"ert","secretAccessKey":"rty"}}
 
+                    let includeTimestampData = {"data":accountsCreate,"timestamp":timestamp.toString()}
+                    //let includeTimestampData = {"data":accountsCreate,"timestamp":"1744597671569076100"}
 
-                    let accountsCreate = {"basePath":"asd","userAccount":"sdf","configName":accountsName,"content":{"storageType":storageType,"endpoint":endpoint,"accessKeyId":accessKeyId,"secretAccessKey":secretAccessKey}};
-                    //let accountsCreate = {"data":{"basePath":"jjyStorage","userAccount":sessionStorage.getItem('userGuid'),"configName":accountsName,"content":{"storageType":storageType,"endpoint":endpoint,"accessKeyId":accessKeyId,"secretAccessKey":secretAccessKey}}}
-                    //let accountsCreate = {"data":{"basePath":"asd","userAccount":"sdf","configName":"dfg","content":{"storageType":"qwe","endpoint":"wer","accessKeyId":"ert","secretAccessKey":"rty"}}}
-
-                    let includeTimestampData = {"data":accountsCreate,"timestamp":timestamp}
-
-                    alert("includeTimestampData::: " + JSON.stringify(includeTimestampData))
+                    //alert("includeTimestampData::: " + JSON.stringify(includeTimestampData))
                     console.log("includeTimestampData::: " + JSON.stringify(includeTimestampData))
 
-                    alert("accountsCreate::: " + JSON.stringify(accountsCreate))
+                    //alert("accountsCreate::: " + JSON.stringify(accountsCreate))
                     console.log("accountsCreate::: " + JSON.stringify(accountsCreate))
 
                     let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData));
-                    alert("hmacData::: " + hmacData)
+                    //alert("hmacData::: " + hmacData)
                     console.log("hmacData::: " + hmacData)
 
-                    let includeHmacData = {
-                        "data":accountsCreate,
-                        "hmac_data":hmacData,
-                        //"timestamp": 1744597671569076100 //timestamp,
-                        "timestamp":"1744597671569076100" //timestamp,
-                    }
-                    alert("includeHmacData::: " + JSON.stringify(includeHmacData))
+                    //let includeHmacData = {"data":accountsCreate,"hmac_data":hmacData,"timestamp":timestamp}
+                    let includeHmacData = {"data":accountsCreate,"hmac_data":hmacData,"timestamp":timestamp.toString()}
+                    //alert("includeHmacData::: " + JSON.stringify(includeHmacData))
                     console.log("includeHmacData::: " + JSON.stringify(includeHmacData))
 
                     const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
@@ -203,21 +193,17 @@
                         "oTnDWnK1WK/CVIVxWbb2EmHr9tgX\n" +
                         "-----END PRIVATE KEY-----"
 
-
-                    //Web Crypto API
                     const encodeRsaData = await func.encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
-                    console.log(JSON.stringify(encodeRsaData))
+                    console.log("encodeRsaData::: " + JSON.stringify(encodeRsaData))
 
-                    let payLoad = {
-                        "payload":encodeRsaData
-                    }
+                    let payload = {"payload":encodeRsaData}
 
                     const decodeRsaData = await func.decodeRsaWebCryptoAPI(encodeRsaData, privateKey)
-                    alert("decodeRsaWebCryptoAPI 출력::: " + decodeRsaData)
-                    console.log("decodeRsaWebCryptoAPI 출력:::: " + decodeRsaData)
+                    //alert("decodeRsaWebCryptoAPI 출력::: " + decodeRsaData)
+                    console.log("decodeRsaData::: " + decodeRsaData)
 
                     //func.saveData('POST', `${func.vaultUrl}v1/vault`, JSON.stringify(accountsCreate), true, 'application/json', func.historyBack);
-                    func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(payLoad), true, 'application/json', func.historyBackRefresh);
+                    func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(payload), true, 'application/json', func.historyBackRefresh);
 
                     sessionStorage.setItem('accountsData', 'Y')
                 },

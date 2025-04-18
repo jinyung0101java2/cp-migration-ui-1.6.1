@@ -331,7 +331,7 @@ const func = {
 		httpRequest.open(method, url, bull);
 		httpRequest.setRequestHeader('Content-type', header);
 		httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('accessToken'));
-		httpRequest.responseType = "json"
+		//httpRequest.responseType = "json"
 
 		httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
 		httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
