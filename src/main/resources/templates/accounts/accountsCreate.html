@@ -133,6 +133,9 @@
                     let encodeDataWithAes = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
                     console.log("encodeDataWithAes::: " + encodeDataWithAes)
 
+                    let decodeDataWithAes = func.decodeDataWithAes(encodeDataWithAes, aesIV.aes, aesIV.iv);
+                    console.log("decodeDataWithAes::: " + decodeDataWithAes)
+
                     const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
                         "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
                         "020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
@@ -205,20 +208,35 @@
                     const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes, publicKey)
                     console.log("encodeRsaAes::: " + JSON.stringify(encodeRsaAes))
 
-                    const encodeIvBase64 = await func.encodeIvBase64(aesIV.iv)
+                    const decodeRsaAes = await func.decodeRsaWebCryptoAPI(encodeRsaAes, privateKey)
+                    console.log("decodeRsaAes::: " + JSON.stringify(decodeRsaAes))
+
+                    const encodeIvBase64 = func.encodeIvBase64(aesIV.iv)
                     console.log("encodeIvBase64::: " + JSON.stringify(encodeIvBase64))
+
+                    const decodeIvBase64 = func.decodeIvBase64(encodeIvBase64)
+                    console.log("decodeIvBase64::: " + decodeIvBase64)
 
                     const encodeRsaData = await func.encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
                     console.log("encodeRsaData::: " + JSON.stringify(encodeRsaData))
-
-                    let payload = {"payload":encodeRsaData}
 
                     const decodeRsaData = await func.decodeRsaWebCryptoAPI(encodeRsaData, privateKey)
                     //alert("decodeRsaWebCryptoAPI 출력::: " + decodeRsaData)
                     console.log("decodeRsaData::: " + decodeRsaData)
 
+                    let payload = {"payload":encodeRsaData}
+
+                    let encodeData = {
+                        "key":encodeRsaAes,
+                        "iv":encodeIvBase64,
+                        "data":encodeDataWithAes
+                    }
+
+                    console.log("encodeData::: " + encodeData)
+
                     //func.saveData('POST', `${func.vaultUrl}v1/vault`, JSON.stringify(accountsCreate), true, 'application/json', func.historyBack);
                     //func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(payload), true, 'application/json', func.historyBackRefresh);
+                    //func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh);
 
                     sessionStorage.setItem('accountsData', 'Y')
                 },

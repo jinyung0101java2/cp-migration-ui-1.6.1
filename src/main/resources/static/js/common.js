@@ -490,10 +490,19 @@ const func = {
 		return CryptoJS.AES.encrypt(data, aes, { iv: iv });
 	},
 
+	decodeDataWithAes(data, aes, iv) {
+		return CryptoJS.AES.decrypt(data, aes, { iv: iv });
+	},
+
 	encodeIvBase64(iv) {
+
 	 	return CryptoJS.enc.Base64.stringify(iv)
 	},
 
+	decodeIvBase64(iv) {
+
+		return CryptoJS.enc.Base64.parse(iv);
+	},
 
 	async encodeRsaWebCryptoAPI(data, publicKeyb64) {
 		const pemHF = {
