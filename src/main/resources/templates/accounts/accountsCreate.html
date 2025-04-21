@@ -125,8 +125,13 @@
                     //alert("includeHmacData::: " + JSON.stringify(includeHmacData))
                     console.log("includeHmacData::: " + JSON.stringify(includeHmacData))
 
-                    let aesEncrypt = func.generateAes256Key(JSON.stringify(includeHmacData));
-                    console.log("aesEncrypt::: " + aesEncrypt)
+                    let aesIV = func.generateAesIv();
+                    console.log("aesIV::: " + aesIV)
+                    console.log("aesIV.aes::: " + aesIV.aes)
+                    console.log("aesIV.iv::: " + aesIV.iv)
+
+                    let encodeDataWithAes = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
+                    console.log("encodeDataWithAes::: " + encodeDataWithAes)
 
                     const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
                         "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
@@ -197,8 +202,11 @@
                         "-----END PRIVATE KEY-----"
 
 
-                    const encodeRsaAesKey = await func.encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
-                    console.log("encodeRsaData::: " + JSON.stringify(encodeRsaData))
+                    const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes, publicKey)
+                    console.log("encodeRsaAes::: " + JSON.stringify(encodeRsaAes))
+
+                    const encodeIvBase64 = await func.encodeIvBase64(aesIV.iv)
+                    console.log("encodeIvBase64::: " + JSON.stringify(encodeIvBase64))
 
                     const encodeRsaData = await func.encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
                     console.log("encodeRsaData::: " + JSON.stringify(encodeRsaData))

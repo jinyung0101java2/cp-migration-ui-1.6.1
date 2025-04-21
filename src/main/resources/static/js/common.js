@@ -456,38 +456,44 @@ const func = {
 
 	},
 
-	generateAes256Key(data) {
+	generateAesIv() {
 
 		//암호문 형식 base64, Hex
 		//iv bytes, aes bytes, 패딩 방식
 
-		let ivBytes = "0123456789abcdef"; // 16 bytes
+		let hex  = "0123456789abcdef"; // 16 bytes
 		let aesKeyBytes = "0123456789abcdef0123456789abcdef"; // 32 bytes
 		let key='';
 
 		for (i = 0; i < 64; i++) {
-			key += ivBytes.charAt(Math.floor(Math.random() * 16));
+			key += hex.charAt(Math.floor(Math.random() * 16));
 			//Initially this was charAt(chance.integer({min: 0, max: 15}));
 		}
-		console.log(JSON.stringify("key::: " + key)) // 64 bytes
-
 
 		//let iv = CryptoJS.enc.Hex.parse(ivBytes);
 		let iv = CryptoJS.enc.Hex.parse(key);
-		console.log(JSON.stringify("iv::: " + iv))
 		//let aesKey = CryptoJS.enc.Utf8.parse(aesKeyBytes);
 		//let aesKey = CryptoJS.enc.Hex.parse(aesKeyBytes);
-		let aesKey = CryptoJS.enc.Hex.parse(key);
-		console.log(JSON.stringify("aesKey::: " + aesKey))
+		let aes = CryptoJS.enc.Hex.parse(key);
 
-		console.log(JSON.stringify("CryptoJS.AES.encrypt::: " + CryptoJS.AES.encrypt(data, key, { iv: iv })))
-
-		return CryptoJS.AES.encrypt(data, key, { iv: iv });
+		return {
+			"aes": aes,
+			"iv": iv
+		}
 
 		// AES 키 rsa 공개키로 encode
 		//IV도 rsa 공기키로 encode
 
 	},
+
+	encodeDataWithAes(data, aes, iv) {
+		return CryptoJS.AES.encrypt(data, aes, { iv: iv });
+	},
+
+	encodeIvBase64(iv) {
+	 	return CryptoJS.enc.Base64.stringify(iv)
+	},
+
 
 	async encodeRsaWebCryptoAPI(data, publicKeyb64) {
 		const pemHF = {
