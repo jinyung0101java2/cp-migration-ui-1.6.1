@@ -179,7 +179,9 @@ const func = {
 							document.getElementById('wrap').removeChild(document.getElementById('loading'));
 						};
 						return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  'closed');*/
-						callbackFunction(JSON.parse(httpRequest.responseText), list);
+						//callbackFunction(JSON.parse(httpRequest.responseText), list);
+						callbackFunction((httpRequest.responseText), list);
+						alert("list:::"+list)
 					} else if (httpRequest.status === 500) {
 						alert(httpRequest.responseText)
 						if (httpRequest.responseText === 'secret is nil') {
@@ -451,6 +453,39 @@ const func = {
 
 		let key = "secret";
 		return CryptoJS.HmacSHA256(data,key).toString(CryptoJS.enc.Hex);
+
+	},
+
+	generateAes256Key(data) {
+
+		//암호문 형식 base64, Hex
+		//iv bytes, aes bytes, 패딩 방식
+
+		let ivBytes = "0123456789abcdef"; // 16 bytes
+		let aesKeyBytes = "0123456789abcdef0123456789abcdef"; // 32 bytes
+		let key='';
+
+		for (i = 0; i < 64; i++) {
+			key += ivBytes.charAt(Math.floor(Math.random() * 16));
+			//Initially this was charAt(chance.integer({min: 0, max: 15}));
+		}
+		console.log(JSON.stringify("key::: " + key)) // 64 bytes
+
+
+		//let iv = CryptoJS.enc.Hex.parse(ivBytes);
+		let iv = CryptoJS.enc.Hex.parse(key);
+		console.log(JSON.stringify("iv::: " + iv))
+		//let aesKey = CryptoJS.enc.Utf8.parse(aesKeyBytes);
+		//let aesKey = CryptoJS.enc.Hex.parse(aesKeyBytes);
+		let aesKey = CryptoJS.enc.Hex.parse(key);
+		console.log(JSON.stringify("aesKey::: " + aesKey))
+
+		console.log(JSON.stringify("CryptoJS.AES.encrypt::: " + CryptoJS.AES.encrypt(data, key, { iv: iv })))
+
+		return CryptoJS.AES.encrypt(data, key, { iv: iv });
+
+		// AES 키 rsa 공개키로 encode
+		//IV도 rsa 공기키로 encode
 
 	},
 

@@ -125,6 +125,9 @@
                     //alert("includeHmacData::: " + JSON.stringify(includeHmacData))
                     console.log("includeHmacData::: " + JSON.stringify(includeHmacData))
 
+                    let aesEncrypt = func.generateAes256Key(JSON.stringify(includeHmacData));
+                    console.log("aesEncrypt::: " + aesEncrypt)
+
                     const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
                         "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
                         "020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
@@ -193,6 +196,10 @@
                         "oTnDWnK1WK/CVIVxWbb2EmHr9tgX\n" +
                         "-----END PRIVATE KEY-----"
 
+
+                    const encodeRsaAesKey = await func.encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
+                    console.log("encodeRsaData::: " + JSON.stringify(encodeRsaData))
+
                     const encodeRsaData = await func.encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
                     console.log("encodeRsaData::: " + JSON.stringify(encodeRsaData))
 
@@ -203,13 +210,15 @@
                     console.log("decodeRsaData::: " + decodeRsaData)
 
                     //func.saveData('POST', `${func.vaultUrl}v1/vault`, JSON.stringify(accountsCreate), true, 'application/json', func.historyBack);
-                    func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(payload), true, 'application/json', func.historyBackRefresh);
+                    //func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(payload), true, 'application/json', func.historyBackRefresh);
 
                     sessionStorage.setItem('accountsData', 'Y')
                 },
             };
             accountsCreate.event();
         };
+
+
 
     </script>
 </th:block>
