@@ -487,11 +487,13 @@ const func = {
 	},
 
 	encodeDataWithAes(data, aes, iv) {
-		return CryptoJS.AES.encrypt(data, aes, { iv: iv });
+		return CryptoJS.AES.encrypt(data, aes, { iv: iv }).toString();
 	},
 
 	decodeDataWithAes(data, aes, iv) {
-		return CryptoJS.AES.decrypt(data, aes, { iv: iv });
+
+		return CryptoJS.AES.decrypt(data, aes, { iv: iv }).toString(CryptoJS.enc.Utf8);
+
 	},
 
 	encodeIvBase64(iv) {
@@ -501,7 +503,9 @@ const func = {
 
 	decodeIvBase64(iv) {
 
-		return CryptoJS.enc.Base64.parse(iv);
+		let parseWordArray = CryptoJS.enc.Base64.parse(iv);
+		let decoded = parseWordArray.toString()
+		return decoded;
 	},
 
 	async encodeRsaWebCryptoAPI(data, publicKeyb64) {
