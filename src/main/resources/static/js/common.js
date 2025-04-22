@@ -461,11 +461,12 @@ const func = {
 		//암호문 형식 base64, Hex
 		//iv bytes, aes bytes, 패딩 방식
 
+
 		let hex  = "0123456789abcdef"; // 16 bytes
 		let aesKeyBytes = "0123456789abcdef0123456789abcdef"; // 32 bytes
 		let key='';
 
-		for (i = 0; i < 64; i++) {
+		for (i = 0; i < 32; i++) {
 			key += hex.charAt(Math.floor(Math.random() * 16));
 			//Initially this was charAt(chance.integer({min: 0, max: 15}));
 		}
@@ -491,9 +492,7 @@ const func = {
 	},
 
 	decodeDataWithAes(data, aes, iv) {
-
 		return CryptoJS.AES.decrypt(data, aes, { iv: iv }).toString(CryptoJS.enc.Utf8);
-
 	},
 
 	encodeIvBase64(iv) {
