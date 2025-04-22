@@ -488,11 +488,22 @@ const func = {
 	},
 
 	encodeDataWithAes(data, aes, iv) {
-		return CryptoJS.AES.encrypt(data, aes, { iv: iv }).toString();
+		return CryptoJS.AES.encrypt(data, aes,
+			{ iv: iv,
+			  padding: CryptoJS.pad.Pkcs7,
+			  mode: CryptoJS.mode.CBC
+	        }).toString();
+		/*return CryptoJS.AES.encrypt(data, aes,
+			{ iv: iv
+			}).toString();*/
 	},
 
 	decodeDataWithAes(data, aes, iv) {
-		return CryptoJS.AES.decrypt(data, aes, { iv: iv }).toString(CryptoJS.enc.Utf8);
+		return CryptoJS.AES.decrypt(data, aes,
+			{ iv: iv,
+			  padding: CryptoJS.pad.Pkcs7,
+		      mode: CryptoJS.mode.CBC
+			}).toString(CryptoJS.enc.Utf8);
 	},
 
 	encodeIvBase64(iv) {

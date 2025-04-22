@@ -136,8 +136,8 @@
                     console.log("aesIV.aes::: " + aesIV.aes)
                     console.log("aesIV.iv::: " + aesIV.iv)
 
-                    //let encodeDataWithAes = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
-                    let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
+                    let encodeDataWithAes = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
+                    //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
                     console.log("encodeDataWithAes::: " + encodeDataWithAes)
 
                     let decodeDataWithAes = func.decodeDataWithAes(encodeDataWithAes, aesIV.aes, aesIV.iv);
