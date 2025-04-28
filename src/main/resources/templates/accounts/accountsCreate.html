@@ -140,8 +140,50 @@
                     //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
                     console.log("encodeDataWithAes::: " + encodeDataWithAes)
 
+                    let encodeDataWithAesPkcs7 = func.encodeDataWithAesPkcs7(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
+                    //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
+                    console.log("encodeDataWithAesPkcs7::: " + encodeDataWithAesPkcs7)
+
+                    let encodeDataWithAesIso97971 = func.encodeDataWithAesIso97971(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
+                    //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
+                    console.log("encodeDataWithAesIso97971::: " + encodeDataWithAesIso97971)
+
+                    let encodeDataWithAesAnsiX923 = func.encodeDataWithAesAnsiX923(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
+                    //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
+                    console.log("encodeDataWithAesAnsiX923::: " + encodeDataWithAesAnsiX923)
+
+                    let encodeDataWithAesIso10126 = func.encodeDataWithAesIso10126(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
+                    //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
+                    console.log("encodeDataWithAesIso10126::: " + encodeDataWithAesIso10126)
+
+                    let encodeDataWithAesZeroPadding = func.encodeDataWithAesZeroPadding(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
+                    //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
+                    console.log("encodeDataWithAesZeroPadding::: " + encodeDataWithAesZeroPadding)
+
+                    let encodeDataWithAesNoPadding = func.encodeDataWithAesNoPadding(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
+                    //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
+                    console.log("encodeDataWithAesNoPadding::: " + encodeDataWithAesNoPadding)
+
                     let decodeDataWithAes = func.decodeDataWithAes(encodeDataWithAes, aesIV.aes, aesIV.iv);
                     console.log("decodeDataWithAes::: " + decodeDataWithAes)
+
+                    let decodeDataWithAesPkcs7 = func.decodeDataWithAesPkcs7 (encodeDataWithAes, aesIV.aes, aesIV.iv);
+                    console.log("decodeDataWithAesPkcs7::: " + decodeDataWithAesPkcs7)
+
+                    let decodeDataWithAesIso97971 = func.decodeDataWithAesIso97971(encodeDataWithAes, aesIV.aes, aesIV.iv);
+                    console.log("decodeDataWithAesIso97971::: " + decodeDataWithAesIso97971)
+
+                    let decodeDataWithAesAnsiX923 = func.decodeDataWithAesAnsiX923(encodeDataWithAes, aesIV.aes, aesIV.iv);
+                    console.log("decodeDataWithAesAnsiX923::: " + decodeDataWithAesAnsiX923)
+
+                    let decodeDataWithAesIso10126 = func.decodeDataWithAesIso10126(encodeDataWithAes, aesIV.aes, aesIV.iv);
+                    console.log("decodeDataWithAesIso10126::: " + decodeDataWithAesIso10126)
+
+                    let decodeDataWithAesZeroPadding = func.decodeDataWithAesZeroPadding(encodeDataWithAes, aesIV.aes, aesIV.iv);
+                    console.log("decodeDataWithAesZeroPadding::: " + decodeDataWithAesZeroPadding)
+
+                    let decodeDataWithAesNoPadding = func.decodeDataWithAesNoPadding(encodeDataWithAes, aesIV.aes, aesIV.iv);
+                    console.log("decodeDataWithAesNoPadding::: " + decodeDataWithAesNoPadding)
 
                     const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
                         "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +

@@ -489,6 +489,15 @@ const func = {
 
 	encodeDataWithAes(data, aes, iv) {
 		return CryptoJS.AES.encrypt(data, aes,
+			{ iv: iv
+			}).toString();
+		/*return CryptoJS.AES.encrypt(data, aes,
+			{ iv: iv
+			}).toString();*/
+	},
+
+	encodeDataWithAesPkcs7(data, aes, iv) {
+		return CryptoJS.AES.encrypt(data, aes,
 			{ iv: iv,
 			  padding: CryptoJS.pad.Pkcs7,
 			  mode: CryptoJS.mode.CBC
@@ -498,10 +507,113 @@ const func = {
 			}).toString();*/
 	},
 
+	encodeDataWithAesIso97971(data, aes, iv) {
+		return CryptoJS.AES.encrypt(data, aes,
+			{ iv: iv,
+				padding: CryptoJS.pad.Iso97971,
+				mode: CryptoJS.mode.CBC
+			}).toString();
+		/*return CryptoJS.AES.encrypt(data, aes,
+			{ iv: iv
+			}).toString();*/
+	},
+
+	encodeDataWithAesAnsiX923(data, aes, iv) {
+		return CryptoJS.AES.encrypt(data, aes,
+			{ iv: iv,
+				padding: CryptoJS.pad.AnsiX923,
+				mode: CryptoJS.mode.CBC
+			}).toString();
+		/*return CryptoJS.AES.encrypt(data, aes,
+			{ iv: iv
+			}).toString();*/
+	},
+
+	encodeDataWithAesIso10126(data, aes, iv) {
+		return CryptoJS.AES.encrypt(data, aes,
+			{ iv: iv,
+				padding: CryptoJS.pad.Iso10126,
+				mode: CryptoJS.mode.CBC
+			}).toString();
+		/*return CryptoJS.AES.encrypt(data, aes,
+			{ iv: iv
+			}).toString();*/
+	},
+
+	encodeDataWithAesZeroPadding(data, aes, iv) {
+		return CryptoJS.AES.encrypt(data, aes,
+			{ iv: iv,
+				padding: CryptoJS.pad.ZeroPadding,
+				mode: CryptoJS.mode.CBC
+			}).toString();
+		/*return CryptoJS.AES.encrypt(data, aes,
+			{ iv: iv
+			}).toString();*/
+	},
+
+	encodeDataWithAesNoPadding(data, aes, iv) {
+		return CryptoJS.AES.encrypt(data, aes,
+			{ iv: iv,
+				padding: CryptoJS.pad.NoPadding,
+				mode: CryptoJS.mode.CBC
+			}).toString();
+		/*return CryptoJS.AES.encrypt(data, aes,
+			{ iv: iv
+			}).toString();*/
+	},
+
 	decodeDataWithAes(data, aes, iv) {
+		return CryptoJS.AES.decrypt(data, aes,
+			{ iv: iv/*,
+			  padding: CryptoJS.pad.Pkcs7,
+		      mode: CryptoJS.mode.CBC*/
+			}).toString(CryptoJS.enc.Utf8);
+	},
+
+	decodeDataWithAesPkcs7(data, aes, iv) {
 		return CryptoJS.AES.decrypt(data, aes,
 			{ iv: iv,
 			  padding: CryptoJS.pad.Pkcs7,
+		      mode: CryptoJS.mode.CBC
+			}).toString(CryptoJS.enc.Utf8);
+	},
+
+	decodeDataWithAesIso97971(data, aes, iv) {
+		return CryptoJS.AES.decrypt(data, aes,
+			{ iv: iv,
+			  padding: CryptoJS.pad.Iso97971,
+		      mode: CryptoJS.mode.CBC
+			}).toString(CryptoJS.enc.Utf8);
+	},
+
+	decodeDataWithAesAnsiX923(data, aes, iv) {
+		return CryptoJS.AES.decrypt(data, aes,
+			{ iv: iv,
+			  padding: CryptoJS.pad.AnsiX923,
+		      mode: CryptoJS.mode.CBC
+			}).toString(CryptoJS.enc.Utf8);
+	},
+
+	decodeDataWithAesIso10126(data, aes, iv) {
+		return CryptoJS.AES.decrypt(data, aes,
+			{ iv: iv,
+			  padding: CryptoJS.pad.Iso10126,
+		      mode: CryptoJS.mode.CBC
+			}).toString(CryptoJS.enc.Utf8);
+	},
+
+	decodeDataWithAesZeroPadding(data, aes, iv) {
+		return CryptoJS.AES.decrypt(data, aes,
+			{ iv: iv,
+			  padding: CryptoJS.pad.ZeroPadding,
+		      mode: CryptoJS.mode.CBC
+			}).toString(CryptoJS.enc.Utf8);
+	},
+
+	decodeDataWithAesNoPadding(data, aes, iv) {
+		return CryptoJS.AES.decrypt(data, aes,
+			{ iv: iv,
+			  padding: CryptoJS.pad.NoPadding,
 		      mode: CryptoJS.mode.CBC
 			}).toString(CryptoJS.enc.Utf8);
 	},
