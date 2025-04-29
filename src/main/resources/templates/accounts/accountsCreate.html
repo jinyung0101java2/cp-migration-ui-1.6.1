@@ -296,12 +296,16 @@
                     let resposeDecodeAESKey = await responseDecodeRsaWebCryptoAPI(resposeKey, privateKey)//rsa로 인코딩 된 AES Key
                     console.log("respose DecodeAESKey:::" + JSON.stringify(resposeDecodeAESKey))
 
+                    // AES key base64 디코딩
+                    let resposeDecodeBase64AESKey = func.decodeIvBase64(resposeDecodeAESKey)
+                    console.log("respose DecodeBase64AESKey:::" + JSON.stringify(resposeDecodeBase64AESKey))
+
                     // IV 디코딩
                     const resposeDecodeIvBase64 = func.decodeIvBase64(resposeIv)//base64로 인코딩 된 IV
                     console.log("respose DecodeIvBase64::: " + resposeDecodeIvBase64)
 
                     // DATA 디코딩
-                    let resposeDecodeDataWithAes2 = await responseDecodeDataWithAes(resposeData, resposeDecodeAESKey, resposeDecodeIvBase64);
+                    let resposeDecodeDataWithAes2 = await responseDecodeDataWithAes(resposeData, resposeDecodeBase64AESKey, resposeDecodeIvBase64);
                     console.log("respose DecodeDataWithAes::: " + resposeDecodeDataWithAes2)
 
 
@@ -328,7 +332,7 @@
                     //alert("decodeRsaWebCryptoAPI 출력::: " + decodeRsaData)
                     console.log("decodeRsaData::: " + decodeRsaData)
 
-                    let payload = {"payload":encodeRsaData}
+                    //let payload = {"payload":encodeRsaData}
 
                     let encodeData = {
                         "key":encodeRsaAes,
@@ -349,10 +353,11 @@
         };
 
     async function responseDecodeDataWithAes(data, aes, iv) {
+
         try {
-            return CryptoJS.AES.decrypt(data, aes,
-                { iv: iv/*,
-			  padding: CryptoJS.pad.Pkcs7,
+            return CryptoJS.AES.decrypt(data.toString(), CryptoJS.enc.Hex.parse(aes),
+                { iv: CryptoJS.enc.Hex.parse(iv),
+			  /*padding: CryptoJS.pad.Pkcs7,
 		      mode: CryptoJS.mode.CBC*/
                 }).toString(CryptoJS.enc.Utf8);
         } catch (error) {
@@ -475,41 +480,6 @@
 
         return { encrypted, key, iv };
     }
-
-    async function decryptData(encrypted, key, iv) {
-        const decrypted = await crypto.subtle.decrypt(
-            { name: 'AES-GCM', iv },
-            key,
-            encrypted
-        );
-        return new TextDecoder().decode(decrypted);
-    }
-
-    // 사용 예시
-    encryptData('Hello, World!').then(async ({ encrypted, key, iv }) => {
-        /*const binaryDerStringEncrypted = window.atob(encrypted.toString());
-        const bufferEncrypted = new Uint8Array(binaryDerStringEncrypted.length);
-        for (let i = 0; i < binaryDerStringEncrypted.length; i++) {
-            bufferEncrypted[i] = binaryDerStringEncrypted.charCodeAt(i);
-        }
-
-        const binaryDerStringKey = window.atob(key.toString());
-        const bufferKey = new Uint8Array(binaryDerStringKey.length);
-        for (let i = 0; i < binaryDerStringKey.length; i++) {
-            bufferKey[i] = binaryDerStringKey.charCodeAt(i);
-        }
-
-        const binaryDerStringIv = window.atob(iv.toString());
-        const bufferIv = new Uint8Array(binaryDerStringIv.length);
-        for (let i = 0; i < binaryDerStringIv.length; i++) {
-            bufferIv[i] = binaryDerStringIv.charCodeAt(i);
-        }*/
-
-        console.log('암호화 된 데이터:', new Uint8Array(encrypted));
-        const decrypted = await decryptData(encrypted, key, iv);
-        console.log('복호화 된 데이터:', decrypted);
-    });
-
 
     /*async function encryptData(data, aes, iv) {
 
