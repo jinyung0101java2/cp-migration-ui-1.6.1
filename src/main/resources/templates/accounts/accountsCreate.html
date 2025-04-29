@@ -132,37 +132,68 @@
                     console.log("includeHmacData::: " + JSON.stringify(includeHmacData))
 
                     let aesIV = func.generateAesIv();
-                    console.log("aesIV::: " + aesIV)
+                    console.log("aesIV::: " + JSON.stringify(aesIV))
                     console.log("aesIV.aes::: " + aesIV.aes)
                     console.log("aesIV.iv::: " + aesIV.iv)
 
+
+                    let encryptDatapadding = await encryptData(JSON.stringify(includeHmacData));
+                    //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
+                    console.log("encryptDatapadding::: " + encryptDatapadding)
+
+                    let pad = func.pkcs7Pad(encryptDatapadding, 16)
+                    let padStr = new TextDecoder().decode(pad);
+                    console.log("pad::: " + pad)
+                    console.log("padStr::: " + padStr)
+
+
+                    let padding = func.pkcs7Pad(includeHmacData, 16)
+
+                    // let encoder = new TextEncoder();
+                    // let uint8Array = encoder.encode(encodeDataWithAes);
+                    console.log("[DATA]includeHmacData + uint8Array::: " + padding)
+                    console.log("[DATA]includeHmacData + TextDecoder::: " + new TextDecoder("windows-1252").decode(padding))
+
+
                     let encodeDataWithAes = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
                     //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
-                    console.log("encodeDataWithAes::: " + encodeDataWithAes)
+                    console.log("[DATA]encodeDataWithAes::: " + encodeDataWithAes)
+
+
+                    let padding2 = func.pkcs7Pad(encodeDataWithAes, 16)
+
+                    // let encoder = new TextEncoder();
+                    // let uint8Array = encoder.encode(encodeDataWithAes);
+                    console.log("[DATA]encodeDataWithAes + uint8Array::: " + padding2)
+                    console.log("[DATA]decodeDataWithAes + uint8Array::: " + new TextDecoder('utf-8').decode(padding2))
+
+
+
+
 
                     let encodeDataWithAesPkcs7 = func.encodeDataWithAesPkcs7(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
                     //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
-                    console.log("encodeDataWithAesPkcs7::: " + encodeDataWithAesPkcs7)
+                    console.log("[DATA]encodeDataWithAesPkcs7::: " + encodeDataWithAesPkcs7)
 
                     let encodeDataWithAesIso97971 = func.encodeDataWithAesIso97971(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
                     //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
-                    console.log("encodeDataWithAesIso97971::: " + encodeDataWithAesIso97971)
+                    console.log("[DATA]encodeDataWithAesIso97971::: " + encodeDataWithAesIso97971)
 
                     let encodeDataWithAesAnsiX923 = func.encodeDataWithAesAnsiX923(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
                     //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
-                    console.log("encodeDataWithAesAnsiX923::: " + encodeDataWithAesAnsiX923)
+                    console.log("[DATA]encodeDataWithAesAnsiX923::: " + encodeDataWithAesAnsiX923)
 
                     let encodeDataWithAesIso10126 = func.encodeDataWithAesIso10126(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
                     //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
-                    console.log("encodeDataWithAesIso10126::: " + encodeDataWithAesIso10126)
+                    console.log("[DATA]encodeDataWithAesIso10126::: " + encodeDataWithAesIso10126)
 
                     let encodeDataWithAesZeroPadding = func.encodeDataWithAesZeroPadding(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
                     //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
-                    console.log("encodeDataWithAesZeroPadding::: " + encodeDataWithAesZeroPadding)
+                    console.log("[DATA]encodeDataWithAesZeroPadding::: " + encodeDataWithAesZeroPadding)
 
                     let encodeDataWithAesNoPadding = func.encodeDataWithAesNoPadding(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
                     //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
-                    console.log("encodeDataWithAesNoPadding::: " + encodeDataWithAesNoPadding)
+                    console.log("[DATA]encodeDataWithAesNoPadding::: " + encodeDataWithAesNoPadding)
 
                     let decodeDataWithAes = func.decodeDataWithAes(encodeDataWithAes, aesIV.aes, aesIV.iv);
                     console.log("decodeDataWithAes::: " + decodeDataWithAes)
@@ -252,16 +283,40 @@
                         "gZlATHt35kKk9zY+8XA6Fb6VrwG0zvjsk5hEBJ/onrYH22g9MsHaKF2B8C4dMwPZ\n" +
                         "oTnDWnK1WK/CVIVxWbb2EmHr9tgX\n" +
                         "-----END PRIVATE KEY-----"
+                    console.log("******************************************************************************************************************************************************************")
+                    let respose = {"key":"ZBghBzhSfnpMFCqwcrFnOk/IhCiJ2sS5SiZHZz0WBPLApxORWq/ky9MEwLYyWN8aENZHRi1GkRdpW71AyB2b4AGQJ0kFwvHdGk7ogEbtF97uzKiyfjBA2OXfNh1wIRc+UJS5TCmxxDBSRVgKfwvz4wp8z8Oyr21jjAP53VyGfZcwsNm9NhdOPGNyXaV07VLulIbdypHwCWB7Jpjj1DrQ52VbYlhtbHfmiRHXQLwjx9+3FZLjN/9qLOGWCdIYWETaFWvsV2Qqlo9iPJNj8ksxDmPrwB/Qvi76j4Qq81RgQ8AFlq3PByyx94YuZazgZq+b/qgyyWNjGEpcjmag7P1UPh5SxbZPreeddTEsFnMX2P0yChfVpbwk4LS8BrcpeUC5QBvSZee2wKUNiIBg9jCzylPKHt56LFtQ6M1tESU55Civ4BZU1hC/EbTUHRdSxrX/uvz6NJCKC/CzVhdEa6gI5iUnU70obDOsrP9xe1Av2R1F7B3Vnr4SkRk93k5jd9V+PmH6I2DcZ090TqEDHjLdsaPlGrSG3OHDKNYvPZcPLkx8eweGq5PjJwNp3Ig8yXPmr5eyf2fYIQdEL4otcQSTZVUblFuqxk+fqhtgAkEMkyJfpikt5Cm/Ihs8wpFZS2UnpUH0PMSw5TFUvGpnPrMbI+N+2n5fxSa0V/RpfA5ZrD0=","iv":"rURs+/QEQqLSvJ3GwD/3og==","data":"H50BE7dV0OQsd2f2jgSJDzQuwEHuHdNBcP1Vb+Lhvj0hOTKx60TjYS35zWC/cPRMr6sKPUToocincsRb9Xq2h/C3JvW3oGObzVXoDR8RuE6FemDvVqy33L2+8whBD+PVyiUxVbMw7qewNuw9xhzw9nZE0qlFVRCV7W9rNFKJ7mcAD7IUUvSozlY4QVW6qnsqSnlmto33ZIX6ZkbMN06GsjJwnzadDxqECJ9c9o0/76337/wDOeyzAaPszzCPlYpbh8/q5GaKe8wwuhM/2z3CRLjwsBYRTeF+4txM0ZyzYFgyAoJw9DTESvRC1/PZjTvXP/gzeVIpDChUPxFoMjXeTnPy4HH2TRWfxcEKR9koPyuzY07p15c4G9WrO+G+sogyf81rrBbNpi3TkEelwXjGuEss17bYWqH/8lyhfW54O3vzAKxOihzPecgwwFF1PDH27fTr4fBxRjvo/DTdnWmIdw=="};
+                    let resposeKey = respose.key
+                    console.log("respose key:::" + JSON.stringify(resposeKey))
+                    let resposeIv = respose.iv
+                    console.log("respose iv:::" + JSON.stringify(resposeIv))
+                    let resposeData = respose.data
+                    console.log("respose data:::" + JSON.stringify(resposeData))
+
+                    // AES key 디코딩
+                    let resposeDecodeAESKey = await responseDecodeRsaWebCryptoAPI(resposeKey, privateKey)//rsa로 인코딩 된 AES Key
+                    console.log("respose DecodeAESKey:::" + JSON.stringify(resposeDecodeAESKey))
+
+                    // IV 디코딩
+                    const resposeDecodeIvBase64 = func.decodeIvBase64(resposeIv)//base64로 인코딩 된 IV
+                    console.log("respose DecodeIvBase64::: " + resposeDecodeIvBase64)
+
+                    // DATA 디코딩
+                    let resposeDecodeDataWithAes2 = await responseDecodeDataWithAes(resposeData, resposeDecodeAESKey, resposeDecodeIvBase64);
+                    console.log("respose DecodeDataWithAes::: " + resposeDecodeDataWithAes2)
+
+
+                    console.log("******************************************************************************************************************************************************************")
+
 
 
                     const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes, publicKey)
-                    console.log("encodeRsaAes::: " + JSON.stringify(encodeRsaAes))
+                    console.log("[KEY]encodeRsaAes::: " + JSON.stringify(encodeRsaAes))
 
                     const decodeRsaAes = await func.decodeRsaWebCryptoAPI(encodeRsaAes, privateKey)
                     console.log("decodeRsaAes::: " + JSON.stringify(decodeRsaAes))
 
                     const encodeIvBase64 = func.encodeIvBase64(aesIV.iv)
-                    console.log("encodeIvBase64::: " + JSON.stringify(encodeIvBase64))
+                    console.log("[IV]encodeIvBase64::: " + JSON.stringify(encodeIvBase64))
 
                     const decodeIvBase64 = func.decodeIvBase64(encodeIvBase64)
                     console.log("decodeIvBase64::: " + decodeIvBase64)
@@ -281,7 +336,7 @@
                         "data":encodeDataWithAes
                     }
 
-                    console.log("encodeData::: " + encodeData)
+                    console.log("encodeData::: " + JSON.stringify(encodeData))
 
                     //func.saveData('POST', `${func.vaultUrl}v1/vault`, JSON.stringify(accountsCreate), true, 'application/json', func.historyBack);
                     //func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(payload), true, 'application/json', func.historyBackRefresh);
@@ -293,6 +348,350 @@
             accountsCreate.event();
         };
 
+    async function responseDecodeDataWithAes(data, aes, iv) {
+        try {
+            return CryptoJS.AES.decrypt(data, aes,
+                { iv: iv/*,
+			  padding: CryptoJS.pad.Pkcs7,
+		      mode: CryptoJS.mode.CBC*/
+                }).toString(CryptoJS.enc.Utf8);
+        } catch (error) {
+            console.log("복호화 error")
+        }
+
+    }
+
+    async function responseDecodeRsaWebCryptoAPI(data, privateKeyb64) {
+        const pemHF = {
+            public: {
+                header: '-----BEGIN PUBLIC KEY-----',
+                footer: '-----END PUBLIC KEY-----',
+            },
+            private: {
+                header: '-----BEGIN PRIVATE KEY-----',
+                footer: '-----END PRIVATE KEY-----',
+            },
+        };
+
+        const binaryDerString = window.atob(privateKeyb64.replace(pemHF.private.footer, '').replace(pemHF.private.header, ''));
+        const buffer = new Uint8Array(binaryDerString.length);
+        for (let i = 0; i < binaryDerString.length; i++) {
+            buffer[i] = binaryDerString.charCodeAt(i);
+        }
+
+        const privateKey = await window.crypto.subtle.importKey(
+            'pkcs8',
+            buffer.buffer,
+            {
+                name: 'RSA-OAEP',
+                hash: 'SHA-256',
+            },
+            true,
+            ['decrypt']
+        );
+
+        const binaryDerString2 = window.atob(data);
+        const buffer2 = new Uint8Array(binaryDerString2.length);
+        for (let i = 0; i < binaryDerString2.length; i++) {
+            buffer2[i] = binaryDerString2.charCodeAt(i);
+        }
+
+        const text = await window.crypto.subtle.decrypt(
+            {
+                name: 'RSA-OAEP',
+            },
+            privateKey,
+            buffer2.buffer
+        );
+
+        // const decoder = new TextDecoder("windows-1252");
+        //const decoder = new TextDecoder("utf-8");//windows-1251, windows-1252, UTF-8, ISO-8859-2, KOI8-R, GBK, (csiso2022kr, iso-2022-cn->invalid)
+        // let change = btoa(String.fromCharCode(...new Uint8Array(text)));
+        // const decoder = new TextDecoder("utf8");
+        // return decoder.decode(change);
+
+        return btoa(String.fromCharCode(...new Uint8Array(text)));
+
+        // return new TextDecoder("windows-1252").decode(text);
+    }
+
+
+    function pkcs7Pad(data) {
+        let blockSize = 16;
+        const padSize  = blockSize - (data.length % blockSize);
+        const padText = new Uint8Array(padSize).fill(padSize);
+
+        // const padded = new Uint8Array(data.length + padding);
+        // padded.set(data, 0);
+        // padded.set(padText, data.length);
+        return concatUint8Arrays([data, padText]);
+    }
+
+    function concatUint8Arrays(arrays) {
+        const totalLength = arrays.reduce((sum, arr) => sum + arr.length, 0);
+        const result = new Uint8Array(totalLength);
+        let offset = 0;
+
+        for (const arr of arrays) {
+            result.set(arr, offset);
+            offset += arr.length;
+        }
+
+        return result;
+    }
+
+    async function encryptData(data) {
+        const key = await crypto.subtle.generateKey(
+            { name: 'AES-GCM', length: 256 },
+            true,
+            ['encrypt', 'decrypt']
+        );
+
+        console.log('key 데이터:', key);
+
+        // let keyString = new TextDecoder().decode(key);
+        // const binaryDerString2 = window.atob(key);
+        const buffer2 = new Uint8Array(key.length);
+        for (let i = 0; i < key.length; i++) {
+            buffer2[i] = key.charCodeAt(i);
+        }
+
+        console.log('keyString 데이터:', buffer2.buffer);
+        const iv = window.crypto.getRandomValues(new Uint8Array(12)); // 초기화 벡터
+
+        console.log('iv 데이터:', iv);
+        let decoder = new TextDecoder();
+        const keyIv = decoder.decode(iv)
+
+
+        console.log('keyIv 데이터:', keyIv);
+
+        const encodedData = new TextEncoder().encode(data);
+        const encrypted = await crypto.subtle.encrypt(
+            { name: 'AES-GCM', iv },
+            key,
+            encodedData
+        );
+
+        return { encrypted, key, iv };
+    }
+
+    async function decryptData(encrypted, key, iv) {
+        const decrypted = await crypto.subtle.decrypt(
+            { name: 'AES-GCM', iv },
+            key,
+            encrypted
+        );
+        return new TextDecoder().decode(decrypted);
+    }
+
+    // 사용 예시
+    encryptData('Hello, World!').then(async ({ encrypted, key, iv }) => {
+        /*const binaryDerStringEncrypted = window.atob(encrypted.toString());
+        const bufferEncrypted = new Uint8Array(binaryDerStringEncrypted.length);
+        for (let i = 0; i < binaryDerStringEncrypted.length; i++) {
+            bufferEncrypted[i] = binaryDerStringEncrypted.charCodeAt(i);
+        }
+
+        const binaryDerStringKey = window.atob(key.toString());
+        const bufferKey = new Uint8Array(binaryDerStringKey.length);
+        for (let i = 0; i < binaryDerStringKey.length; i++) {
+            bufferKey[i] = binaryDerStringKey.charCodeAt(i);
+        }
+
+        const binaryDerStringIv = window.atob(iv.toString());
+        const bufferIv = new Uint8Array(binaryDerStringIv.length);
+        for (let i = 0; i < binaryDerStringIv.length; i++) {
+            bufferIv[i] = binaryDerStringIv.charCodeAt(i);
+        }*/
+
+        console.log('암호화 된 데이터:', new Uint8Array(encrypted));
+        const decrypted = await decryptData(encrypted, key, iv);
+        console.log('복호화 된 데이터:', decrypted);
+    });
+
+
+    /*async function encryptData(data, aes, iv) {
+
+        let array = pkcs7Pad(data)
+        console.log("array::::" + array)
+
+        const encodedData = new TextEncoder().encode(data);
+        const encrypted = await crypto.subtle.encrypt(
+            { name: 'AES-GCM', iv },
+            aes,
+            encodedData
+        );
+
+        return encrypted;
+    }
+
+    function pkcs7Pad(data) {
+        let blockSize = 16;
+        const padSize  = blockSize - (data.length % blockSize);
+        const padText = new Uint8Array(padSize).fill(padSize);
+
+        // const padded = new Uint8Array(data.length + padding);
+        // padded.set(data, 0);
+        // padded.set(padText, data.length);
+        return concatUint8Arrays([data, padText]);
+    }
+
+    function concatUint8Arrays(arrays) {
+        const totalLength = arrays.reduce((sum, arr) => sum + arr.length, 0);
+        const result = new Uint8Array(totalLength);
+        let offset = 0;
+
+        for (const arr of arrays) {
+            result.set(arr, offset);
+            offset += arr.length;
+        }
+
+        return result;
+    }
+
+    function encodeDataWithAes(data, aes, iv) {
+
+        return CryptoJS.AES.encrypt(data, aes,
+            { iv: iv
+            }).toString();
+    }
+
+    function pkcs7Pad2(data, blockSize) {
+        let data2 = new TextEncoder().encode(data);
+        const padding = blockSize - (data2.length % blockSize);
+        const padText = new Uint8Array(padding).fill(padding);
+        const padded = new Uint8Array(data2.length + padding);
+        padded.set(data2, 0);
+        padded.set(padText, data2.length);
+
+        return padded;
+    }*/
+
+
+
+
+
+    /*function pad(data) {
+        const blockSize = 16;
+        const padSize = blockSize - (data.length % blockSize);
+        const padding = Buffer.alloc(padSize, padSize);
+        return Buffer.concat([data, padding]);
+    }
+
+    function unpad(data) {
+        const padSize = data[data.length - 1];
+        return data.slice(0, data.length - padSize);
+    }*/
+
+
+    /*async function encryptWithPadding(key, plaintext, paddingAlgorithm) {
+        const encodedPlaintext = CryptoJS.enc.Utf8.parse(plaintext); // 문자열을 UTF-8로 인코딩
+
+        // 패딩 적용 (예: PKCS7)
+        let paddedPlaintext = null;
+        if (paddingAlgorithm === 'PKCS7') {
+            paddedPlaintext = CryptoJS.pad.Pkcs7(encodedPlaintext.toString(CryptoJS.enc.Base64));
+        }
+
+        // 암호화
+        const ciphertext = await crypto.subtle.encrypt({
+            name: 'AES-CBC', // 또는 다른 알고리즘
+            iv: iv, // 초기화 벡터
+        }, key, new Uint8Array(CryptoJS.enc.Base64.parse(paddedPlaintext)));
+
+        return ciphertext;
+    }
+
+    // 암호화 예시
+    const key = await crypto.subtle.generateKey(
+        {
+            name: 'AES-CBC',
+            length: 256,
+        },
+        true,
+        'encryption'
+    );
+
+    const plaintext = 'This is the plaintext data.';
+    const ciphertext = await encryptWithPadding(key, plaintext, 'PKCS7');
+
+    console.log('Ciphertext:', ciphertext);
+
+
+    async function encrypt(data, aes, iv) {
+        const ciphertext = await crypto.subtle.encrypt({
+            name: 'AES-CBC',
+            iv: iv,
+        }, key, new Uint8Array(CryptoJS.enc.Base64.parse(paddedPlaintext)));
+
+        return ciphertext;
+    }*/
+
+   /* function padding(data) {
+        let blockSize = 16;
+        let data2 = new TextEncoder().encode(data);
+        const padding = blockSize - (data2.length % blockSize);
+        const padText = new Uint8Array(padding).fill(padding);
+        const padded = new Uint8Array(data2.length + padding);
+        padded.set(data2, 0);
+        padded.set(padText, data2.length);
+
+
+
+    }*/
+
+    /*async function encrypt(data, cipherKey, cipherIvKey) {
+        if (!data.trim()) {
+            return data;
+        }
+
+        let data2 = new TextEncoder().encode(data);
+        const padded = padPKCS7(data2);
+        // const padded = padPKCS7(Buffer.from(data, 'utf-8'));
+        const cipher = crypto.createCipheriv('aes-256-cbc', cipherKey, cipherIvKey);
+
+        const encrypted = Buffer.concat([cipher.update(padded), cipher.final()]);
+
+        return encrypted.toString('base64');
+    }
+
+    function decrypt(cipherText, cipherKey, cipherIvKey) {
+        if (!cipherText.trim()) {
+            return cipherText;
+        }
+
+        const decoded = Buffer.from(cipherText, 'base64');
+        const decipher = crypto.createDecipheriv('aes-256-cbc', cipherKey, cipherIvKey);
+        const decrypted = Buffer.concat([decipher.update(decoded), decipher.final()]);
+        const unpadded = trimPKCS7(decrypted);
+        return unpadded.toString('utf-8');
+    }
+
+    function padPKCS7(buffer) {
+        const blockSize = 16;
+        // const padding = blockSize - (buffer.length % blockSize);
+        // const pad = Buffer.alloc(padding, padding);
+        // return Buffer.concat([buffer, pad]);
+        const padding = blockSize - (buffer.length % blockSize);
+        const padText = new Uint8Array(padding).fill(padding);
+        concatBuffers(buffer, padText)
+        // const padded = new Uint8Array(buffer.length + padding);
+        // padded.set(data2, 0);
+        // padded.set(padText, data2.length);
+    }
+
+    function concatBuffers(buffer1, buffer2) {
+        const tmp = new Uint8Array(buffer1.length + buffer2.length);
+        tmp.set(buffer1, 0);
+        tmp.set(buffer2, buffer1.length);
+        return tmp;
+    }
+
+    function trimPKCS7(buffer) {
+        const padding = buffer[buffer.length - 1];
+        return buffer.slice(0, buffer.length - padding);
+    }*/
 
 
     </script>

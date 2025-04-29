@@ -487,7 +487,19 @@ const func = {
 
 	},
 
+	pkcs7Pad(data, blockSize) {
+	let data2 = new TextEncoder().encode(data);
+	const padding = blockSize - (data2.length % blockSize);
+	const padText = new Uint8Array(padding).fill(padding);
+	const padded = new Uint8Array(data2.length + padding);
+	padded.set(data2, 0);
+	padded.set(padText, data2.length);
+
+	return padded;
+	},
+
 	encodeDataWithAes(data, aes, iv) {
+
 		return CryptoJS.AES.encrypt(data, aes,
 			{ iv: iv
 			}).toString();
@@ -500,6 +512,7 @@ const func = {
 		return CryptoJS.AES.encrypt(data, aes,
 			{ iv: iv,
 			  padding: CryptoJS.pad.Pkcs7,
+			  //padding: pkcs7Pad(data, 16),
 			  mode: CryptoJS.mode.CBC
 	        }).toString();
 		/*return CryptoJS.AES.encrypt(data, aes,
@@ -563,11 +576,16 @@ const func = {
 	},
 
 	decodeDataWithAes(data, aes, iv) {
-		return CryptoJS.AES.decrypt(data, aes,
-			{ iv: iv/*,
+		try {
+			return CryptoJS.AES.decrypt(data, aes,
+				{ iv: iv/*,
 			  padding: CryptoJS.pad.Pkcs7,
 		      mode: CryptoJS.mode.CBC*/
-			}).toString(CryptoJS.enc.Utf8);
+				}).toString(CryptoJS.enc.Utf8);
+		} catch (error) {
+			console.log("복호화 error")
+		}
+
 	},
 
 	decodeDataWithAesPkcs7(data, aes, iv) {
