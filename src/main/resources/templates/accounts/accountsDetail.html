@@ -59,6 +59,11 @@
 </div>
 
 <th:block layout:fragment="script">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha256.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/10.2.0/jsrsasign-all-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
     <script type="text/javascript">
     window.onload = () => {
 
@@ -70,7 +75,95 @@
                 func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', accountsDetail.draw);
             },
 
-            draw(data){
+            async draw(data) {
+
+                const privateKey = "-----BEGIN PRIVATE KEY-----\n" +
+                    "MIIJQQIBADANBgkqhkiG9w0BAQEFAASCCSswggknAgEAAoICAQCUzOtV/h2Gj1Jm\n" +
+                    "ITsT/LTTbSPMX8/8ccghEc2diFzI7f7WkprjNJHR8SNT4DDU7tdsC/WmuF8jz5hn\n" +
+                    "yKoKQq5rwstXsS1A0mwcpll7A5fWLpyzNyun1RWnp33+RmA+wfwwPMo4+/NbPahW\n" +
+                    "9qTBSJWKi3NeDHzt5U8u31xYjlHJax+a2KjK6IqKnkcPe03QwA7eC5S2r3S5zA5u\n" +
+                    "NHZUdfQ8t0bV4ACahCB+kg84ktpL/bo9HzN/m+Z+yje52haDvxL3cOp+WnRDRFh7\n" +
+                    "Va9ZW2kH9FmF5rr+qWcaUkK4bIpXy9QBQhox2/c8VICN4CqVlLbfZHRVA9bHLVLu\n" +
+                    "bYb4PYXTj49ShDMLDyekFASINXOsYv/6iwHt7Oxx/H/EIVMfeKG66fYrlCSdPpjT\n" +
+                    "BZD00jxlICJIreSuFD+mBcpyZLue3TScx1niiPKQrQzQNLbvQYwek+Dy/BgJDnSy\n" +
+                    "GowzlNcg6XlA81zXdfNVy3b9+COFz6lipwlCUS/KLwDTHwfL1cHjjt6QBxY0wWA/\n" +
+                    "N9fGasuNXX2z0sR4W412xmtUjUxyh9f6pM4yZB27laL5HF8pf/JVNA16jOjBuULf\n" +
+                    "aHz0EUjKb5SLvGF7w3nJZkN1Pjs06aJyZzkb8l2slOMizTFRSC3y+9027bD96sXR\n" +
+                    "fNvW373+VtjvJqSAHmqmy+FpMTYctwIDAQABAoICAA3hbcSYT2XJgdzAFdQ/+xhL\n" +
+                    "8o5yk6LPdGVNVVpwKYOe2+plQ6iVM1MbxPlijPuYCiVsmi5CvbFIAMYRrHcHkGDC\n" +
+                    "C5jzEK8e0fH8PJWimKvkrj5zk5F06a+5iqHJK9o+20keqpiVPDbTMhxmpqjXHggO\n" +
+                    "CSWJUbAZd4D+Wg1yvUNmSEz4EArZlW7n4+YYUQJ7oAdrmiROirt4QxJZt34agL2X\n" +
+                    "NTbnTfccAzH7awsSe+Wh1hk0i2fIgcBrGbavFvGURe8qK928j2LlAcIDlLdntQ0G\n" +
+                    "aMF6bBAsek80xD+S9HbLL0wsv+fNxqrskQ9rDV3lwQdmxglWMddjrXxLYE9Q4eZd\n" +
+                    "bQtlTK8jHPehpL2AXkqGwT0mezv6yj2bPiPImGp667eibf45N+1MbjHew+MPedyb\n" +
+                    "aln7lLWbUpQvnCqyBexlelPFhohWHl0By0wndfGzFRt5exOkup0OwM5JO17k+5lr\n" +
+                    "LBx9QS/1NUvAkDmgzBdOH0DsJhx7mR7NB5T4ZeozgHxWh+BAoFtLwlu/luML3fvp\n" +
+                    "MVXjmeEfBahQJ5UOPX1th5avbBuX5GdF9NxCoioYQYJb+YC5SF9TKZWCCVaiywBc\n" +
+                    "C8vlywWfv19L1stumEt0S+JHP+KW4wiO5bTaKmwkkXn6RFGpY9o4uE7uYJMvNL11\n" +
+                    "nEs2SzCA0Kh9OIDubAeZAoIBAQDIp2t9Y09lYBzyaY8CnZ8kc7F5hP775O4n8iHv\n" +
+                    "pz5epFjpVsmnmHSFRz3eYbsSNK/XgMcy6K/A2RKDgB0O86l4rhxSX9dFaPFISk20\n" +
+                    "98QZrLgTKDgdqF+SIrByp8Dyzcsq7m2bk/DBJ0jhACOwy+gTUvMCh7kg9bJ4Hocr\n" +
+                    "l0iCrcE/Jry0C5lUMElnn3ytGy0C/tVZcSfT8g3DH6d4bie0Nq7O/noqJjv9YWOJ\n" +
+                    "q9EudZixtNOJlKyiD6YsBgWrCcvxjP6KkwAmWYPmDd2ym4tEdqXLA9P3vT16FMI5\n" +
+                    "FtF7pAeu0fMvsjxWoFP7eeS8yu8U61yy45OIhTHoJoJYxRnvAoIBAQC92AS+PVJG\n" +
+                    "AkndOsgTQB/VrttZCRbOGMWIOgJOo+YnfG2IX9+UpYNuHL7MiUi521wJlyrC1UBs\n" +
+                    "ZFtDdrp++wyC9XV4lg2qT27FSe8nEsOuwjYiUDS2BDiOOjhXp3khMFMC1qH1Hvcl\n" +
+                    "eIiJEKZacuSkLG8fjYxiDaWkUUj/5ui6KnsVsSJ3l+UkTFnP27f8am8rcHCZCL9l\n" +
+                    "jSio2dowFbomOhZhw8jkeuTPtqKuFvR4yDs44hjmWOS5XPHFsaHTiGorspcoLcWY\n" +
+                    "RM4g64aHLOykAWCRez1EyAdXrj/BFhGLMEOKlk/ghSXYIOYO8HE8I+Dd5mtBAXt2\n" +
+                    "Ffn40HCYSpG5AoIBADDHYn4s8lQ2tVLJDpcYMmPuLCrahhI+aRcU6eMUyTjAw0yW\n" +
+                    "aJdxnIH5+7RgFdYrMMQ27jYWEwPSwYluT6Ie4ggQa5oq6m5ZQK7OQW3I/ccwEd+2\n" +
+                    "W036bKFeBX8aAPIFzWo2ZDb6FAEgx7rLCeIk79oixCjNTdgRYr2Izltuf5YlH2F2\n" +
+                    "zVEHsNKimnWyc+CxRpP/12XS+Fex9F6HB3NjdAt/b6eqfZBZkyPZ1RTWzBd7Rw+M\n" +
+                    "YhCEMCOFomP5Ys9dplKmcArICbVI9aOro0WUQpr2LP/ZgmIrgxJ2kXDHd02TZrq9\n" +
+                    "F110+u4kM8Zir5Sl0NFJFlP2txrtJmDFW9Kwt8kCggEAWtDW3AbLr8/yc9Fl2sen\n" +
+                    "Mvp11e7iKO9yt0tAxUvkkukUINP0SdCvweIgaAoYb0h/i9rzysZnDjMn8Wr/pjUE\n" +
+                    "dDVl36ywltNu4xQOQrvYPmaLrPh/br8wKuGxCEWGTZknbMkuKuuIQTWa4y7C1av2\n" +
+                    "so7LDeYRzOpIXgXAjSJyHHSr8uGM4ncYV7fqkuPB7Q8hZT9hreOgY70WQUgN90i9\n" +
+                    "hwHsqRIWrS4Y/UCaK/uxMYJfykNms/K8X+wVgIQMLPwqBgNmCgNzbfckQF1LOqkD\n" +
+                    "/yTlhFLXKWsjEA+8Uerzs4kAFnD3fylSxERgqa7eDG4BaUWL80n5PLEgpqVX55Js\n" +
+                    "iQKCAQBvKkxQJQOfyOLbZbiIgKgNNlp+5lX8wwIdkq71v7gutRY0zrpWLCoezJgw\n" +
+                    "msnr8VKzIGF1FdSPqFYX5p++0tC7OCxRzsOlBgnV7e8Ax30O/rwvDDYXwys+4j+r\n" +
+                    "DsKFidZTiBBQJDdKBzsXrs58956ThDc3sHiRa0YXmIYTSRgr7tFiPqF7yabW/qbb\n" +
+                    "f2b4MxwLBinz0MlMyPUKmpIItiW0ISbsLWsBscT6uKsCXq9WXlcFK4ZocSSc9lFa\n" +
+                    "gZlATHt35kKk9zY+8XA6Fb6VrwG0zvjsk5hEBJ/onrYH22g9MsHaKF2B8C4dMwPZ\n" +
+                    "oTnDWnK1WK/CVIVxWbb2EmHr9tgX\n" +
+                    "-----END PRIVATE KEY-----"
+
+                console.log("******************************************************************************************************************************************************************")
+                let decodeData = await func.responseDecodeData(data)
+
+                let resposeEncodedAes = decodeData.encodedAes
+                console.log("respose encodedAes:::" + JSON.stringify(resposeEncodedAes))
+                let resposeDecodedAes = decodeData.decodedAes//
+                console.log("respose decodedAes:::" + JSON.stringify(resposeDecodedAes))
+                let resposeEncodedIv = decodeData.encodedIv
+                console.log("respose encodedIv:::" + JSON.stringify(resposeEncodedIv))
+                let resposeDecodedIv = decodeData.decodedIv//
+                console.log("respose decodedIv:::" + JSON.stringify(resposeDecodedIv))
+                let resposeData = decodeData.data//
+                console.log("respose data:::" + JSON.stringify(resposeData))
+
+                /*// AES key 디코딩
+                let resposeDecodeAESKey = await responseDecodeRsaWebCryptoAPI(resposeEncodedAes, privateKey)//rsa로 인코딩 된 AES Key
+                console.log("respose DecodeAESKey:::" + JSON.stringify(resposeDecodeAESKey))
+
+                // AES key base64 디코딩
+                let resposeDecodeBase64AESKey = func.decodeIvBase64(resposeDecodeAESKey)
+                console.log("respose DecodeBase64AESKey:::" + JSON.stringify(resposeDecodeBase64AESKey))
+
+                // IV 디코딩
+                const resposeDecodeIvBase64 = func.decodeIvBase64(resposeDecodedIv)//base64로 인코딩 된 IV
+                console.log("respose DecodeIvBase64::: " + resposeDecodeIvBase64)*/
+
+                // DATA 디코딩
+                let resposeDecodeDataWithAes2 = await responseDecodeDataWithAes(resposeData, resposeDecodedAes, resposeDecodedIv);
+                // let resposeDecodeDataWithAes2 = await responseDecodeDataWithAes(resposeData, resposeDecodeBase64AESKey, resposeDecodedIv);
+                console.log("respose DecodeDataWithAes::: " + resposeDecodeDataWithAes2)
+
+
+                console.log("******************************************************************************************************************************************************************")
+
 
                 console.log(JSON.stringify(data))
 
@@ -114,6 +207,79 @@
         accountsDetail.init();
         accountsDetail.event();
     }
+
+    async function responseDecodeDataWithAes(data, aes, iv) {
+        console.log("data type::" + typeof data + " data:: " + data)
+        console.log("aes type:::" + typeof aes + " aes:: " + aes)
+        console.log("iv type:::" + typeof iv + " iv:: " + iv)
+
+        try {
+            return CryptoJS.AES.decrypt(data.toString(), CryptoJS.enc.Hex.parse(aes),
+                { iv: CryptoJS.enc.Hex.parse(iv),
+                    /*padding: CryptoJS.pad.Pkcs7,
+                    mode: CryptoJS.mode.CBC*/
+                }).toString(CryptoJS.enc.Utf8);
+        } catch (error) {
+            console.log("복호화 error")
+        }
+
+       /* try {
+            return CryptoJS.AES.decrypt(data.toString(), CryptoJS.enc.Hex.parse(aes),
+                { iv: CryptoJS.enc.Hex.parse(iv),
+                }).toString(CryptoJS.enc.Utf8);
+        } catch (error) {
+            console.log("복호화 error")
+        }*/
+
+    }
+
+    async function responseDecodeRsaWebCryptoAPI(data, privateKeyb64) {
+        const pemHF = {
+            public: {
+                header: '-----BEGIN PUBLIC KEY-----',
+                footer: '-----END PUBLIC KEY-----',
+            },
+            private: {
+                header: '-----BEGIN PRIVATE KEY-----',
+                footer: '-----END PRIVATE KEY-----',
+            },
+        };
+
+        const binaryDerString = window.atob(privateKeyb64.replace(pemHF.private.footer, '').replace(pemHF.private.header, ''));
+        const buffer = new Uint8Array(binaryDerString.length);
+        for (let i = 0; i < binaryDerString.length; i++) {
+            buffer[i] = binaryDerString.charCodeAt(i);
+        }
+
+        const privateKey = await window.crypto.subtle.importKey(
+            'pkcs8',
+            buffer.buffer,
+            {
+                name: 'RSA-OAEP',
+                hash: 'SHA-256',
+            },
+            true,
+            ['decrypt']
+        );
+
+        const binaryDerString2 = window.atob(data);
+        const buffer2 = new Uint8Array(binaryDerString2.length);
+        for (let i = 0; i < binaryDerString2.length; i++) {
+            buffer2[i] = binaryDerString2.charCodeAt(i);
+        }
+
+        const text = await window.crypto.subtle.decrypt(
+            {
+                name: 'RSA-OAEP',
+            },
+            privateKey,
+            buffer2.buffer
+        );
+
+        return btoa(String.fromCharCode(...new Uint8Array(text)));
+
+    }
+
 </script>
 </th:block>
 </html>

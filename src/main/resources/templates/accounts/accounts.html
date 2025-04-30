@@ -46,6 +46,11 @@
     </div>
 </div>
 <th:block layout:fragment="script">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha256.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/10.2.0/jsrsasign-all-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
     <script type="text/javascript">
     window.onload = () => {
 
@@ -71,40 +76,64 @@
                 //func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=true`, 'application/json', accounts.draw);
             },
 
-            draw(data){
-                alert("data:::" + data)
+            async draw(data) {
 
-                if (data === undefined) {
+                let decodeData = await func.responseDecodeData(data)
+                let encodedData = JSON.stringify(decodeData.data)
+                encodedData = encodedData.replaceAll("\"", "");
+
+                let iv = decodeData.iv
+                let aes = decodeData.aes
+                console.log("decodeData 리스트 화면 data::::::" + encodedData)
+                console.log("decodeData 리스트 화면 iv::::::" + iv)
+                console.log("decodeData 리스트 화면 aes::::::" + aes)
+
+
+                let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
+
+                console.log("responseDecodeDataWithAes 리스트 화면 ::::::" + typeof responseDecodeData)
+                let decodedData = JSON.parse(responseDecodeData)
+
+                console.log("decodedData ::::::" + JSON.stringify(decodedData))
+                console.log("decodedData created_time::::::" + JSON.stringify(decodedData.data[0].metadata.created_time))
+                console.log("decodedData name::::::" + JSON.stringify(decodedData.data[1].name))
+                console.log("decodedData length::::::" + JSON.stringify(decodedData.data.length))
+
+
+
+                if (sessionStorage.getItem('accountsCnt') === 0) {
                     var html = `<tr><td colspan="4">No Data.</td></tr>`;
 
                     func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                 } else {
                     func.removeHtml(document.querySelector('.listTable'), html, 'tbody');
-                    if(data.length > 0){
-                        for(var i=0; i<=data.length-1; i++){
+
+
+                    if (decodedData.data.length > 0) {
+                        for (var i = 0; i <= decodedData.length - 1; i++) {
                             let originTime = '';
                             let createdTime1 = '';
                             let createdTime2 = '';
 
-                            originTime = data[i].metadata.created_time;
+                            originTime = decodedData.data[i].metadata.created_time;
                             createdTime1 = originTime.substr(0, 10)
                             createdTime2 = originTime.substr(11, 8)
 
                             var html = `<tr>
-                                        <td class="left"><a href="javascript:;" data-name="${data[i].name}">${data[i].name}</a></td>
-                                        <td>${data[i].data.storageType}</td>
-                                        <td>${data[i].data.endpoint}</td>
+                                        <td class="left"><a href="javascript:;" data-name="${decodedData.data[i].name}">${decodedData.data[i].name}</a></td>
+                                        <td>${decodedData.data[i].data.storageType}</td>
+                                        <td>${decodedData.data[i].data.endpoint}</td>
                                         <td>${createdTime1 + " " + createdTime2}</td>
                                     </tr>`;
 
                             func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
-                        };
+                        }
                     } else {
                         var html = `<tr><td colspan="4">No Data.</td></tr>`;
 
                         func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
-                    };
-                    sessionStorage.setItem('accountsCnt', data.length)
+                    }
+                    sessionStorage.setItem('accountsCnt', decodedData.data.length)
                 }
 
                 accounts.listEvent();
@@ -189,6 +218,21 @@
         accounts.event();
         accounts.draw();
     }
+
+    async function responseDecodeDataWithAes(data, aes, iv) {
+
+        try {
+            return CryptoJS.AES.decrypt(data.toString(), CryptoJS.enc.Hex.parse(aes),
+                { iv: CryptoJS.enc.Hex.parse(iv),
+                    padding: CryptoJS.pad.Pkcs7,
+                    mode: CryptoJS.mode.CBC
+                }).toString(CryptoJS.enc.Utf8);
+        } catch (error) {
+            console.log("복호화 error")
+        }
+
+    }
+
 </script>
 </th:block>
 </html>
