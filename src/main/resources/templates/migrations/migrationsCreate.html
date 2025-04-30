@@ -302,12 +302,8 @@
 
             func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#sourceMigration > option:checked').value}`, 'application/json', accountsDraw);
 
-            // accountsDraw()//삭제
-
             //function accountsDraw(data) {
             async function accountsDraw(data) {
-
-                alert("data:::" + data)
 
                 let decodeData = await func.responseDecodeData(data)
                 let encodedData = JSON.stringify(decodeData.data)
@@ -332,13 +328,6 @@
                     "secretAccessKey": secretAccessKey
                 }
 
-                /*let bucketsData = {
-                    "storageType": "s3",
-                    "endpoint": "http://115.68.198.65:9000",
-                    "accessKeyId": "admin",
-                    "secretAccessKey": "tpsxj0812"
-                }*/
-
                 func.bucketData('POST', `http://192.168.0.5:8901/v1/migration/operations/list`, bucketsData, true, 'application/json', bucketsDraw);
             }
 
@@ -355,14 +344,44 @@
 
 
           function bucketsDraw(data) {
-              console.log('bucketsDraw data==' +  data) // 문자열
+              func.removeHtml(document.querySelector('#sourceBucket'));
+
+              data = data.substr(10);//맨처음 "map[list:" 자르기
+              data = data.slice(0, -2);//맨끝에 "]]" 자르기
+              let dataLength = data.match(/map/g)?.length
+              // let arrData = data.split('Path');
+              let arrData = data.split('Size');
+              arrData.pop();
+              console.log("::::::::::::::배열:::::::::::::" + JSON.stringify(arrData))
+
+
+                for (var i=0; i<=arrData.length-1; i++) {
+                    //arrData[i] = arrData[i].slice(0, -1);
+                    arrData[i] = arrData[i].substring(arrData[i].indexOf(`Name:`) + 5,arrData[i].indexOf(` Path`) );
+                    // arrData[i] = arrData[i].substring(arrData[i].indexOf(`"Z N"`)+1, 0);
+                    //arrData[i] = arrData[i].slice(arrData[i].indexOf(`"Na"`));
+                    //arrData[i] = arrData[i].substring(arrData[i].indexOf(`"Name":"`));
+
+                    /*arrData[i] = arrData[i].substr(9);
+                    arrData[i] = arrData[i].slice(0, -7);*/
+                    console.log(arrData[i])
+                }
+
+              console.log(":::::arrData::::::::arrData::::::::::::::" + JSON.stringify(arrData))
+
+
+
+
+              /*data = JSON.parse(data)
+              console.log('bucketsDraw data==' + JSON.stringify(data)) // 문자열
               func.removeHtml(document.querySelector('#sourceBucket'));
 
               data = data.substr(12);
               data = data.slice(0,-2)
-              data.replace(/\n|\r|\s*/g, '')
+              data.replace(/\n|\r|\s*!/g, '')
 
               let datLength = JSON.parse(data)
+              console.log("datLength:::" + datLength)
 
               const text = data.split('Size')
               for(var i=0; i<=datLength.length-1; i++) {
@@ -370,7 +389,7 @@
                   text[i] = text[i].substr(9);
                   text[i] = text[i].slice(0, -7);
                   console.log(text[i])
-              }
+              }*/
 
               let sourceBucketHtml = ``;
 
