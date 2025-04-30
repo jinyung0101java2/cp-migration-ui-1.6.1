@@ -84,22 +84,8 @@
 
                 let iv = decodeData.iv
                 let aes = decodeData.aes
-                console.log("decodeData 리스트 화면 data::::::" + encodedData)
-                console.log("decodeData 리스트 화면 iv::::::" + iv)
-                console.log("decodeData 리스트 화면 aes::::::" + aes)
-
-
                 let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
-
-                console.log("responseDecodeDataWithAes 리스트 화면 ::::::" + typeof responseDecodeData)
                 let decodedData = JSON.parse(responseDecodeData)
-
-                console.log("decodedData ::::::" + JSON.stringify(decodedData))
-                console.log("decodedData created_time::::::" + JSON.stringify(decodedData.data[0].metadata.created_time))
-                console.log("decodedData name::::::" + JSON.stringify(decodedData.data[1].name))
-                console.log("decodedData length::::::" + JSON.stringify(decodedData.data.length))
-
-
 
                 if (sessionStorage.getItem('accountsCnt') === 0) {
                     var html = `<tr><td colspan="4">No Data.</td></tr>`;
@@ -118,19 +104,12 @@
                             createdTime1 = originTime.substr(0, 10)
                             createdTime2 = originTime.substr(11, 8)
 
-                            console.log(JSON.stringify(decodedData.data[i].name))
-                            console.log(JSON.stringify(decodedData.data[i].data.storageType))
-                            console.log(JSON.stringify(decodedData.data[i].data.endpoint))
-                            console.log(JSON.stringify(createdTime1 + " " + createdTime2))
-
-
                             var html = `<tr>
                                         <td class="left"><a href="javascript:;" data-name="${decodedData.data[i].name}">${decodedData.data[i].name}</a></td>
                                         <td>${decodedData.data[i].data.storageType}</td>
                                         <td>${decodedData.data[i].data.endpoint}</td>
                                         <td>${createdTime1 + " " + createdTime2}</td>
                                     </tr>`;
-
 
                             func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                         }
