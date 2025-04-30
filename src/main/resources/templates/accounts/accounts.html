@@ -108,9 +108,8 @@
                 } else {
                     func.removeHtml(document.querySelector('.listTable'), html, 'tbody');
 
-
                     if (decodedData.data.length > 0) {
-                        for (var i = 0; i <= decodedData.length - 1; i++) {
+                        for (var i = 0; i <= decodedData.data.length - 1; i++) {
                             let originTime = '';
                             let createdTime1 = '';
                             let createdTime2 = '';
@@ -119,12 +118,19 @@
                             createdTime1 = originTime.substr(0, 10)
                             createdTime2 = originTime.substr(11, 8)
 
+                            console.log(JSON.stringify(decodedData.data[i].name))
+                            console.log(JSON.stringify(decodedData.data[i].data.storageType))
+                            console.log(JSON.stringify(decodedData.data[i].data.endpoint))
+                            console.log(JSON.stringify(createdTime1 + " " + createdTime2))
+
+
                             var html = `<tr>
                                         <td class="left"><a href="javascript:;" data-name="${decodedData.data[i].name}">${decodedData.data[i].name}</a></td>
                                         <td>${decodedData.data[i].data.storageType}</td>
                                         <td>${decodedData.data[i].data.endpoint}</td>
                                         <td>${createdTime1 + " " + createdTime2}</td>
                                     </tr>`;
+
 
                             func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                         }
