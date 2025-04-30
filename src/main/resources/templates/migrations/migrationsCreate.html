@@ -393,8 +393,8 @@
 
               let sourceBucketHtml = ``;
 
-              for(var i=0; i<=text.length-2; i++){
-                  sourceBucketHtml += `<option value="${text[i]}">${text[i]}</option>`;
+              for(var i=0; i<=arrData.length-1; i++){
+                  sourceBucketHtml += `<option value="${arrData[i]}">${arrData[i]}</option>`;
               }
 
               func.appendHtml(document.getElementById('sourceBucket'), sourceBucketHtml);
