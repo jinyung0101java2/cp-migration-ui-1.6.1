@@ -289,21 +289,15 @@
         }
 
         function changeSourceMigrationSelect() {
-            //Source Bucket 목록 불러와서 뿌려주기
-            //func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', accountsDetail.draw);
-            /*func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#sourceMigration > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                document.getElementById('createTemplatesDetail').value = e.hclScript;
-            })*/
+
             let storageType = ``;
             let endpoint = ``;
             let accessKeyId = ``;
             let secretAccessKey = ``;
 
+            func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#sourceMigration > option:checked').value}`, 'application/json', sourceAccountsDraw);
 
-            func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#sourceMigration > option:checked').value}`, 'application/json', accountsDraw);
-
-            //function accountsDraw(data) {
-            async function accountsDraw(data) {
+            async function sourceAccountsDraw(data) {
 
                 let decodeData = await func.responseDecodeData(data)
                 let encodedData = JSON.stringify(decodeData.data)
@@ -328,68 +322,26 @@
                     "secretAccessKey": secretAccessKey
                 }
 
-                func.bucketData('POST', `http://192.168.0.5:8901/v1/migration/operations/list`, bucketsData, true, 'application/json', bucketsDraw);
+                func.bucketData('POST', `http://192.168.0.5:8901/v1/migration/operations/list`, bucketsData, true, 'application/json', sourceBucketsDraw);
             }
 
-           /* let bucketsData = {
-                "storageType": storageType,
-                "endpoint": endpoint,
-                "accessKeyId": accessKeyId,
-                "secretAccessKey": secretAccessKey
-            }
-            alert('bucketsDraw::::' + JSON.stringify(bucketsData))
-
-            //func.drawData('POST', `http://192.168.0.5:8911/v1/migration/operations/list`, 'application/json', bucketsDraw);
-            func.bucketData('POST', `http://192.168.0.5:8911/v1/migration/operations/list`, bucketsData, true, 'application/json', bucketsDraw);*/
-
-
-          function bucketsDraw(data) {
+            function sourceBucketsDraw(data) {
               func.removeHtml(document.querySelector('#sourceBucket'));
 
-              data = data.substr(10);//맨처음 "map[list:" 자르기
-              data = data.slice(0, -2);//맨끝에 "]]" 자르기
+              data = data.substr(10);
+              data = data.slice(0, -2);
               let dataLength = data.match(/map/g)?.length
-              // let arrData = data.split('Path');
               let arrData = data.split('Size');
               arrData.pop();
               console.log("::::::::::::::배열:::::::::::::" + JSON.stringify(arrData))
 
 
                 for (var i=0; i<=arrData.length-1; i++) {
-                    //arrData[i] = arrData[i].slice(0, -1);
                     arrData[i] = arrData[i].substring(arrData[i].indexOf(`Name:`) + 5,arrData[i].indexOf(` Path`) );
-                    // arrData[i] = arrData[i].substring(arrData[i].indexOf(`"Z N"`)+1, 0);
-                    //arrData[i] = arrData[i].slice(arrData[i].indexOf(`"Na"`));
-                    //arrData[i] = arrData[i].substring(arrData[i].indexOf(`"Name":"`));
-
-                    /*arrData[i] = arrData[i].substr(9);
-                    arrData[i] = arrData[i].slice(0, -7);*/
                     console.log(arrData[i])
                 }
 
               console.log(":::::arrData::::::::arrData::::::::::::::" + JSON.stringify(arrData))
-
-
-
-
-              /*data = JSON.parse(data)
-              console.log('bucketsDraw data==' + JSON.stringify(data)) // 문자열
-              func.removeHtml(document.querySelector('#sourceBucket'));
-
-              data = data.substr(12);
-              data = data.slice(0,-2)
-              data.replace(/\n|\r|\s*!/g, '')
-
-              let datLength = JSON.parse(data)
-              console.log("datLength:::" + datLength)
-
-              const text = data.split('Size')
-              for(var i=0; i<=datLength.length-1; i++) {
-                  text[i] = text[i].substring(text[i].indexOf(`"Name": "`));
-                  text[i] = text[i].substr(9);
-                  text[i] = text[i].slice(0, -7);
-                  console.log(text[i])
-              }*/
 
               let sourceBucketHtml = ``;
 
@@ -401,31 +353,77 @@
 
           }
 
-            /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                        document.getElementById('createTemplatesDetail').value = e.hclScript;
-                    })*/
-
-
-           /* func.removeHtml(document.querySelector('#sourceBucket'));
-
-            const bucket1 = ['bucket1', 'bucket1', 'bucket3', 'bucket3', 'bucket5'];
-            let sourceBucketHtml = ``;
-
-            for (let key of bucket1) {
-                sourceBucketHtml += `<option value="${key}">${key}</option>`;
-            }
-
-            func.appendHtml(document.getElementById('sourceBucket'), sourceBucketHtml);*/
-
-
         }
         function changeDestinationMigrationSelect() {
             //Destination Bucket 목록 불러와서 뿌려주기
             /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
                 document.getElementById('createTemplatesDetail').value = e.hclScript;
             })*/
+            let storageType = ``;
+            let endpoint = ``;
+            let accessKeyId = ``;
+            let secretAccessKey = ``;
 
-            func.removeHtml(document.querySelector('#destinationBucket'));
+            func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#destinationMigration > option:checked').value}`, 'application/json', destinationAccountsDraw);
+
+            async function destinationAccountsDraw(data) {
+
+                let decodeData = await func.responseDecodeData(data)
+                let encodedData = JSON.stringify(decodeData.data)
+                encodedData = encodedData.replaceAll("\"", "");
+
+                let iv = decodeData.iv
+                let aes = decodeData.aes
+                let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
+                let decodedData = JSON.parse(responseDecodeData)
+
+                console.log("decodedData:::" + JSON.stringify(decodedData))
+
+                storageType = decodedData.data.data.storageType;
+                endpoint = decodedData.data.data.endpoint;
+                accessKeyId = decodedData.data.data.accessKeyId;
+                secretAccessKey = decodedData.data.data.secretAccessKey;
+
+                let bucketsData = {
+                    "storageType": storageType,
+                    "endpoint": endpoint,
+                    "accessKeyId": accessKeyId,
+                    "secretAccessKey": secretAccessKey
+                }
+
+                func.bucketData('POST', `http://192.168.0.5:8901/v1/migration/operations/list`, bucketsData, true, 'application/json', destinationBucketsDraw);
+            }
+
+            function destinationBucketsDraw(data) {
+                func.removeHtml(document.querySelector('#destinationBucket'));
+
+                data = data.substr(10);
+                data = data.slice(0, -2);
+                let dataLength = data.match(/map/g)?.length
+                let arrData = data.split('Size');
+                arrData.pop();
+                console.log("::::::::::::::배열:::::::::::::" + JSON.stringify(arrData))
+
+
+                for (var i=0; i<=arrData.length-1; i++) {
+                    arrData[i] = arrData[i].substring(arrData[i].indexOf(`Name:`) + 5,arrData[i].indexOf(` Path`) );
+                    console.log(arrData[i])
+                }
+
+                console.log(":::::arrData::::::::arrData::::::::::::::" + JSON.stringify(arrData))
+
+                let destinationBucketHtml = ``;
+
+                for(var i=0; i<=arrData.length-1; i++){
+                    destinationBucketHtml += `<option value="${arrData[i]}">${arrData[i]}</option>`;
+                }
+
+                func.appendHtml(document.getElementById('destinationBucket'), destinationBucketHtml);
+
+            }
+
+
+          /*  func.removeHtml(document.querySelector('#destinationBucket'));
 
             const bucket2 = ['bucket1', 'bucket1', 'bucket3', 'bucket3', 'bucket5'];
             let destinationBucketHtml = ``;
@@ -434,7 +432,7 @@
                 destinationBucketHtml += `<option value="${key}">${key}</option>`;
             }
 
-            func.appendHtml(document.getElementById('destinationBucket'), destinationBucketHtml);
+            func.appendHtml(document.getElementById('destinationBucket'), destinationBucketHtml);*/
 
         }
 
