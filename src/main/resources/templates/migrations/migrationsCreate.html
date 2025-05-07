@@ -8,8 +8,8 @@
         </article>
         <article class="base tab-cont-wrap">
             <ul class="tab-btn">
-                <li type="notice-migrations" id="tab-migrations" class="active"><a href="javascript:">Migrations</a></li>
                 <li type="notice-accounts" id="tab-accounts"><a onclick="movePage(URI_CP_ACCOUNTS_LIST)">Accounts</a></li>
+                <li type="notice-migrations" id="tab-migrations" class="active"><a href="javascript:">Migrations</a></li>
             </ul>
             <div class="creat" style="overflow: auto">
                 <h3 th:text="|Migrations #{M0022}|"></h3>
@@ -215,7 +215,6 @@
 
                     let encodeData = {"key":encodeRsaAes,"iv":encodeIvBase64,"data":encodeDataWithAes}
 
-
                     func.saveData('POST', `${func.migrationUrl}v1/migration/sync/sync`, JSON.stringify(encodeData), true, 'application/json');
 
                 },
@@ -420,7 +419,7 @@
                         mode: CryptoJS.mode.CBC
                     }).toString(CryptoJS.enc.Utf8);
             } catch (error) {
-                console.log("Decrypt error")
+                console.log("Decrypt Error")
             }
 
         }

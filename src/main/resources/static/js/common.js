@@ -1,5 +1,5 @@
 
-const func = {
+const func= {
 	migrationUrl: URI_CP_MIGRATION_API,
 	vaultUrl: URI_CP_VAULT_API,
 	ui : 'http://localhost:8090/',
@@ -213,6 +213,50 @@ const func = {
 	// 데이터 로드 - loadData(method, url, callbackFunction)
 	// (전송타입, url, 콜백함수)
 	/////////////////////////////////////////////////////////////////////////////////////
+	initLoadData(method, url, header, callbackFunction, list) {
+
+		if(url == null) {
+			callbackFunction();
+			return false;
+		}
+
+		var httpRequest = new XMLHttpRequest();
+
+		setTimeout(function() {
+			httpRequest.open(method, url, false);
+			httpRequest.setRequestHeader('Content-type', header);
+			httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('accessToken'));
+			httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
+			httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
+
+			httpRequest.onreadystatechange = () => {
+				if (httpRequest.readyState === XMLHttpRequest.DONE) {
+					if (httpRequest.status === 200) {
+						callbackFunction((httpRequest.responseText), list);
+					} else if (httpRequest.status === 500) {
+						alert(httpRequest.responseText)
+						if (httpRequest.responseText === 'secret is nil') {
+							console.warn = console.error = () => {};
+						}
+					} else if (httpRequest.status === 404) {
+						alert(httpRequest.responseText)
+						if (httpRequest.responseText === 'secret is nil') {
+							console.warn = console.error = () => {};
+						}
+					}
+					else {
+						if(document.getElementById('loading')) {
+							document.getElementById('wrap').removeChild(document.getElementById('loading'));
+						};
+						return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');
+					}
+				}
+			}
+			httpRequest.send();
+		}, 0)
+	},
+
+
 	loadData(method, url, header, callbackFunction, list) {
 
 		if(url == null) {
@@ -649,7 +693,7 @@ const func = {
 		      mode: CryptoJS.mode.CBC*/
 				}).toString(CryptoJS.enc.Utf8);
 		} catch (error) {
-			console.log("Decrypt error")
+			console.log("Decrypt Error")
 		}
 
 	},
@@ -808,22 +852,13 @@ const func = {
 		let responseIv = jsonParseData.iv;
 		let responseData = jsonParseData.data;
 
-		console.log("디코딩 responseKey:::" + JSON.stringify(responseKey))
-		console.log("디코딩 responseIv:::" + JSON.stringify(responseIv))
-		console.log("디코딩 responseData:::" + JSON.stringify(responseData))
-
 		let responseDecodeAesKey = await func.responseDecodeAesKeyWithRsa(responseKey, func.privateKey)
-		console.log("디코딩 responseDecodeAesKey:::" + JSON.stringify(responseDecodeAesKey))
 		let responseBase64DecodeAesKey = func.decodeIvBase64(responseDecodeAesKey)
-		console.log("디코딩 responseBase64DecodeAesKey:::" + JSON.stringify(responseBase64DecodeAesKey))
 		let responseBase64DecodeIv = func.decodeIvBase64(responseIv)
-		console.log("디코딩 responseBase64DecodeIv:::" + JSON.stringify(responseBase64DecodeIv))
 
 		return {
 			"data": responseData,
-			//"encodedAes": responseKey,
 			"aes": responseBase64DecodeAesKey,
-			//"encodedIv": responseIv,
 			"iv": responseBase64DecodeIv
 		}
 
@@ -888,7 +923,7 @@ const func = {
 				{ iv: CryptoJS.enc.Hex.parse(iv)
 				}).toString(CryptoJS.enc.Utf8);
 		} catch (error) {
-			console.log("Decrypt error")
+			console.log("Decrypt Error")
 		}
 
 	}

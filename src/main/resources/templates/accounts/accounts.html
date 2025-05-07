@@ -9,8 +9,8 @@
         </article>
         <article class="base tab-cont-wrap">
             <ul class="tab-btn">
-                <li type="notice-migrations" id="tab-migrations"><a onclick="movePage(URI_CP_MIGRATIONS_CREATE)">Migrations</a></li>
                 <li type="notice-accounts" id="tab-accounts" class="active"><a href="javascript:">Accounts</a></li>
+                <li type="notice-migrations" id="tab-migrations"><a onclick="movePage(URI_CP_MIGRATIONS_CREATE)">Migrations</a></li>
             </ul>
             <div class="notice tab-cont-wrap">
                     <h3>List</h3>
@@ -59,21 +59,9 @@
             init(){
                 if (sessionStorage.getItem('accountsData') === 'Y') {
                     func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=true`, 'application/json', accounts.draw);
+                    // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=true`, 'application/json', accounts.draw);
                 }
-                /*if (!location.hash) {
-                    location.hash = '#reload';
-                    location.href = location.href;
-                }*/
-                //1
-                //location.reload(true);
 
-//2
-                //location.href = location.href;
-
-//3
-                //history.go(0);
-                //func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}`, 'application/json', accounts.draw);
-                //func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=true`, 'application/json', accounts.draw);
             },
 
             async draw(data) {
@@ -137,65 +125,13 @@
                     }, true);
                 };
             },
-            /*
-            //draw(data){
-            draw(data){
-
-                /!*let data = {
-                    "name": "jjy",
-                    "storageType": "s3",
-                    "provider": "NHN"
-                }*!/
-
-                if(accounts.offset == 0) accounts.allItemCount = data.itemMetaData.allItemCount;
-
-                if(data.httpStatusCode == 200){
-                    if(data.items.length > 0){
-                        for(var i=0; i<=data.items.length-1; i++){
-                            var html = `<tr><td class="left"><a href="javascript:;" data-name="${data.items[i].name}" data-spac="${data.items[i].namespace}">${data.items[i].name}</a></td><td class="left">${data.items[i].namespace}</td><td>${data.items[i].creationTimestamp}</td></tr>`;
-
-                            func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
-                        };
-                    } else {
-                        var html = `<tr><td colspan="3">No Data.</td></tr>`;
-
-                        func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
-                    };
-                } else {
-                    var html = `<tr><td colspan="3">No Data.</td></tr>`;
-
-                    func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
-                };
-
-                // more 버튼 활성, 비활성
-                if(document.querySelector('.listTable').querySelectorAll('tr').length < accounts.allItemCount){
-                    document.querySelector('.more').classList.toggle('on', true);
-                } else {
-                    document.querySelector('.more').classList.toggle('on', false);
-                };
-
-                if(document.getElementById('loading')){
-                    document.getElementById('wrap').removeChild(document.getElementById('loading'));
-                };
-
-                accounts.listEvent();
-            },*/
 
             event(){
-                // more 버튼 event
-                /*document.querySelector('.more').addEventListener('click', (e) => {
-                    if(document.querySelector('.listTable').querySelectorAll('tr').length < accounts.allItemCount){
-                    accounts.offset++;
-
-                    accounts.load();
-                };
-            }, false);*/
 
                 document.querySelector('.create').addEventListener('click', (e) => {
                     document.location.href = URI_CP_ACCOUNTS_CREATE;
             }, false);
             },
-
 
         }
 
@@ -213,9 +149,8 @@
                     mode: CryptoJS.mode.CBC
                 }).toString(CryptoJS.enc.Utf8);
         } catch (error) {
-            console.log("Decrypt error")
+            console.log("Decrypt Error")
         }
-
     }
 
 </script>
