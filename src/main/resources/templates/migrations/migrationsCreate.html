@@ -89,12 +89,9 @@
 
                 draw(data) {
                     data = JSON.parse(data)
-                    console.log(JSON.stringify(data))
 
                     let sourceMigrationHtml = ``;
-                    let sourceBucketHtml = ``;
                     let destinationMigrationHtml = ``;
-                    let destinationBucketHtml = ``;
 
                     for (let key of data.keys) {
                         sourceMigrationHtml += `<option value="${key}">${key}</option>`;
@@ -167,12 +164,7 @@
                     let detinationBucket = document.querySelector('#destinationBucket > option:checked');
 
 
-                    // detail 정보 불러오기
                     func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
-                    // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
-
-                    func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${detinationMigration}`, 'application/json', detinationDetailDraw);
-
                     // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
 
                     async function sourceDetailDraw(data) {
@@ -190,6 +182,9 @@
                         sourceSecretAccessKey = decodedData.data.data.secretAccessKey;
 
                     }
+
+                    func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${detinationMigration}`, 'application/json', detinationDetailDraw);
+                    // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
 
                     async function detinationDetailDraw(data) {
                         let decodeData = await func.responseDecodeData(data)
@@ -215,7 +210,7 @@
                     let aesIV = func.generateAesIv();
 
                     let encodeDataWithAes = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
-                    const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes, publicKey)
+                    const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes)
                     const encodeIvBase64 = func.encodeIvBase64(aesIV.iv)
 
                     let encodeData = {"key":encodeRsaAes,"iv":encodeIvBase64,"data":encodeDataWithAes}
@@ -237,12 +232,7 @@
                     let detinationSecretAccessKey = ``;
                     let detinationBucket = document.querySelector('#destinationBucket > option:checked');
 
-                    // detail 정보 불러오기
                     func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
-                    // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
-
-                    func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${detinationMigration}`, 'application/json', detinationDetailDraw);
-
                     // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
 
                     async function sourceDetailDraw(data) {
@@ -260,6 +250,9 @@
                         sourceSecretAccessKey = decodedData.data.data.secretAccessKey;
 
                     }
+
+                    func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${detinationMigration}`, 'application/json', detinationDetailDraw);
+                    // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
 
                     async function detinationDetailDraw(data) {
                         let decodeData = await func.responseDecodeData(data)
@@ -285,7 +278,7 @@
                     let aesIV = func.generateAesIv();
 
                     let encodeDataWithAes = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
-                    const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes, publicKey)
+                    const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes)
                     const encodeIvBase64 = func.encodeIvBase64(aesIV.iv)
 
                     let encodeData = {"key":encodeRsaAes,"iv":encodeIvBase64,"data":encodeDataWithAes}
@@ -427,7 +420,7 @@
                         mode: CryptoJS.mode.CBC
                     }).toString(CryptoJS.enc.Utf8);
             } catch (error) {
-                console.log("복호화 error")
+                console.log("Decrypt error")
             }
 
         }

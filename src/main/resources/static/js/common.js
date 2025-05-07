@@ -649,7 +649,7 @@ const func = {
 		      mode: CryptoJS.mode.CBC*/
 				}).toString(CryptoJS.enc.Utf8);
 		} catch (error) {
-			console.log("복호화 error")
+			console.log("Decrypt error")
 		}
 
 	},
@@ -714,7 +714,7 @@ const func = {
 		return decoded;
 	},
 
-	async encodeRsaWebCryptoAPI(data, publicKeyb64) {
+	async encodeRsaWebCryptoAPI(data) {
 		const pemHF = {
 			public: {
 				header: '-----BEGIN PUBLIC KEY-----',
@@ -726,7 +726,7 @@ const func = {
 			},
 		};
 
-		const binaryDerString = window.atob(publicKeyb64.replace(pemHF.public.footer, '').replace(pemHF.public.header, ''));
+		const binaryDerString = window.atob(func.publicKey.replace(pemHF.public.footer, '').replace(pemHF.public.header, ''));
 		const buffer = new Uint8Array(binaryDerString.length);
 		for (let i = 0; i < binaryDerString.length; i++) {
 			buffer[i] = binaryDerString.charCodeAt(i);
@@ -754,7 +754,7 @@ const func = {
 		return btoa(String.fromCharCode(...new Uint8Array(cipher)));
 	},
 
-	async decodeRsaWebCryptoAPI(data, privateKeyb64) {
+	async decodeRsaWebCryptoAPI(data) {
 		const pemHF = {
 			public: {
 				header: '-----BEGIN PUBLIC KEY-----',
@@ -766,7 +766,7 @@ const func = {
 			},
 		};
 
-		const binaryDerString = window.atob(privateKeyb64.replace(pemHF.private.footer, '').replace(pemHF.private.header, ''));
+		const binaryDerString = window.atob(func.privateKey.replace(pemHF.private.footer, '').replace(pemHF.private.header, ''));
 		const buffer = new Uint8Array(binaryDerString.length);
 		for (let i = 0; i < binaryDerString.length; i++) {
 			buffer[i] = binaryDerString.charCodeAt(i);
@@ -829,7 +829,7 @@ const func = {
 
 	},
 
-	async responseDecodeAesKeyWithRsa(data, privateKeyb64) {
+	async responseDecodeAesKeyWithRsa(data) {
 		const pemHF = {
 			public: {
 				header: '-----BEGIN PUBLIC KEY-----',
@@ -841,7 +841,7 @@ const func = {
 			},
 		};
 
-		const binaryDerString = window.atob(privateKeyb64.replace(pemHF.private.footer, '').replace(pemHF.private.header, ''));
+		const binaryDerString = window.atob(func.privateKey.replace(pemHF.private.footer, '').replace(pemHF.private.header, ''));
 		const buffer = new Uint8Array(binaryDerString.length);
 		for (let i = 0; i < binaryDerString.length; i++) {
 			buffer[i] = binaryDerString.charCodeAt(i);
@@ -888,7 +888,7 @@ const func = {
 				{ iv: CryptoJS.enc.Hex.parse(iv)
 				}).toString(CryptoJS.enc.Utf8);
 		} catch (error) {
-			console.log("복호화 error")
+			console.log("Decrypt error")
 		}
 
 	}

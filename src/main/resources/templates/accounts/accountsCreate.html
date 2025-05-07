@@ -320,7 +320,7 @@
                     const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes, publicKey)
                     console.log("[KEY]encodeRsaAes::: " + JSON.stringify(encodeRsaAes))
 
-                    const decodeRsaAes = await func.decodeRsaWebCryptoAPI(encodeRsaAes, privateKey)
+                    const decodeRsaAes = await func.decodeRsaWebCryptoAPI(encodeRsaAes)
                     console.log("decodeRsaAes::: " + JSON.stringify(decodeRsaAes))
 
                     const encodeIvBase64 = func.encodeIvBase64(aesIV.iv)
@@ -368,7 +368,7 @@
 		        mode: CryptoJS.mode.CBC
                 }).toString(CryptoJS.enc.Utf8);
         } catch (error) {
-            console.log("복호화 error")
+            console.log("Decrypt error")
         }
 
     }

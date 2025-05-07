@@ -85,9 +85,6 @@
                 let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
                 let decodedData = JSON.parse(responseDecodeData)
 
-                console.log(decodedData)
-                console.log(decodedData)
-
                 document.getElementById('name').innerText = sessionStorage.getItem('accountsName');
                 document.getElementById('storageType').innerText = decodedData.data.data.storageType;
                 document.getElementById('endpoint').innerText = decodedData.data.data.endpoint;
@@ -138,7 +135,7 @@
                     mode: CryptoJS.mode.CBC
                 }).toString(CryptoJS.enc.Utf8);
         } catch (error) {
-            console.log("복호화 error")
+            console.log("Decrypt error")
         }
 
     }
