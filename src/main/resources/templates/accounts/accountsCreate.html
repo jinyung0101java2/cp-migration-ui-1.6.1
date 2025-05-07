@@ -72,6 +72,10 @@
 
             const accountsCreate = {
 
+                init() {
+                    sessionStorage.setItem('accountsName' , '-');
+                },
+
                 event() {
                     let accountsName = document.querySelector('#accountsName');
                     let storageType = document.querySelector('#storageType');
@@ -353,6 +357,7 @@
                     sessionStorage.setItem('accountsData', 'Y')
                 },
             };
+            accountsCreate.init();
             accountsCreate.event();
         };
 

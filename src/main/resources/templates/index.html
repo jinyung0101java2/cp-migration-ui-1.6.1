@@ -3,69 +3,43 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout}">
 <div layout:fragment="content">
-    <div id="content" class="sub-page clusters">
+    <div id="content" class="sub-page">
         <article class="location">
         </article>
         <article class="base tab-cont-wrap">
             <ul class="tab-btn">
-                <li type="notice-migrations" id="tab-migrations" class="active"><a href="javascript:">Migrations</a></li>
-                <li type="notice-accounts" id="tab-accounts"><a onclick="movePage(URI_CP_ACCOUNTS_LIST)">Accounts</a></li>
+                <li type="notice-accounts" id="tab-accounts" class="active"><a href="javascript:">Accounts</a></li>
+                <li type="notice-migrations" id="tab-migrations"><a onclick="movePage(URI_CP_MIGRATIONS_CREATE)">Migrations</a></li>
             </ul>
-            <div class="creat" style="overflow: auto">
-                <h3 th:text="|Migrations #{M0022}|"></h3>
-                <div class="source" style="float: left;width: 45%;margin-right: 40px;">
-                    <h3 th:text="Soucre"></h3>
-                    <dl>
-                        <dt><label for="sourceMigration">Name</label></dt>
-                        <dd>
-                            <fieldset>
-                                <select id="sourceMigration" onchange="changeSourceMigrationSelect()">
-                                </select>
-                            </fieldset>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt><label for="sourceBucket">Bucket</label></dt>
-                        <dd>
-                            <fieldset>
-                                <select id="sourceBucket">
-                                    <option value="">
-                                </select>
-                            </fieldset>
-                        </dd>
-                    </dl>
+            <div class="notice tab-cont-wrap">
+                <h3>List</h3>
+                <!-- User -->
+                <div class="table_style01">
+                    <!-- board -->
+                    <table>
+                        <caption>Accounts List</caption>
+                        <colgroup >
+                            <col width="20%" />
+                            <col width="10%" />
+                            <col width="40%" />
+                            <col width="30%" />
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Storage Type</th>
+                            <th scope="col">Endpoint</th>
+                            <th scope="col">Created Time</th>
+                        </tr>
+                        </thead>
+                        <tbody class="listTable">
+                        </tbody>
+                    </table>
+                    <!-- more btn -->
+                    <a class="more" href="javascript:;">more</a>
                 </div>
-                <div class="destination" style="float: left;width: 45%;margin-right: 40px;">
-                    <h3 th:text="Destination"></h3>
-                    <dl>
-                        <dt><label for="destinationMigration">Name</label></dt>
-                        <dd>
-                            <fieldset>
-                                <select id="destinationMigration" onchange="changeDestinationMigrationSelect()">
-                                </select>
-                            </fieldset>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt><label for="destinationBucket">Bucket</label></dt>
-                        <dd>
-                            <fieldset>
-                                <select id="destinationBucket">
-                                    <option value=""></option>
-                                </select>
-                            </fieldset>
-                        </dd>
-                    </dl>
-                </div>
-            </div>
-            <!-- btn -->
-            <div class="btn02" style="margin-top: 0">
-                <div>
-                    <button type="submit" id="sync" th:text="#{M0027}"></button>
-                </div>
-                <div>
-                    <button type="submit" id="copy" th:text="#{M0028}"></button>
-                </div>
+                <!-- btn -->
+                <a href="javascript:;" class="create" th:text="#{M0022}"></a>
             </div>
         </article>
     </div>
@@ -74,262 +48,117 @@
 <th:block layout:fragment="script">
     <script type="text/javascript" th:inline="javascript">
         window.onload = () => {
-            const migrationsCreate = {
+
+            const accounts = {
 
                 init() {
-                    sessionStorage.setItem('accountsData', 'Y')
-                    sessionStorage.setItem('accountsCnt', 0)
+                    if (sessionStorage.getItem('accountsData') !== 'Y') {
+                        sessionStorage.setItem('accountsData', 'N')
+                    }
+
+                    if (sessionStorage.getItem('accountsData') === 'N' || sessionStorage.getItem('accountsCnt') < 1) {
+                        sessionStorage.setItem('accountsCnt', 0)
+                    }
+
                     sessionStorage.setItem('accessToken' , 'Bearer ' + [[${accessToken}]]);
                     sessionStorage.setItem('userGuid' , [[${userGuid}]]);
+                    sessionStorage.setItem('accountsName' , '-');
 
-                    //vault에서 migration list 불러오기
-                    //func.loadData('GET', `${func.vaultUrl}accounts/provider/info`, 'application/json', migrationsCreate.draw);
-                    migrationsCreate.draw()
+                    if (sessionStorage.getItem('accountsData') === 'N') {
+                        var html = `<tr><td colspan="4">No Data.</td></tr>`;
+
+                        func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                    }
                 },
 
-                draw(data) {  //vault에서 migration list 불러와서 source, destination 뿌려주기
-                    const data2 = ['minio1', 'minio2', 'kt', 'nhn', 'naver'];
+                async draw(data) {
 
-                    //info = new Map(Object.entries(data2.items));
+                    let decodeData = await func.responseDecodeData(data)
+                    let encodedData = JSON.stringify(decodeData.data)
+                    encodedData = encodedData.replaceAll("\"", "");
 
-                    let sourceMigrationHtml = ``;
-                    let sourceBucketHtml = ``;
-                    let destinationMigrationHtml = ``;
-                    let destinationBucketHtml = ``;
+                    let iv = decodeData.iv
+                    let aes = decodeData.aes
+                    let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
+                    let decodedData = JSON.parse(responseDecodeData)
 
-                  /*  for (let key of data2) {
-                        sourceMigrationHtml += `<option value="${key}">${key}</option>`;
+                    if (sessionStorage.getItem('accountsData') === 'N') {
+                        alert('No Data.')
+                        var html = `<tr><td colspan="4">No Data.</td></tr>`;
+
+                        func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                    } else {
+                        func.removeHtml(document.querySelector('.listTable'), html, 'tbody');
+
+                        if (decodedData.data.length > 0) {
+                            for (var i = 0; i <= decodedData.data.length - 1; i++) {
+                                let originTime = '';
+                                let createdTime1 = '';
+                                let createdTime2 = '';
+
+                                originTime = decodedData.data[i].metadata.created_time;
+                                createdTime1 = originTime.substr(0, 10)
+                                createdTime2 = originTime.substr(11, 8)
+
+                                var html = `<tr>
+                                        <td class="left"><a href="javascript:;" data-name="${decodedData.data[i].name}">${decodedData.data[i].name}</a></td>
+                                        <td>${decodedData.data[i].data.storageType}</td>
+                                        <td>${decodedData.data[i].data.endpoint}</td>
+                                        <td>${createdTime1 + " " + createdTime2}</td>
+                                    </tr>`;
+
+                                func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                            }
+                        } else {
+                            var html = `<tr><td colspan="4">No Data.</td></tr>`;
+
+                            func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                        }
+                        sessionStorage.setItem('accountsCnt', decodedData.data.length)
                     }
 
-                    for (let key of info.keys()) {
-                        destinationMigrationHtml += `<option value="${key}">${key}</option>`;
-                    }*/
+                    accounts.listEvent();
 
-                    for (let key of data2) {
-                        sourceMigrationHtml += `<option value="${key}">${key}</option>`;
-                    }
-
-                    /*for (i = 0; i < data2.length; i++) {
-                        sourceMigrationHtml += `<option value="${data2[i]}">${data2[i]}</option>`;
-                    }*/
-
-                    for (let key of data2) {
-                        destinationMigrationHtml += `<option value="${key}">${key}</option>`;
-                    }
-
-                   /* for (i = 0; i < data2.length; i++) {
-                        destinationMigrationHtml += `<option value="${data2[i]}">${data2[i]}</option>`;
-                    }*/
-
-                    func.appendHtml(document.getElementById('sourceMigration'), sourceMigrationHtml);
-                    func.appendHtml(document.getElementById('destinationMigration'), destinationMigrationHtml);
                 },
 
-                event() {
+                listEvent(){
+                    var listAll = document.querySelector('.listTable').querySelectorAll('a');
 
-                    document.getElementById('sync').addEventListener('click', (e) => {
+                    for(var i=0; i<=listAll.length-1; i++){
 
-                        let sourceMigration = document.querySelector('#sourceMigration');
-                        let sourceBucket = document.querySelector('#sourceBucket');
-                        let detinationMigration = document.querySelector('#destinationMigration');
-                        let detinationBucket = document.querySelector('#destinationBucket');
+                        listAll[i].addEventListener('click', (e) => {
+                            sessionStorage.setItem('accountsName', e.target.getAttribute('data-name'));
 
+                            document.location.href = URI_CP_ACCOUNTS_LIST + URI_CP_DETAILS;
+                        }, true);
+                    };
+                },
 
-                        //let source = document.getElementById('sourceMigration')
-                       /* alert('sourceMigration:::::' + sourceMigration.value)
-                        alert('sourceBucket::::::' + sourceBucket.value)
-                        alert('detinationMigration:::::' + detinationMigration.value)
-                        alert('detinationBucket::::::' + detinationBucket.value)
+                event(){
 
-                        console.log(JSON.stringify(sourceBucket.value))
-                        console.log(JSON.stringify(detinationBucket.value))
-
-                        if(sourceMigration.value !== 0 && detinationMigration.value !== 0 && sourceBucket.value !== 0 && detinationBucket.value !== 0) {
-                            alert
-                        }*/
-
-
-
-                        if(sourceBucket.value === "") {
-                            func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
-                        } else if (detinationBucket.value === "") {
-                            func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
-                        } else if (sourceBucket.value === "" && detinationBucket.value === "") {
-                            func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
-                        } else if (sourceMigration.value !== 0 && detinationMigration.value !== 0 && sourceBucket.value !== 0 && detinationBucket.value !== 0) {
-                            func.alertPopup('SYNC', MSG_CHECK_TO_SYNC, true, MSG_CONFIRM, migrationsCreate.sync);
-                        }
-
-                    }, false);
-
-                    document.getElementById('copy').addEventListener('click', (e) => {
-
-                        let sourceMigration = document.querySelector('#sourceMigration');
-                        let sourceBucket = document.querySelector('#sourceBucket');
-                        let detinationMigration = document.querySelector('#destinationMigration');
-                        let detinationBucket = document.querySelector('#destinationBucket');
-
-                        if(sourceBucket.value === "") {
-                            func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
-                        } else if (detinationBucket.value === "") {
-                            func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
-                        } else if (sourceBucket.value === "" && detinationBucket.value === "") {
-                            func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
-                        } else if (sourceMigration.value !== 0 && detinationMigration.value !== 0 && sourceBucket.value !== 0 && detinationBucket.value !== 0) {
-                            func.alertPopup('COPY', MSG_CHECK_TO_COPY, true, MSG_CONFIRM, migrationsCreate.copy);
-                        }
-
+                    document.querySelector('.create').addEventListener('click', (e) => {
+                        document.location.href = URI_CP_ACCOUNTS_CREATE;
                     }, false);
                 },
 
-                sync () {
-                    let sourceMigration = document.querySelector('#sourceMigration > option:checked');
-                    let sourceEndpoint = ``;
-                    let sourceAccessKeyId = ``;
-                    let sourceSecretAccessKey = ``;
-                    let sourceBucket = document.querySelector('#sourceBucket > option:checked');
-
-                    //vault에서 src account 정보 상세 조회 하기
-                    /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                        document.getElementById('createTemplatesDetail').value = e.hclScript;
-                    })*/
-
-                    //const source = map[storage_type:s3 endpoint:http://115.68.198.175:9000 access_key_id:admin secret_access_key:tpsxj0812]
-
-                    sourceEndpoint = `http://115.68.198.175:9000`;
-                    sourceAccessKeyId = `admin`;
-                    sourceSecretAccessKey = `tpsxj0812`;
-
-
-                    let detinationMigration = document.querySelector('#destinationMigration > option:checked');
-                    let detinationEndpoint = ``;
-                    let detinationAccessKeyId = ``;
-                    let detinationSecretAccessKey = ``;
-                    let detinationBucket = document.querySelector('#destinationBucket > option:checked');
-
-                    //vault에서 dest account 정보 상세 조회 하기
-                    /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                        document.getElementById('createTemplatesDetail').value = e.hclScript;
-                    })*/
-
-                    //map[storage_type:s3 endpoint:http://115.68.198.65:9000 access_key_id:admin secret_access_key:tpsxj0812]
-
-                    detinationEndpoint = `http://115.68.198.65:9000`;
-                    detinationAccessKeyId = `admin`;
-                    detinationSecretAccessKey = `tpsxj0812`;
-
-                    let migrationsCreate =  {
-                        "src": {
-                            "storageType": "s3",
-                            "endpoint": sourceEndpoint,
-                            "accessKeyId": sourceAccessKeyId,
-                            "secretAccessKey": sourceSecretAccessKey
-                        },
-                        "dst": {
-                            "storageType": "s3",
-                            "endpoint": detinationEndpoint,
-                            "accessKeyId": detinationAccessKeyId,
-                            "secretAccessKey": detinationSecretAccessKey
-                        }
-                    }
-
-
-                    func.saveData('POST', `${func.migrationUrl}v1/migration/sync/sync`, JSON.stringify(migrationsCreate), true, 'application/json');
-
-                },
-                copy () {
-                    let sourceMigration = document.querySelector('#sourceMigration > option:checked');
-                    let sourceEndpoint = ``;
-                    let sourceAccessKeyId = ``;
-                    let sourceSecretAccessKey = ``;
-                    let sourceBucket = document.querySelector('#sourceBucket > option:checked');
-
-                    //vault에서 src account 정보 상세 조회 하기
-                    /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                        document.getElementById('createTemplatesDetail').value = e.hclScript;
-                    })*/
-
-                    //const source = map[storage_type:s3 endpoint:http://115.68.198.175:9000 access_key_id:admin secret_access_key:tpsxj0812]
-
-                    sourceEndpoint = `http://115.68.198.175:9000`;
-                    sourceAccessKeyId = `admin`;
-                    sourceSecretAccessKey = `tpsxj0812`;
-
-
-                    let detinationMigration = document.querySelector('#destinationMigration > option:checked');
-                    let detinationEndpoint = ``;
-                    let detinationAccessKeyId = ``;
-                    let detinationSecretAccessKey = ``;
-                    let detinationBucket = document.querySelector('#destinationBucket > option:checked');
-
-                    //vault에서 dest account 정보 상세 조회 하기
-                    /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                        document.getElementById('createTemplatesDetail').value = e.hclScript;
-                    })*/
-
-                    //map[storage_type:s3 endpoint:http://115.68.198.65:9000 access_key_id:admin secret_access_key:tpsxj0812]
-
-                    detinationEndpoint = `http://115.68.198.65:9000`;
-                    detinationAccessKeyId = `admin`;
-                    detinationSecretAccessKey = `tpsxj0812`;
-
-                    let migrationsCreate =  {
-                        "src": {
-                            "storageType": "s3",
-                            "endpoint": sourceEndpoint,
-                            "accessKeyId": sourceAccessKeyId,
-                            "secretAccessKey": sourceSecretAccessKey
-                        },
-                        "dst": {
-                            "storageType": "s3",
-                            "endpoint": detinationEndpoint,
-                            "accessKeyId": detinationAccessKeyId,
-                            "secretAccessKey": detinationSecretAccessKey
-                        }
-                    }
-
-                    func.saveData('POST', `${func.migrationUrl}v1/migration/sync/copy`, JSON.stringify(migrationsCreate), true, 'application/json');
-                }
-            };
-            migrationsCreate.init();
-            migrationsCreate.event();
-        }
-
-        function changeSourceMigrationSelect() {
-            //Source Bucket 목록 불러와서 뿌려주기
-            /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                document.getElementById('createTemplatesDetail').value = e.hclScript;
-            })*/
-            func.removeHtml(document.querySelector('#sourceBucket'));
-
-            const bucket1 = ['bucket1', 'bucket1', 'bucket3', 'bucket3', 'bucket5'];
-            let sourceBucketHtml = ``;
-
-            for (let key of bucket1) {
-                sourceBucketHtml += `<option value="${key}">${key}</option>`;
             }
 
-            func.appendHtml(document.getElementById('sourceBucket'), sourceBucketHtml);
-
-
+            accounts.init();
+            accounts.event();
+            accounts.draw();
         }
-        function changeDestinationMigrationSelect() {
-            //Destination Bucket 목록 불러와서 뿌려주기
-            /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                document.getElementById('createTemplatesDetail').value = e.hclScript;
-            })*/
 
-            func.removeHtml(document.querySelector('#destinationBucket'));
+        async function responseDecodeDataWithAes(data, aes, iv) {
 
-            const bucket2 = ['bucket1', 'bucket1', 'bucket3', 'bucket3', 'bucket5'];
-            let destinationBucketHtml = ``;
-
-            for (let key of bucket2) {
-                destinationBucketHtml += `<option value="${key}">${key}</option>`;
+            try {
+                return CryptoJS.AES.decrypt(data.toString(), CryptoJS.enc.Hex.parse(aes),
+                    { iv: CryptoJS.enc.Hex.parse(iv),
+                        padding: CryptoJS.pad.Pkcs7,
+                        mode: CryptoJS.mode.CBC
+                    }).toString(CryptoJS.enc.Utf8);
+            } catch (error) {
+                console.log("Decrypt Error")
             }
-
-            func.appendHtml(document.getElementById('destinationBucket'), destinationBucketHtml);
-
         }
     </script>
 </th:block>

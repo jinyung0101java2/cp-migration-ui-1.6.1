@@ -60,8 +60,13 @@
                 if (sessionStorage.getItem('accountsData') === 'Y') {
                     func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=true`, 'application/json', accounts.draw);
                     // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=true`, 'application/json', accounts.draw);
+                } else if (sessionStorage.getItem('accountsData') === 'N') {
+                    var html = `<tr><td colspan="4">No Data.</td></tr>`;
+
+                    func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                 }
 
+                sessionStorage.setItem('accountsName' , '-');
             },
 
             async draw(data) {
@@ -75,7 +80,7 @@
                 let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
                 let decodedData = JSON.parse(responseDecodeData)
 
-                if (sessionStorage.getItem('accountsCnt') === 0) {
+                if (sessionStorage.getItem('accountsData') === 'N') {
                     var html = `<tr><td colspan="4">No Data.</td></tr>`;
 
                     func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
