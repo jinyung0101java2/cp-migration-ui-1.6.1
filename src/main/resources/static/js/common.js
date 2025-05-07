@@ -70,6 +70,7 @@ const func = {
 		"ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
 		"/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
 		"-----END PUBLIC KEY-----",
+	hmacKey : "secret",
 
 	init() {
 
@@ -517,8 +518,7 @@ const func = {
 
 	encodeHmacSha256(data) {
 
-		let key = "secret";
-		return CryptoJS.HmacSHA256(data,key).toString(CryptoJS.enc.Hex);
+		return CryptoJS.HmacSHA256(data, func.hmacKey).toString(CryptoJS.enc.Hex);
 
 	},
 

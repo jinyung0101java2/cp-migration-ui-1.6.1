@@ -166,6 +166,45 @@
                     let detinationSecretAccessKey = ``;
                     let detinationBucket = document.querySelector('#destinationBucket > option:checked');
 
+
+                    // detail 정보 불러오기
+                    func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
+                    // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
+
+                    func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${detinationMigration}`, 'application/json', detinationDetailDraw);
+                    // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
+
+                    async function sourceDetailDraw(data) {
+                        let decodeData = await func.responseDecodeData(data)
+                        let encodedData = JSON.stringify(decodeData.data)
+                        encodedData = encodedData.replaceAll("\"", "");
+
+                        let iv = decodeData.iv
+                        let aes = decodeData.aes
+                        let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
+                        let decodedData = JSON.parse(responseDecodeData)
+
+                        sourceEndpoint = decodedData.data.data.endpoint;
+                        sourceAccessKeyId = decodedData.data.data.accessKeyId;
+                        sourceSecretAccessKey = decodedData.data.data.secretAccessKey;
+
+                    }
+
+                    async function detinationDetailDraw(data) {
+                        let decodeData = await func.responseDecodeData(data)
+                        let encodedData = JSON.stringify(decodeData.data)
+                        encodedData = encodedData.replaceAll("\"", "");
+
+                        let iv = decodeData.iv
+                        let aes = decodeData.aes
+                        let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
+                        let decodedData = JSON.parse(responseDecodeData)
+
+                        detinationEndpoint = decodedData.data.data.endpoint;
+                        detinationAccessKeyId = decodedData.data.data.accessKeyId;
+                        detinationSecretAccessKey = decodedData.data.data.secretAccessKey;
+                    }
+
                     let migrationsCreate = {
                         "src": {
                             "storageType": "s3",
@@ -183,6 +222,9 @@
                         }
                     }
 
+
+
+
                     func.saveData('POST', `${func.migrationUrl}v1/migration/sync/sync`, JSON.stringify(migrationsCreate), true, 'application/json');
 
                 },
@@ -198,6 +240,45 @@
                     let detinationAccessKeyId = ``;
                     let detinationSecretAccessKey = ``;
                     let detinationBucket = document.querySelector('#destinationBucket > option:checked');
+
+                    // detail 정보 불러오기
+                    func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
+                    // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
+
+                    func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${detinationMigration}`, 'application/json', detinationDetailDraw);
+                    // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
+
+                    async function sourceDetailDraw(data) {
+                        let decodeData = await func.responseDecodeData(data)
+                        let encodedData = JSON.stringify(decodeData.data)
+                        encodedData = encodedData.replaceAll("\"", "");
+
+                        let iv = decodeData.iv
+                        let aes = decodeData.aes
+                        let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
+                        let decodedData = JSON.parse(responseDecodeData)
+
+                        sourceEndpoint = decodedData.data.data.endpoint;
+                        sourceAccessKeyId = decodedData.data.data.accessKeyId;
+                        sourceSecretAccessKey = decodedData.data.data.secretAccessKey;
+
+                    }
+
+                    async function detinationDetailDraw(data) {
+                        let decodeData = await func.responseDecodeData(data)
+                        let encodedData = JSON.stringify(decodeData.data)
+                        encodedData = encodedData.replaceAll("\"", "");
+
+                        let iv = decodeData.iv
+                        let aes = decodeData.aes
+                        let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
+                        let decodedData = JSON.parse(responseDecodeData)
+
+                        detinationEndpoint = decodedData.data.data.endpoint;
+                        detinationAccessKeyId = decodedData.data.data.accessKeyId;
+                        detinationSecretAccessKey = decodedData.data.data.secretAccessKey;
+                    }
+
 
                     let migrationsCreate = {
                         "src": {
@@ -285,10 +366,6 @@
 
         }
         function changeDestinationMigrationSelect() {
-            //Destination Bucket 목록 불러와서 뿌려주기
-            /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                document.getElementById('createTemplatesDetail').value = e.hclScript;
-            })*/
             let storageType = ``;
             let endpoint = ``;
             let accessKeyId = ``;
@@ -329,7 +406,7 @@
 
                 data = data.substr(10);
                 data = data.slice(0, -2);
-                let dataLength = data.match(/map/g)?.length
+                // let dataLength = data.match(/map/g)?.length
                 let arrData = data.split('Size');
                 arrData.pop();
 
