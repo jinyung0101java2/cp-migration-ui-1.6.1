@@ -20,7 +20,6 @@
                         <dd>
                             <fieldset>
                                 <select id="sourceMigration" onchange="changeSourceMigrationSelect()">
-                                    <!--<option value=""></option>-->
                                 </select>
                             </fieldset>
                         </dd>
@@ -30,7 +29,6 @@
                         <dd>
                             <fieldset>
                                 <select id="sourceBucket">
-                                    <!--<option value="">-->
                                 </select>
                             </fieldset>
                         </dd>
@@ -43,7 +41,6 @@
                         <dd>
                             <fieldset>
                                 <select id="destinationMigration" onchange="changeDestinationMigrationSelect()">
-                                    <!--<option value=""></option>-->
                                 </select>
                             </fieldset>
                         </dd>
@@ -53,7 +50,6 @@
                         <dd>
                             <fieldset>
                                 <select id="destinationBucket">
-                                    <!--<option value=""></option>-->
                                 </select>
                             </fieldset>
                         </dd>
@@ -87,10 +83,8 @@
 
                     if (sessionStorage.getItem('accountsData') === 'Y') {
                         func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=false`, 'application/json', migrationsCreate.draw);
+                        // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=false`, 'application/json', migrationsCreate.draw);
                     }
-                    //vault에서 migration list 불러오기
-                    //func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=false`, 'application/json', migrationsCreate.draw);
-                    //풀기func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=false`, 'application/json', migrationsCreate.draw);
                 },
 
                 draw(data) {
@@ -123,19 +117,6 @@
                         let detinationMigration = document.querySelector('#destinationMigration');
                         let detinationBucket = document.querySelector('#destinationBucket');
 
-
-                        //let source = document.getElementById('sourceMigration')
-                        /* alert('sourceMigration:::::' + sourceMigration.value)
-                         alert('sourceBucket::::::' + sourceBucket.value)
-                         alert('detinationMigration:::::' + detinationMigration.value)
-                         alert('detinationBucket::::::' + detinationBucket.value)
-
-                         console.log(JSON.stringify(sourceBucket.value))
-                         console.log(JSON.stringify(detinationBucket.value))
-
-                         if(sourceMigration.value !== 0 && detinationMigration.value !== 0 && sourceBucket.value !== 0 && detinationBucket.value !== 0) {
-                             alert
-                         }*/
                         if (sessionStorage.getItem('accountsData') === 'N') {
                             func.alertPopup('ALERT', MSG_CHECK_TO_REGISTER_ACCOUNT, true, MSG_CONFIRM, "closed");
                         } else if(sourceBucket.value === "") {
@@ -179,36 +160,11 @@
                     let sourceSecretAccessKey = ``;
                     let sourceBucket = document.querySelector('#sourceBucket > option:checked');
 
-                    //vault에서 src account 정보 상세 조회 하기
-                    /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                        document.getElementById('createTemplatesDetail').value = e.hclScript;
-                    })*/
-
-                    //const source = map[storage_type:s3 endpoint:http://115.68.198.175:9000 access_key_id:admin secret_access_key:tpsxj0812]
-
-                    sourceEndpoint = `http://115.68.198.175:9000`;
-                    sourceAccessKeyId = `admin`;
-                    sourceSecretAccessKey = `tpsxj0812`;
-                    sourceBucket = `jjy`;
-
-
                     let detinationMigration = document.querySelector('#destinationMigration > option:checked');
                     let detinationEndpoint = ``;
                     let detinationAccessKeyId = ``;
                     let detinationSecretAccessKey = ``;
                     let detinationBucket = document.querySelector('#destinationBucket > option:checked');
-
-                    //vault에서 dest account 정보 상세 조회 하기
-                    /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                        document.getElementById('createTemplatesDetail').value = e.hclScript;
-                    })*/
-
-                    //map[storage_type:s3 endpoint:http://115.68.198.65:9000 access_key_id:admin secret_access_key:tpsxj0812]
-
-                    detinationEndpoint = `http://115.68.198.65:9000`;
-                    detinationAccessKeyId = `admin`;
-                    detinationSecretAccessKey = `tpsxj0812`;
-                    detinationBucket = `test2`;
 
                     let migrationsCreate = {
                         "src": {
@@ -237,47 +193,26 @@
                     let sourceSecretAccessKey = ``;
                     let sourceBucket = document.querySelector('#sourceBucket > option:checked');
 
-                    //vault에서 src account 정보 상세 조회 하기
-                    /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                        document.getElementById('createTemplatesDetail').value = e.hclScript;
-                    })*/
-
-                    //const source = map[storage_type:s3 endpoint:http://115.68.198.175:9000 access_key_id:admin secret_access_key:tpsxj0812]
-
-                    sourceEndpoint = `http://115.68.198.175:9000`;
-                    sourceAccessKeyId = `admin`;
-                    sourceSecretAccessKey = `tpsxj0812`;
-
-
                     let detinationMigration = document.querySelector('#destinationMigration > option:checked');
                     let detinationEndpoint = ``;
                     let detinationAccessKeyId = ``;
                     let detinationSecretAccessKey = ``;
                     let detinationBucket = document.querySelector('#destinationBucket > option:checked');
 
-                    //vault에서 dest account 정보 상세 조회 하기
-                    /*func.loadData('GET', `${func.migrationUrl}templates/${document.querySelector('#createTemplates > option:checked').getAttribute('data-id')}`, 'application/json', (e) => {
-                        document.getElementById('createTemplatesDetail').value = e.hclScript;
-                    })*/
-
-                    //map[storage_type:s3 endpoint:http://115.68.198.65:9000 access_key_id:admin secret_access_key:tpsxj0812]
-
-                    detinationEndpoint = `http://115.68.198.65:9000`;
-                    detinationAccessKeyId = `admin`;
-                    detinationSecretAccessKey = `tpsxj0812`;
-
-                    let migrationsCreate =  {
+                    let migrationsCreate = {
                         "src": {
                             "storageType": "s3",
                             "endpoint": sourceEndpoint,
                             "accessKeyId": sourceAccessKeyId,
-                            "secretAccessKey": sourceSecretAccessKey
+                            "secretAccessKey": sourceSecretAccessKey,
+                            "bucket": sourceBucket
                         },
                         "dst": {
                             "storageType": "s3",
                             "endpoint": detinationEndpoint,
                             "accessKeyId": detinationAccessKeyId,
-                            "secretAccessKey": detinationSecretAccessKey
+                            "secretAccessKey": detinationSecretAccessKey,
+                            "bucket": detinationBucket
                         }
                     }
 
@@ -296,6 +231,7 @@
             let secretAccessKey = ``;
 
             func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#sourceMigration > option:checked').value}`, 'application/json', sourceAccountsDraw);
+            // func.loadData('GET', `${func.vaultUrl}/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#sourceMigration > option:checked').value}`, 'application/json', sourceAccountsDraw);
 
             async function sourceAccountsDraw(data) {
 
@@ -307,8 +243,6 @@
                 let aes = decodeData.aes
                 let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
                 let decodedData = JSON.parse(responseDecodeData)
-
-                console.log("decodedData:::" + JSON.stringify(decodedData))
 
                 storageType = decodedData.data.data.storageType;
                 endpoint = decodedData.data.data.endpoint;
@@ -323,6 +257,7 @@
                 }
 
                 func.bucketData('POST', `http://192.168.0.5:8901/v1/migration/operations/list`, bucketsData, true, 'application/json', sourceBucketsDraw);
+                // func.bucketData('POST', `${func.vaultUrl}v1/migration/operations/list`, bucketsData, true, 'application/json', sourceBucketsDraw);
             }
 
             function sourceBucketsDraw(data) {
@@ -330,18 +265,13 @@
 
               data = data.substr(10);
               data = data.slice(0, -2);
-              let dataLength = data.match(/map/g)?.length
+              // let dataLength = data.match(/map/g)?.length
               let arrData = data.split('Size');
               arrData.pop();
-              console.log("::::::::::::::배열:::::::::::::" + JSON.stringify(arrData))
-
 
                 for (var i=0; i<=arrData.length-1; i++) {
                     arrData[i] = arrData[i].substring(arrData[i].indexOf(`Name:`) + 5,arrData[i].indexOf(` Path`) );
-                    console.log(arrData[i])
                 }
-
-              console.log(":::::arrData::::::::arrData::::::::::::::" + JSON.stringify(arrData))
 
               let sourceBucketHtml = ``;
 
@@ -365,6 +295,7 @@
             let secretAccessKey = ``;
 
             func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#destinationMigration > option:checked').value}`, 'application/json', destinationAccountsDraw);
+            // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#destinationMigration > option:checked').value}`, 'application/json', destinationAccountsDraw);
 
             async function destinationAccountsDraw(data) {
 
@@ -376,8 +307,6 @@
                 let aes = decodeData.aes
                 let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
                 let decodedData = JSON.parse(responseDecodeData)
-
-                console.log("decodedData:::" + JSON.stringify(decodedData))
 
                 storageType = decodedData.data.data.storageType;
                 endpoint = decodedData.data.data.endpoint;
@@ -392,6 +321,7 @@
                 }
 
                 func.bucketData('POST', `http://192.168.0.5:8901/v1/migration/operations/list`, bucketsData, true, 'application/json', destinationBucketsDraw);
+                // func.bucketData('POST', `${func.vaultUrl}v1/migration/operations/list`, bucketsData, true, 'application/json', destinationBucketsDraw);
             }
 
             function destinationBucketsDraw(data) {
@@ -402,15 +332,10 @@
                 let dataLength = data.match(/map/g)?.length
                 let arrData = data.split('Size');
                 arrData.pop();
-                console.log("::::::::::::::배열:::::::::::::" + JSON.stringify(arrData))
-
 
                 for (var i=0; i<=arrData.length-1; i++) {
                     arrData[i] = arrData[i].substring(arrData[i].indexOf(`Name:`) + 5,arrData[i].indexOf(` Path`) );
-                    console.log(arrData[i])
                 }
-
-                console.log(":::::arrData::::::::arrData::::::::::::::" + JSON.stringify(arrData))
 
                 let destinationBucketHtml = ``;
 
@@ -421,19 +346,6 @@
                 func.appendHtml(document.getElementById('destinationBucket'), destinationBucketHtml);
 
             }
-
-
-          /*  func.removeHtml(document.querySelector('#destinationBucket'));
-
-            const bucket2 = ['bucket1', 'bucket1', 'bucket3', 'bucket3', 'bucket5'];
-            let destinationBucketHtml = ``;
-
-            for (let key of bucket2) {
-                destinationBucketHtml += `<option value="${key}">${key}</option>`;
-            }
-
-            func.appendHtml(document.getElementById('destinationBucket'), destinationBucketHtml);*/
-
         }
 
         async function responseDecodeDataWithAes(data, aes, iv) {
