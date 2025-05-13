@@ -97,96 +97,126 @@
 
                 async save() {
 
-                    /*let accountsName = document.querySelector('#accountsName').value;
+                    let accountsName = document.querySelector('#accountsName').value;
                     let storageType = document.querySelector('#storageType').value;
                     let endpoint = document.querySelector('#endpoint').value;
                     let accessKeyId = document.querySelector('#accessKeyId').value;
-                    let secretAccessKey = document.querySelector('#secretAccessKey').value;*/
+                    let secretAccessKey = document.querySelector('#secretAccessKey').value;
 
-                    let accountsName = "SKT";
+                    /*let accountsName = "SKT";
                     let storageType = "s3";
                     let endpoint = "https://api.endpoint.com";
                     let accessKeyId = "accessKeyId";
-                    let secretAccessKey = "secretAccessKey";
+                    let secretAccessKey = "secretAccessKey";*/
 
+                    //timestamp 생성
                     let timestamp = func.createUnixTimestamp();
-                    //alert("timestamp::: " + timestamp)
-                    console.log("timestamp::: " + JSON.stringify(timestamp))
+                    // console.log("timestamp::: " + JSON.stringify(timestamp))
 
                     //let accountsCreate = {"basePath":"asd","userAccount":"sdf","configName":accountsName,"content":{"storageType":storageType,"endpoint":endpoint,"accessKeyId":accessKeyId,"secretAccessKey":secretAccessKey}};
-                    let accountsCreate = {"basePath":"storage","userAccount":sessionStorage.getItem('userGuid'),"configName":accountsName,"content":{"storageType":storageType,"endpoint":endpoint,"accessKeyId":accessKeyId,"secretAccessKey":secretAccessKey}}
+                    //data 생성
+                    let accountsCreate = {"basePath":"jjyStorage","userAccount":sessionStorage.getItem('userGuid'),"configName":accountsName,"content":{"storageType":storageType,"endpoint":endpoint,"accessKeyId":accessKeyId,"secretAccessKey":secretAccessKey}}
                     //let accountsCreate = {"basePath":"asd","userAccount":"sdf","configName":"dfg","content":{"storageType":"qwe","endpoint":"wer","accessKeyId":"ert","secretAccessKey":"rty"}}
 
+                    //data에 timestamp 추가
                     let includeTimestampData = {"data":accountsCreate,"timestamp":timestamp.toString()}
                     //let includeTimestampData = {"data":accountsCreate,"timestamp":"1744597671569076100"}
 
-                    //alert("includeTimestampData::: " + JSON.stringify(includeTimestampData))
-                    console.log("includeTimestampData::: " + JSON.stringify(includeTimestampData))
+                    // console.log("includeTimestampData::: " + JSON.stringify(includeTimestampData))
+                    // console.log("accountsCreate::: " + JSON.stringify(accountsCreate))
 
-                    //alert("accountsCreate::: " + JSON.stringify(accountsCreate))
-                    console.log("accountsCreate::: " + JSON.stringify(accountsCreate))
-
+                    //hmac 생성
                     let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData));
-                    //alert("hmacData::: " + hmacData)
-                    console.log("hmacData::: " + hmacData)
+                    // console.log("hmacData::: " + hmacData)
 
+                    //data + timestamp + hmac 추가
                     //let includeHmacData = {"data":accountsCreate,"hmac_data":hmacData,"timestamp":timestamp}
                     let includeHmacData = {"data":accountsCreate,"hmac_data":hmacData,"timestamp":timestamp.toString()}
                     //alert("includeHmacData::: " + JSON.stringify(includeHmacData))
-                    console.log("includeHmacData::: " + JSON.stringify(includeHmacData))
+                    // console.log("includeHmacData::: " + JSON.stringify(includeHmacData))
 
-                    let aesIV = func.generateAesIv();
-                    console.log("aesIV::: " + JSON.stringify(aesIV))
-                    console.log("aesIV.aes::: " + aesIV.aes)
-                    console.log("aesIV.iv::: " + aesIV.iv)
-                    console.log("aesIV.iv::: " + aesIV.iv)
-                    console.log("aesIV.iv::: " + aesIV.iv)
-                    console.log("aesIV.iv::: " + aesIV.iv)
-                    let ivv = JSON.stringify(aesIV.iv)
-                    console.log("aesIV.iv::JSON.stringify: " + aesIV.iv)
+                    //aes, iv 생성
+                    // let aesIV = func.generateAesIv();
+                    // console.log("aesIV::: " + JSON.stringify(aesIV))
+                    // console.log("aesIV.aes::: " + aesIV.aes)
+                    // console.log("aesIV.iv::: " + aesIV.iv)
+
+                    /*let aesIV2 = func.generateAesIv2();
+                    let aesIVString2 = aesIV2.toString(CryptoJS.enc.Hex)
+                    console.log("aesIV2::: " + JSON.stringify(aesIV2))
+                    console.log("aesIV.aes2::: " + aesIV2.aes)
+                    console.log("aesIV.iv2::: " + aesIV2.iv)
+                    console.log("aesIVString2::: " + aesIVString2)*/
+
+
+                    let aesIVOriginal = func.generateAesIvOriginal();
+                    console.log("aesIVOriginal::: " + JSON.stringify(aesIVOriginal))
+                    console.log("aesIVOriginal.aes::: " + aesIVOriginal.aes)
+                    console.log("aesIVOriginal.iv::: " + aesIVOriginal.iv)
+
+
+                    // let aesIV3 = func.generateAesIv3();
+                    // // let aesIVString3 = aesIV3.toString(CryptoJS.enc.Hex)
+                    // console.log("aesIV3::: " + JSON.stringify(aesIV3))
+                    // console.log("aesIV.aes3::: " + aesIV3.aes)
+                    // console.log("aesIV.iv3::: " + aesIV3.iv)
+                    // console.log("aesIVString3::: " + aesIVString3)
+
 
                     let encryptDatapadding = await encryptData(JSON.stringify(includeHmacData));
                     //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
-                    console.log("encryptDatapadding::: " + encryptDatapadding)
+                    // console.log("encryptDatapadding::: " + encryptDatapadding)
 
                     let pad = func.pkcs7Pad(encryptDatapadding, 16)
                     let padStr = new TextDecoder().decode(pad);
-                    console.log("pad::: " + pad)
-                    console.log("padStr::: " + padStr)
+                    // console.log("pad::: " + pad)
+                    // console.log("padStr::: " + padStr)
 
 
                     let padding = func.pkcs7Pad(includeHmacData, 16)
 
                     // let encoder = new TextEncoder();
                     // let uint8Array = encoder.encode(encodeDataWithAes);
-                    console.log("[DATA]includeHmacData + uint8Array::: " + padding)
-                    console.log("[DATA]includeHmacData + TextDecoder::: " + new TextDecoder("windows-1252").decode(padding))
+                    // console.log("[DATA]includeHmacData + uint8Array::: " + padding)
+                    // console.log("[DATA]includeHmacData + TextDecoder::: " + new TextDecoder("windows-1252").decode(padding))
 
-
-                    let encodeDataWithAes = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
+                    //data + timestamp + hmac을 aes,iv로 인코딩
+                    // let encodeDataWithAes = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
                     //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
-                    console.log("[DATADATA]encodeDataWithAes::: " + encodeDataWithAes)
-                    console.log("[DATADATA]encodeDataWithAes typeof::: " + typeof encodeDataWithAes)
+                    // console.log("[DATADATA]encodeDataWithAes::: " + encodeDataWithAes)
+                    // console.log("[DATADATA]encodeDataWithAes typeof::: " + typeof encodeDataWithAes)
 
+                    // let encodeDataWithAes2 = func.encodeDataWithAes2(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
+                    //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
+                    // console.log("[DATADATA]encodeDataWithAes2::: " + encodeDataWithAes2)
+                    // console.log("[DATADATA]encodeDataWithAes2 typeof::: " + typeof encodeDataWithAes2)
 
-                    let padding2 = func.pkcs7Pad(encodeDataWithAes, 16)
+                    let encodeDataWithAesOriginal = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIVOriginal.aes, aesIVOriginal.iv);
+                    //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
+                    console.log("[DATADATA]encodeDataWithAesOriginal::: " + encodeDataWithAesOriginal)
+                    console.log("[DATADATA]encodeDataWithAesOriginal typeof::: " + typeof encodeDataWithAesOriginal)
+
+                    let encodeDataWithAesOriginal2 = func.encodeDataWithAes2(JSON.stringify(includeHmacData), aesIVOriginal.aes, aesIVOriginal.iv);
+                    //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
+                    // console.log("[DATADATA]encodeDataWithAesOriginal2::: " + encodeDataWithAesOriginal2)
+                    // console.log("[DATADATA]encodeDataWithAesOriginal2 typeof::: " + typeof encodeDataWithAesOriginal2)
+
+                    // let padding2 = func.pkcs7Pad(encodeDataWithAes, 16)
 
                     // let encoder = new TextEncoder();
                     // let uint8Array = encoder.encode(encodeDataWithAes);
-                    console.log("[DATA]encodeDataWithAes + uint8Array::: " + padding2)
-                    console.log("[DATA]decodeDataWithAes + uint8Array::: " + new TextDecoder('utf-8').decode(padding2))
+                    // console.log("[DATA]encodeDataWithAes + uint8Array::: " + padding2)
+                    // console.log("[DATA]decodeDataWithAes + uint8Array::: " + new TextDecoder('utf-8').decode(padding2))
 
-
-
-                    let encodeDataWithAesPkcs7 = func.encodeDataWithAesPkcs7(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
+                    // let encodeDataWithAesPkcs7 = func.encodeDataWithAesPkcs7(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
                     //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
-                    console.log("[DATA]encodeDataWithAesPkcs7::: " + encodeDataWithAesPkcs7)
+                    // console.log("[DATA]encodeDataWithAesPkcs7::: " + encodeDataWithAesPkcs7)
 
-                    let decodeDataWithAes = func.decodeDataWithAes(encodeDataWithAes, aesIV.aes, aesIV.iv);
-                    console.log("decodeDataWithAes::: " + decodeDataWithAes)
+                    // let decodeDataWithAes = func.decodeDataWithAes(encodeDataWithAes, aesIV.aes, aesIV.iv);
+                    // console.log("decodeDataWithAes::: " + decodeDataWithAes)
 
-                    let decodeDataWithAesPkcs7 = func.decodeDataWithAesPkcs7 (encodeDataWithAes, aesIV.aes, aesIV.iv);
-                    console.log("decodeDataWithAesPkcs7::: " + decodeDataWithAesPkcs7)
+                    // let decodeDataWithAesPkcs7 = func.decodeDataWithAesPkcs7 (encodeDataWithAes, aesIV.aes, aesIV.iv);
+                    // console.log("decodeDataWithAesPkcs7::: " + decodeDataWithAesPkcs7)
 
                     const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
                         "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
@@ -255,61 +285,45 @@
                         "gZlATHt35kKk9zY+8XA6Fb6VrwG0zvjsk5hEBJ/onrYH22g9MsHaKF2B8C4dMwPZ\n" +
                         "oTnDWnK1WK/CVIVxWbb2EmHr9tgX\n" +
                         "-----END PRIVATE KEY-----"
-                    console.log("******************************************************************************************************************************************************************")
-                    //let respose = {"key":"ZBghBzhSfnpMFCqwcrFnOk/IhCiJ2sS5SiZHZz0WBPLApxORWq/ky9MEwLYyWN8aENZHRi1GkRdpW71AyB2b4AGQJ0kFwvHdGk7ogEbtF97uzKiyfjBA2OXfNh1wIRc+UJS5TCmxxDBSRVgKfwvz4wp8z8Oyr21jjAP53VyGfZcwsNm9NhdOPGNyXaV07VLulIbdypHwCWB7Jpjj1DrQ52VbYlhtbHfmiRHXQLwjx9+3FZLjN/9qLOGWCdIYWETaFWvsV2Qqlo9iPJNj8ksxDmPrwB/Qvi76j4Qq81RgQ8AFlq3PByyx94YuZazgZq+b/qgyyWNjGEpcjmag7P1UPh5SxbZPreeddTEsFnMX2P0yChfVpbwk4LS8BrcpeUC5QBvSZee2wKUNiIBg9jCzylPKHt56LFtQ6M1tESU55Civ4BZU1hC/EbTUHRdSxrX/uvz6NJCKC/CzVhdEa6gI5iUnU70obDOsrP9xe1Av2R1F7B3Vnr4SkRk93k5jd9V+PmH6I2DcZ090TqEDHjLdsaPlGrSG3OHDKNYvPZcPLkx8eweGq5PjJwNp3Ig8yXPmr5eyf2fYIQdEL4otcQSTZVUblFuqxk+fqhtgAkEMkyJfpikt5Cm/Ihs8wpFZS2UnpUH0PMSw5TFUvGpnPrMbI+N+2n5fxSa0V/RpfA5ZrD0=","iv":"rURs+/QEQqLSvJ3GwD/3og==","data":"H50BE7dV0OQsd2f2jgSJDzQuwEHuHdNBcP1Vb+Lhvj0hOTKx60TjYS35zWC/cPRMr6sKPUToocincsRb9Xq2h/C3JvW3oGObzVXoDR8RuE6FemDvVqy33L2+8whBD+PVyiUxVbMw7qewNuw9xhzw9nZE0qlFVRCV7W9rNFKJ7mcAD7IUUvSozlY4QVW6qnsqSnlmto33ZIX6ZkbMN06GsjJwnzadDxqECJ9c9o0/76337/wDOeyzAaPszzCPlYpbh8/q5GaKe8wwuhM/2z3CRLjwsBYRTeF+4txM0ZyzYFgyAoJw9DTESvRC1/PZjTvXP/gzeVIpDChUPxFoMjXeTnPy4HH2TRWfxcEKR9koPyuzY07p15c4G9WrO+G+sogyf81rrBbNpi3TkEelwXjGuEss17bYWqH/8lyhfW54O3vzAKxOihzPecgwwFF1PDH27fTr4fBxRjvo/DTdnWmIdw=="};
-                    //let respose = {"key":"E/ROYaL0nVqQ0taesqM+7l7TSBSFe787nUfYpeg63BRNGd+RyIWfoMHrQRuo3acacgagRlvwf1f7F7GD8au8B6+EKMgKoBBL4l2GlWkjQwyv0ZBKCjSkrldUTtPaefYTP6e6Xfi5HFoFMebLm4xZzkc1Msy/FqW19JtTO5QlLIMY+ZFra1pPV2GBVo93LMOztdbBhwvfRKdTuDaU5Rk7ezmDQiPNSTb0M2tJ/7LZ82s5hKhKcbB30R9sPtc2lF0UYEebVBZolhu73wxKxp+g2B1Xy/wdiSRd0gzpjP3oqAxT5m2vxFKphX22mi7pu9THs6i5no+AoYMkVpAEZEXbUCSjfY67mPSdtiXiMW/HYq5MigbmydUIWAulyd5mWaVZ8Rfq59FfFFlqpnbsuZ6j9mbcsPlw2k4Om+S2hPfEarzG8I/mHVVzEg141wpigpyi2gTJpphI0gg/AECYbRtJG83nIzJtGKCeBV4OtGsV0fqMktPnCGiBcW1gATGKY0i+/k+NFvlQlrf3unqIJtQ7WIE4pHEIKmi2+IfQPGz6TWqTb5ijM+QCPWM3Uv243AqB7eZW9Ify5cdhE4YZzPW91j0vWESxldTzN57Ofgjruo+qtaNGOdOxeHg3Siyr8i9xyTFgX9ajb/rSzyauJoQqP4r5NetN/CIsE4ZcRvo061U=","iv":"HFeKshu2FvpnGZGiw+iGoQ==","data":"RaCWFGFzxOvXOZFE+7n9KwAZ5z7Nv9L7Z9Gr02tyBJDau7qwZmg6zqCOdkvvUhlSFf5UGI9Ej+Sdd59M9IXi8vF5V9XywAfc8sBJhSIh1bfqxoHd1NF9lIJkxksTLLSM4320UixrTccH05Wik7GnsXeJ6DkMU7nuxuFEj+vyO5y3MzGt0DWXhMHKq2h5j8rlQ8J6vtsXBs2Wu5HmZVjB6Rlf1Myaen57KHKA9reWNtJeq4LBAzAoOjCTHMjQUYfm/jm1eu+yXLlM0j7ARvV7WRx9oHhTIOd87uh2xVwY/AyDC+py4nw9KvNGtAAe5SAnKoMk/MR1Zg0j6EqCk5OWN34nBIX2QCT9ZVnJRGslBMEaiv/fTSkw+3ANOVsj36QrCsZzHWBQZ9Dw9ngTMvrQwxuEsjBiO0IrHmgk59aY1L2/A2ponB9v0eTof7/lkJ91ERRrO0v7Pc+s1f09pvfcOA=="}
-                    let respose = {
-                        "key": "P0vqoA2GUKEGVav/ZbjG/z7tokIVVX5U+e73BLW3nqHJXpVKzTKci6AtudhW3mXsW6zo9Pd9IPOdn5X8FdRAsNj69tat77oWLe2V3hfIxZWpplw3nE9PBzyCilh0ROqit/HvjHhLbqbEpL1oLzBP+Pz3il2v/oWjtdxBcJpVXBMNw7Lz3+qOvANw3b+nGV3vAgIsKkKCbuCdNn5ZNyUdb/KkZ5qjU7+87BjPSm1udwlQL4yJFE6Sx7Nu1yQcf+ZHxFm79sGj6WXpLHbJh0ogMMNjKNWsO6rUcVrWfQov/9MOGYLBBjp93WNj3UuD6EysMDOeIpyV4q/35iYmWT0Ocx5JquzP1imdcQpf/F7dR1yF/vyCSseO9tNr5SVPlo0XlAfEWqqUjG7KOPZJwcQm6xMrYSfD+/JHlGdSDe1kDQjpFx/sd9iF4sd298IDEB3cqvizHXgInHAroX/yVZFBUFO6Og6yCUY8OPv7OD9OZrrswbpsS43Je0zxD+VLzgPg7EaCgFr34r/PK7rDm1iOdtuGyl0Zp9f4rFTn4BEBMcZk/1dKB/76cfgNMaSCZbND5dlQyKajhBxU8+O6NdYONXx4Qei2j4XpaZ8kOlxIMb+06iaa3HlVdTiOBsQrxvl+SeGE7Ct9JCnPmoChlVTgygdOu7t+ZNJ6yT+LNbeGOUk=",
-                        "iv": "2XMf4jRWkl5K8Aw/OnH9sQ==",
-                        "data": "qfkVeod771gy5NRZFvr0NqwxEaquE3yDT8cL/+5HmZXg0AO8Hws4r40yCXrVvxRVg23nPJyb4YxSTY0+CO0UAy96nZw4dOeHHag7/jpDob6OHvx9e8XeNxHVmEpQJIk7vduxbDmjEa165Nb1BvVLAe05Tc9fryOqxqe8Wdt9O1gW2PHLy7r2j+R/1vxKKxmfb+uues8t3m9RDZUK84EOIHECpM0Nw4EncFXwNLYXEMpIPuKOudAdQrIWj8fgWBQGZARN0em09adq/f1SaFWHrxjjEBUSYIBnhvHTXHhNf9FKpAPRxxPvu7pfK8M18/HSvG4NkxQarlY7Mkj20V8EABZhtQfAv/Ga2VYHBuG3TCMTwS1ztkJdxgzZkjqXoyj9eF/M7kLtDY8YJ4qHJgvuPe01ucCglRXKchgahBWYxpTIskjpqBXHg6rxGariubaF36Nsjb/iRttAIBcB2leKw7dg0L2lcs3JMmpq4A3jOWLgUfIvXICHSdLsHr+vY/7d"
-                    }
-                    let resposeKey = respose.key
-                    console.log("respose key:::" + JSON.stringify(resposeKey))
-                    let resposeIv = respose.iv
-                    console.log("respose iv:::" + JSON.stringify(resposeIv))
-                    let resposeData = respose.data
-                    console.log("respose data:::" + JSON.stringify(resposeData))
 
-                    // AES key 디코딩
-                    let resposeDecodeAESKey = await responseDecodeRsaWebCryptoAPI(resposeKey, privateKey)//rsa로 인코딩 된 AES Key
-                    console.log("respose DecodeAESKey:::" + JSON.stringify(resposeDecodeAESKey))
+                    // const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes, publicKey)
+                    // console.log("[KEYKEY]encodeRsaAes::: " + JSON.stringify(encodeRsaAes))
 
-                    // AES key base64 디코딩
-                    let resposeDecodeBase64AESKey = func.decodeIvBase64(resposeDecodeAESKey)
-                    console.log("respose DecodeBase64AESKey:::" + JSON.stringify(resposeDecodeBase64AESKey))
+                    const encodeRsaAesOriginal = await func.encodeRsaWebCryptoAPI(aesIVOriginal.aes, publicKey)
+                    console.log("[KEYKEY]encodeRsaAesOriginal::: " + JSON.stringify(encodeRsaAesOriginal))
 
-                    // IV 디코딩
-                    const resposeDecodeIvBase64 = func.decodeIvBase64(resposeIv)//base64로 인코딩 된 IV
-                    console.log("respose DecodeIvBase64::: " + resposeDecodeIvBase64)
+                    // const decodeRsaAes = await func.decodeRsaWebCryptoAPI(encodeRsaAes)
+                    // console.log("decodeRsaAes::: " + JSON.stringify(decodeRsaAes))
 
-                    // DATA 디코딩
-                    let resposeDecodeDataWithAes2 = await responseDecodeDataWithAes(resposeData, resposeDecodeBase64AESKey, resposeDecodeIvBase64);
-                    console.log("respose DecodeDataWithAes::: " + resposeDecodeDataWithAes2)
+                    const decodeRsaAesOriginal = await func.decodeRsaWebCryptoAPI(encodeRsaAesOriginal)
+                    console.log("decodeRsaAesOriginal::: " + JSON.stringify(decodeRsaAesOriginal))
 
-
-                    console.log("******************************************************************************************************************************************************************")
-
-
-
-                    const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes, publicKey)
-                    console.log("[KEYKEY]encodeRsaAes::: " + JSON.stringify(encodeRsaAes))
-
-                    const decodeRsaAes = await func.decodeRsaWebCryptoAPI(encodeRsaAes)
-                    console.log("decodeRsaAes::: " + JSON.stringify(decodeRsaAes))
-
-                    const encodeIvBase64 = func.encodeIvBase64(aesIV.iv)
-                    console.log("[IVIV]encodeIvBase64::: " + JSON.stringify(encodeIvBase64))
+                    // const encodeIvBase64 = func.encodeIvBase64(aesIV.iv)
+                    // console.log("[IVIV]encodeIvBase64::: " + JSON.stringify(encodeIvBase64))
                     //console.log("[IVIV]encodeIvBase64 + Uint8Array::: " + func.byteChange(encodeIvBase64))
 
-                    const decodeIvBase64 = func.decodeIvBase64(encodeIvBase64)
-                    console.log("decodeIvBase64::: " + decodeIvBase64)
+                    const encodeIvBase64Original = func.encodeIvBase64(aesIVOriginal.iv)
+                    console.log("[IVIV]encodeIvBase64Original::: " + JSON.stringify(encodeIvBase64Original))
 
-                    const encodeRsaData = await func.encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
-                    console.log("encodeRsaData::: " + JSON.stringify(encodeRsaData))
+                    // const decodeIvBase64 = func.decodeIvBase64(encodeIvBase64)
+                    // console.log("decodeIvBase64::: " + decodeIvBase64)
 
-                    const decodeRsaData = await func.decodeRsaWebCryptoAPI(encodeRsaData, privateKey)
+                    // const decodeIvBase64Original = func.decodeIvBase64(encodeIvBase64Original)
+                    // console.log("decodeIvBase64Original::: " + decodeIvBase64Original)
+
+                    // const encodeRsaData = await func.encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
+                    // console.log("encodeRsaData::: " + JSON.stringify(encodeRsaData))
+
+                    // const encodeRsaDataOriginal = await func.encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
+                    // console.log("encodeRsaDataOriginal::: " + JSON.stringify(encodeRsaDataOriginal))
+
+                    // const decodeRsaData = await func.decodeRsaWebCryptoAPI(encodeRsaData, privateKey)
                     //alert("decodeRsaWebCryptoAPI 출력::: " + decodeRsaData)
-                    console.log("decodeRsaData::: " + decodeRsaData)
+                    // console.log("decodeRsaData::: " + decodeRsaData)
+
+                    // const decodeRsaDataOriginal = await func.decodeRsaWebCryptoAPI(encodeRsaDataOriginal, privateKey)
+                    //alert("decodeRsaWebCryptoAPI 출력::: " + decodeRsaData)
+                    // console.log("decodeRsaDataOriginal::: " + decodeRsaDataOriginal)
 
                     //let payload = {"payload":encodeRsaData}
 
@@ -337,17 +351,27 @@
                         "data": encodeDataWithAes
                     }*/
 
-                    let encodeData = {
-                        "key":encodeRsaAes,
-                        "iv": encodeIvBase64,
-                        "data": encodeDataWithAes
+                    // let encodeData = {
+                    //     "key":encodeRsaAes,
+                    //     "iv": encodeIvBase64,
+                    //     "data": encodeDataWithAes
+                    // }
+
+                    let encodeDataOriginal = {
+                        "key":encodeRsaAesOriginal,
+                        "iv": encodeIvBase64Original,
+                        "data": encodeDataWithAesOriginal
                     }
 
-                    console.log("encodeData::: " + encodeData)
-                    console.log("encodeData::: " + typeof encodeData)
-                    console.log("encodeData::: " + JSON.stringify(encodeData))
+                    // console.log("encodeData::: " + JSON.stringify(encodeData))
+                    // console.log("encodeData::: " + encodeData)
 
-                   // func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(encodeData), true, 'application/json', func.saveData);
+                    console.log("encodeDataOriginal::: " + JSON.stringify(encodeDataOriginal))
+                    console.log("encodeDataOriginal::: " + encodeDataOriginal)
+                    // console.log("encodeData::: " + typeof encodeData)
+                    // console.log("encodeData::: " + JSON.stringify(encodeData))
+
+                    func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(encodeDataOriginal), true, 'application/json', func.saveData);
 
                     sessionStorage.setItem('accountsData', 'Y')
                 },
@@ -478,8 +502,6 @@
 
         return { encrypted, key, iv };
     }
-
-
 
     </script>
 </th:block>

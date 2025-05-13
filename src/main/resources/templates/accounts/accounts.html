@@ -71,6 +71,7 @@
 
             async draw(data) {
 
+                console.log("datadata:::" + data)
                 let decodeData = await func.responseDecodeData(data)
                 let encodedData = JSON.stringify(decodeData.data)
                 encodedData = encodedData.replaceAll("\"", "");

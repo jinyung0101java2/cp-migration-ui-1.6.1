@@ -570,8 +570,45 @@ const func= {
 
 	encodeHmacSha256(data) {
 
+		 // return CryptoJS.HmacSHA256(data, func.hmacKey).toString(CryptoJS.enc.Base64);
 		return CryptoJS.HmacSHA256(data, func.hmacKey).toString(CryptoJS.enc.Hex);
 
+	},
+
+	generateAesIvOriginal() {
+		//암호문 형식 base64, Hex
+		//iv bytes, aes bytes, 패딩 방식
+
+
+		let hex  = "0123456789abcdef"; // 16 bytes
+		// let aesKeyBytes = "0123456789abcdef0123456789abcdef"; // 32 bytes
+		let aesKeyBytes = "0123456789abcdef0123456789abcdef"; // 32 bytes
+		let ivKey='';
+		let aesKey='';
+
+		for (i = 0; i < 32; i++) {
+			ivKey += hex.charAt(Math.floor(Math.random() * 16));
+		}
+
+		let iv = CryptoJS.enc.Hex.parse(ivKey);
+		console.log("ivOriginal 길이" + iv.toString().length)
+		console.log("ivOriginal 값" + iv)
+
+		for (i = 0; i < 64; i++) {
+			aesKey += aesKeyBytes.charAt(Math.floor(Math.random() * 32));
+		}
+
+		let aes = CryptoJS.enc.Hex.parse(aesKey);
+		console.log("aesOriginal 길이" + aes.toString().length)
+		console.log("aesOriginal 값" + aes)
+
+		return {
+			"aes": aes,
+			"iv": iv
+		}
+
+		// AES 키 rsa 공개키로 encode
+		//IV도 rsa 공기키로 encode
 	},
 
 	generateAesIv() {
@@ -580,9 +617,14 @@ const func= {
 		//iv bytes, aes bytes, 패딩 방식
 
 
-		let hex  = "0123456789abcdef00000000"; // 16 bytes
+		let hex  = "0123456789abcdef"; // 16 bytes
 		let aesKeyBytes = "0123456789abcdef0123456789abcdef"; // 32 bytes
 		let key='';
+
+		/*for (i = 0; i < 32; i++) {
+			key += hex.charAt(Math.floor(Math.random() * 16));
+			//Initially this was charAt(chance.integer({min: 0, max: 15}));
+		}*/
 
 		for (i = 0; i < 32; i++) {
 			key += hex.charAt(Math.floor(Math.random() * 16));
@@ -590,10 +632,12 @@ const func= {
 		}
 
 		//let iv = CryptoJS.enc.Hex.parse(ivBytes);
-		let iv = CryptoJS.enc.Hex.parse(key);
+		let iv = CryptoJS.enc.Utf8.parse(key);
+		console.log("iv길이" + iv.length)
+		console.log("iv 값" + iv)
 		//let aesKey = CryptoJS.enc.Utf8.parse(aesKeyBytes);
 		//let aesKey = CryptoJS.enc.Hex.parse(aesKeyBytes);
-		let aes = CryptoJS.enc.Hex.parse(key);
+		let aes = CryptoJS.enc.Utf8.parse(key);
 
 		return {
 			"aes": aes,
@@ -635,6 +679,18 @@ const func= {
 		/*return CryptoJS.AES.encrypt(data, aes,
 			{ iv: iv
 			}).toString();*/
+
+	},
+
+	encodeDataWithAes2(data, aes, iv) {
+		let cipher = CryptoJS.AES.encrypt(data, CryptoJS.enc.Utf8.parse(aes),{
+			iv : CryptoJS.enc.Utf8.parse(iv),
+			padding : CryptoJS.pad.Pkcs7,
+			mode: CryptoJS.mode.CBC
+		});
+
+		let encTarget = cipher.toString()
+		return encTarget;
 	},
 
 	encodeDataWithAesPkcs7(data, aes, iv) {
@@ -644,61 +700,6 @@ const func= {
 			  //padding: pkcs7Pad(data, 16),
 			  mode: CryptoJS.mode.CBC
 	        });
-		/*return CryptoJS.AES.encrypt(data, aes,
-			{ iv: iv
-			}).toString();*/
-	},
-
-	encodeDataWithAesIso97971(data, aes, iv) {
-		return CryptoJS.AES.encrypt(data, aes,
-			{ iv: iv,
-				padding: CryptoJS.pad.Iso97971,
-				mode: CryptoJS.mode.CBC
-			}).toString();
-		/*return CryptoJS.AES.encrypt(data, aes,
-			{ iv: iv
-			}).toString();*/
-	},
-
-	encodeDataWithAesAnsiX923(data, aes, iv) {
-		return CryptoJS.AES.encrypt(data, aes,
-			{ iv: iv,
-				padding: CryptoJS.pad.AnsiX923,
-				mode: CryptoJS.mode.CBC
-			}).toString();
-		/*return CryptoJS.AES.encrypt(data, aes,
-			{ iv: iv
-			}).toString();*/
-	},
-
-	encodeDataWithAesIso10126(data, aes, iv) {
-		return CryptoJS.AES.encrypt(data, aes,
-			{ iv: iv,
-				padding: CryptoJS.pad.Iso10126,
-				mode: CryptoJS.mode.CBC
-			}).toString();
-		/*return CryptoJS.AES.encrypt(data, aes,
-			{ iv: iv
-			}).toString();*/
-	},
-
-	encodeDataWithAesZeroPadding(data, aes, iv) {
-		return CryptoJS.AES.encrypt(data, aes,
-			{ iv: iv,
-				padding: CryptoJS.pad.ZeroPadding,
-				mode: CryptoJS.mode.CBC
-			}).toString();
-		/*return CryptoJS.AES.encrypt(data, aes,
-			{ iv: iv
-			}).toString();*/
-	},
-
-	encodeDataWithAesNoPadding(data, aes, iv) {
-		return CryptoJS.AES.encrypt(data, aes,
-			{ iv: iv,
-				padding: CryptoJS.pad.NoPadding,
-				mode: CryptoJS.mode.CBC
-			}).toString();
 		/*return CryptoJS.AES.encrypt(data, aes,
 			{ iv: iv
 			}).toString();*/
@@ -725,46 +726,6 @@ const func= {
 			}).toString(CryptoJS.enc.Utf8);
 	},
 
-	decodeDataWithAesIso97971(data, aes, iv) {
-		return CryptoJS.AES.decrypt(data, aes,
-			{ iv: iv,
-			  padding: CryptoJS.pad.Iso97971,
-		      mode: CryptoJS.mode.CBC
-			}).toString(CryptoJS.enc.Utf8);
-	},
-
-	decodeDataWithAesAnsiX923(data, aes, iv) {
-		return CryptoJS.AES.decrypt(data, aes,
-			{ iv: iv,
-			  padding: CryptoJS.pad.AnsiX923,
-		      mode: CryptoJS.mode.CBC
-			}).toString(CryptoJS.enc.Utf8);
-	},
-
-	decodeDataWithAesIso10126(data, aes, iv) {
-		return CryptoJS.AES.decrypt(data, aes,
-			{ iv: iv,
-			  padding: CryptoJS.pad.Iso10126,
-		      mode: CryptoJS.mode.CBC
-			}).toString(CryptoJS.enc.Utf8);
-	},
-
-	decodeDataWithAesZeroPadding(data, aes, iv) {
-		return CryptoJS.AES.decrypt(data, aes,
-			{ iv: iv,
-			  padding: CryptoJS.pad.ZeroPadding,
-		      mode: CryptoJS.mode.CBC
-			}).toString(CryptoJS.enc.Utf8);
-	},
-
-	decodeDataWithAesNoPadding(data, aes, iv) {
-		return CryptoJS.AES.decrypt(data, aes,
-			{ iv: iv,
-			  padding: CryptoJS.pad.NoPadding,
-		      mode: CryptoJS.mode.CBC
-			}).toString(CryptoJS.enc.Utf8);
-	},
-
 	encodeIvBase64(iv) {
 
 	 	return CryptoJS.enc.Base64.stringify(iv)
@@ -775,7 +736,21 @@ const func= {
 		return CryptoJS.enc.Base64.stringify(data)
 	},
 
+	/*decodeIvBase64(iv) {
+
+		/!*let parseWordArray = CryptoJS.enc.Base64.parse(iv);
+		return parseWordArray.toString(CryptoJS.enc.Utf8);*!/
+
+		console.log("iv 디코딩 길이" + iv.toString(CryptoJS.enc.Utf8).length)
+		console.log("iv 디코딩 값" + iv.toString(CryptoJS.enc.Utf8))
+
+		return CryptoJS.enc.Base64.parse(iv.toString(CryptoJS.enc.Utf8))
+	},*/
+
 	decodeIvBase64(iv) {
+
+		/*let parseWordArray = CryptoJS.enc.Base64.parse(iv);
+		return parseWordArray.toString(CryptoJS.enc.Utf8);*/
 
 		let parseWordArray = CryptoJS.enc.Base64.parse(iv);
 		let decoded = parseWordArray.toString()
@@ -809,7 +784,11 @@ const func= {
 			true,
 			['encrypt']
 		);
-		const data1 = new TextEncoder().encode(data);
+		//hex를 unit8array로 변경(글자수 64, 32byte)
+		// const data1 = new TextEncoder().encode(data); //64byte
+		// const data1 = new TextEncoder().encode(data); //64byte
+		let data1 = func.hexToUint8Array(data)
+		console.log("data1data1data1data1data1data1::" + data1)
 
 		const cipher = await window.crypto.subtle.encrypt(
 			{
@@ -950,6 +929,31 @@ const func= {
 			console.log("Decrypt Error")
 		}
 
+	},
+
+	hexToUint8Array(hex) {
+		console.log("hex.toString():::::" + hex.toString())
+	if (hex.toString().length % 2 !== 0) {
+		throw new Error("Invalid hex string length");
 	}
+
+	/*const len = hex.length / 2;
+	const bytes = new Uint8Array(len); //32
+	for (let i = 0; i < len; i++) {
+		bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
+	}*/
+
+	const len = hex.toString().length / 2;
+	const bytes = new Uint8Array(len); //32
+	for (let i = 0; i < len; i++) {
+		const hex_slice = hex.toString().slice(i * 2, i * 2 + 2);
+		const hex_byte = Number.parseInt(hex_slice, 16);
+		bytes[i] = hex_byte;
+		console.log("hex_slice :::: " + hex_slice + " hex_byte ::::" + hex_byte);
+		//bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
+	}
+
+	return bytes;
+}
 
 }
