@@ -438,16 +438,21 @@ const func= {
 	/////////////////////////////////////////////////////////////////////////////////////
 	saveData(method, url, data, bull, header){
 		func.loading();
-
+		console.log("1::: ")
 		var httpRequest = new XMLHttpRequest();
 
 		httpRequest.open(method, url, bull);
+		console.log("2::: ")
 		httpRequest.setRequestHeader('Content-type', header);
+		console.log("3::: ")
 		httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('accessToken'));
+		console.log("4::: ")
 		//httpRequest.responseType = "json"
 
 		httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
+		console.log("5::: ")
 		httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
+		console.log("6::: ")
 
 		httpRequest.onreadystatechange = () => {
 			if (httpRequest.readyState === XMLHttpRequest.DONE){
@@ -460,11 +465,14 @@ const func= {
 					if(document.getElementById('loading')){
 						document.getElementById('wrap').removeChild(document.getElementById('loading'));
 					};
+					console.log("에러메세지::: " + httpRequest.responseText)
 					return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');
 				}
 			}
 		}
+		console.log("data::: " + data)
 		httpRequest.send(data)
+		console.log("last::: ")
 	},
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -572,7 +580,7 @@ const func= {
 		//iv bytes, aes bytes, 패딩 방식
 
 
-		let hex  = "0123456789abcdef"; // 16 bytes
+		let hex  = "0123456789abcdef00000000"; // 16 bytes
 		let aesKeyBytes = "0123456789abcdef0123456789abcdef"; // 32 bytes
 		let key='';
 
@@ -608,8 +616,19 @@ const func= {
 	return padded;
 	},
 
+	byteChange(data){
+		let byte_array = new TextEncoder().encode(data);
+		alert("byteChange byte_array:::" + byte_array)
+		/*const array = new Uint8Array(data2.length);
+		alert("byteChange array:::" + array)*/
+		return byte_array
+	},
+
 	encodeDataWithAes(data, aes, iv) {
 
+		/*return JSON.stringify(CryptoJS.AES.encrypt(data, aes,
+			{ iv: iv
+			}));*/
 		return CryptoJS.AES.encrypt(data, aes,
 			{ iv: iv
 			}).toString();
@@ -624,7 +643,7 @@ const func= {
 			  padding: CryptoJS.pad.Pkcs7,
 			  //padding: pkcs7Pad(data, 16),
 			  mode: CryptoJS.mode.CBC
-	        }).toString();
+	        });
 		/*return CryptoJS.AES.encrypt(data, aes,
 			{ iv: iv
 			}).toString();*/
@@ -749,6 +768,11 @@ const func= {
 	encodeIvBase64(iv) {
 
 	 	return CryptoJS.enc.Base64.stringify(iv)
+	},
+
+	encodeBase64(data) {
+
+		return CryptoJS.enc.Base64.stringify(data)
 	},
 
 	decodeIvBase64(iv) {
