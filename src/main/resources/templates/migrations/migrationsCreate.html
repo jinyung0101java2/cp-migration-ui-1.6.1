@@ -238,10 +238,10 @@
                     let destinationSecretAccessKey = '';
                     let destinationBucket = document.querySelector('#destinationBucket > option:checked').innerHTML;
 
-                    func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
+                    // func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', func.sourceDetailDraw);
                     // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
 
-                    async function sourceDetailDraw(data) {
+                    /*async function sourceDetailDraw(data) {
 
                         let decodeData = await func.responseDecodeData(data)
                         let encodedData = JSON.stringify(decodeData.data)
@@ -267,12 +267,12 @@
 
                         sessionStorage.setItem('sourceData', sourceDataWithRsa);
 
-                    }
+                    }*/
 
-                    func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${destinationMigration}`, 'application/json', destinationDetailDraw);
+                    // func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${destinationMigration}`, 'application/json', func.destinationDetailDraw);
                     // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
 
-                    async function destinationDetailDraw(data) {
+                    /*async function destinationDetailDraw(data) {
                         let decodeData = await func.responseDecodeData(data)
                         let encodedData = JSON.stringify(decodeData.data)
                         encodedData = encodedData.replaceAll("\"", "");
@@ -299,14 +299,28 @@
                         sessionStorage.setItem('destinationData', destinationDataWithRsa);
 
 
-                    }
+                    }*/
 
                     if (sessionStorage.getItem('sourceData') !== '') {
                         let sourceData = sessionStorage.getItem('sourceData');
-                        console.log("sourceData출력:::::" + sourceData)
+                        console.log("sourceData출력:::::" + JSON.stringify(sourceData))
+                        console.log("sourceData출력:::::" + sessionStorage.getItem('sourceData'))
                     } else {
                         console.log("sourceData가 없습니다.:::::")
                     }
+
+                    if (sessionStorage.getItem('destinationData') !== '') {
+                        let destinationData = sessionStorage.getItem('destinationData');
+                        console.log("destinationData출력:::::" + JSON.stringify(destinationData))
+                        console.log("destinationData출력:::::" + sessionStorage.getItem('destinationData'))
+                    } else {
+                        console.log("destinationData가 없습니다.:::::")
+                    }
+
+
+                    let destinationDataWithRsa = await func.decodeRsaWebCryptoAPI(destinationData)
+
+
 
 
                     // let decodeSourceDataWithAes = func.decodeDataWithAes(sourceData, localAes, localIv);
@@ -362,12 +376,13 @@
         }
 
         function changeSourceMigrationSelect() {
-
+            let sourceMigration = document.querySelector('#sourceMigration > option:checked').innerHTML;
             let storageType = ``;
             let endpoint = ``;
             let accessKeyId = ``;
             let secretAccessKey = ``;
 
+            func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', func.sourceDetailDraw);
             func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#sourceMigration > option:checked').value}`, 'application/json', sourceAccountsDraw);
             // func.loadData('GET', `${func.vaultUrl}/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#sourceMigration > option:checked').value}`, 'application/json', sourceAccountsDraw);
 
@@ -423,11 +438,13 @@
 
         }
         function changeDestinationMigrationSelect() {
+            let destinationMigration = document.querySelector('#destinationMigration > option:checked').innerHTML;
             let storageType = ``;
             let endpoint = ``;
             let accessKeyId = ``;
             let secretAccessKey = ``;
 
+            func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${destinationMigration}`, 'application/json', func.destinationDetailDraw);
             func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#destinationMigration > option:checked').value}`, 'application/json', destinationAccountsDraw);
             // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#destinationMigration > option:checked').value}`, 'application/json', destinationAccountsDraw);
 

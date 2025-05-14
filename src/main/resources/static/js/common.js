@@ -979,5 +979,68 @@ const func= {
 		}
 	},
 
+	async sourceDetailDraw(data) {
+		let sourceEndpoint = '';
+		let sourceAccessKeyId = '';
+		let sourceSecretAccessKey = '';
+
+		let decodeData = await func.responseDecodeData(data)
+		let encodedData = JSON.stringify(decodeData.data)
+		encodedData = encodedData.replaceAll("\"", "");
+
+		let iv = decodeData.iv
+		let aes = decodeData.aes
+		let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
+		let decodedData = JSON.parse(responseDecodeData)
+
+		sourceEndpoint = decodedData.data.data.endpoint;
+		sourceAccessKeyId = decodedData.data.data.accessKeyId;
+		sourceSecretAccessKey = decodedData.data.data.secretAccessKey;
+		console.log(JSON.stringify("sourceEndpoint:::" + sourceEndpoint + "," + "sourceAccessKeyId:::" + sourceAccessKeyId + "," + "sourceSecretAccessKey:::" + sourceSecretAccessKey))
+
+		let sourceData = {
+			"sourceEndpoint": sourceEndpoint,
+			"sourceAccessKeyId": sourceAccessKeyId,
+			"sourceSecretAccessKey": sourceSecretAccessKey
+		}
+
+		let sourceDataWithRsa = await func.encodeRsaMigrationWebCryptoAPI(sourceData)
+
+		sessionStorage.setItem('sourceData', sourceDataWithRsa);
+
+	},
+
+	async destinationDetailDraw(data) {
+		let destinationEndpoint = '';
+		let destinationAccessKeyId = '';
+		let destinationSecretAccessKey = '';
+
+		let decodeData = await func.responseDecodeData(data)
+		let encodedData = JSON.stringify(decodeData.data)
+		encodedData = encodedData.replaceAll("\"", "");
+
+		let iv = decodeData.iv
+		let aes = decodeData.aes
+		let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
+		let decodedData = JSON.parse(responseDecodeData)
+
+		destinationEndpoint = decodedData.data.data.endpoint;
+		destinationAccessKeyId = decodedData.data.data.accessKeyId;
+		destinationSecretAccessKey = decodedData.data.data.secretAccessKey;
+
+		console.log(JSON.stringify("destinationEndpoint:::" + destinationEndpoint + "," + "destinationAccessKeyId:::" + destinationAccessKeyId + "," + "destinationSecretAccessKey:::" + destinationSecretAccessKey))
+
+		let destinationData = {
+			"destinationEndpoint": destinationEndpoint,
+			"destinationAccessKeyId": destinationAccessKeyId,
+			"destinationSecretAccessKey": destinationSecretAccessKey
+		}
+
+		let destinationDataWithRsa = await func.encodeRsaMigrationWebCryptoAPI(destinationData)
+
+		sessionStorage.setItem('destinationData', destinationDataWithRsa);
+
+
+	}
 
 }
