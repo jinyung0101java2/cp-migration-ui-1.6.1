@@ -329,19 +329,16 @@
                     console.log("decodeSourceData::::::::::::::::::::  " + decodeSourceData)
                     console.log("decodeDestinationData::::::::::::::::::::  " + decodeDestinationData)
 
+                    decodeSourceData = JSON.parse(decodeSourceData)
+                    decodeDestinationData = JSON.parse(decodeDestinationData)
 
+                    sourceEndpoint = decodeSourceData.sourceEndpoint;
+                    sourceAccessKeyId = decodeSourceData.sourceAccessKeyId;
+                    sourceSecretAccessKey = decodeSourceData.sourceSecretAccessKey;
 
-
-
-                    // let decodeSourceDataWithAes = func.decodeDataWithAes(sourceData, localAes, localIv);
-                    // console.log("decodeSourceDataWithAes::" + decodeSourceDataWithAes)
-                    // sourceEndpoint = decodeSourceDataWithAes.sourceEndpoint
-                    // sourceAccessKeyId = decodeSourceDataWithAes.sourceAccessKeyId
-                    // sourceSecretAccessKey = decodeSourceDataWithAes.sourceSecretAccessKey
-                    // console.log("sourceEndpoint::" + sourceEndpoint)
-                    // console.log("sourceAccessKeyId::" + sourceAccessKeyId)
-                    // console.log("sourceSecretAccessKey::" + sourceSecretAccessKey)
-
+                    destinationEndpoint = decodeDestinationData.destinationEndpoint;
+                    destinationAccessKeyId = decodeDestinationData.destinationAccessKeyId;
+                    destinationSecretAccessKey = decodeDestinationData.destinationSecretAccessKey;
 
                     let migrationsCreate = {"src":{"storageType":"s3","endpoint":sourceEndpoint,"accessKeyId":sourceAccessKeyId,"secretAccessKey":sourceSecretAccessKey,"bucket":sourceBucket},"dst":{"storageType":"s3","endpoint":destinationEndpoint,"accessKeyId":destinationAccessKeyId,"secretAccessKey":destinationSecretAccessKey,"bucket":destinationBucket}}
 
@@ -362,23 +359,12 @@
                     console.log("encodeData:::::::" + JSON.stringify(encodeData))
 
                     let decodeData = encodeData.data;
-                    let decodeKey = encodeData.key;
-                    let decodeIv = encodeData.iv;
-
-                    console.log("encodeData:::::::" + JSON.stringify(decodeData))
-                    console.log("encodeKey:::::::" + JSON.stringify(decodeKey))
-                    console.log("encodeIv:::::::" + JSON.stringify(decodeIv))
-
-                    const decodeIvBase64 = func.decodeIvBase64(decodeIv)
-                    console.log("decodeIvBase64:::::::" + JSON.stringify(decodeIvBase64))
-                    const decodeRsaAesOriginal = await func.decodeRsaWebCryptoAPI(decodeKey)
-                    console.log("decodeRsaAesOriginal:::::::" + JSON.stringify(decodeRsaAesOriginal))
 
                     let decodeDataWithAes = func.decodeDataWithAes(decodeData, aesIVOriginal.aes, aesIVOriginal.iv);
                     console.log("decodeDataWithAes::: " + decodeDataWithAes)
 
 
-                    //func.saveData('POST', `${func.migrationUrl}v1/migration/sync/copy`, JSON.stringify(encodeData), true, 'application/json');
+                    func.saveData('POST', `${func.migrationUrl}v1/migration/sync/copy`, JSON.stringify(encodeData), true, 'application/json');
                 }
             };
             migrationsCreate.init();
