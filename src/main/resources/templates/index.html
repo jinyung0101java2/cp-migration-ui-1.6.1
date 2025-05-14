@@ -52,13 +52,15 @@
             const accounts = {
 
                 init() {
-                    if (sessionStorage.getItem('accountsData') !== 'Y') {
+                    sessionStorage.setItem('accountsData', 'Y')
+
+                   /* if (sessionStorage.getItem('accountsData') !== 'Y') {
                         sessionStorage.setItem('accountsData', 'N')
                     }
 
                     if (sessionStorage.getItem('accountsData') === 'N' || sessionStorage.getItem('accountsCnt') < 1) {
                         sessionStorage.setItem('accountsCnt', 0)
-                    }
+                    }*/
 
                     sessionStorage.setItem('accessToken' , 'Bearer ' + [[${accessToken}]]);
                     sessionStorage.setItem('userGuid' , [[${userGuid}]]);

@@ -438,21 +438,15 @@ const func= {
 	/////////////////////////////////////////////////////////////////////////////////////
 	saveData(method, url, data, bull, header){
 		func.loading();
-		console.log("1::: ")
 		var httpRequest = new XMLHttpRequest();
 
 		httpRequest.open(method, url, bull);
-		console.log("2::: ")
 		httpRequest.setRequestHeader('Content-type', header);
-		console.log("3::: ")
 		httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('accessToken'));
-		console.log("4::: ")
 		//httpRequest.responseType = "json"
 
 		httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
-		console.log("5::: ")
 		httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
-		console.log("6::: ")
 
 		httpRequest.onreadystatechange = () => {
 			if (httpRequest.readyState === XMLHttpRequest.DONE){
@@ -470,9 +464,7 @@ const func= {
 				}
 			}
 		}
-		console.log("data::: " + data)
 		httpRequest.send(data)
-		console.log("last::: ")
 	},
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -570,7 +562,6 @@ const func= {
 
 	encodeHmacSha256(data) {
 
-		 // return CryptoJS.HmacSHA256(data, func.hmacKey).toString(CryptoJS.enc.Base64);
 		return CryptoJS.HmacSHA256(data, func.hmacKey).toString(CryptoJS.enc.Hex);
 
 	},
@@ -591,16 +582,12 @@ const func= {
 		}
 
 		let iv = CryptoJS.enc.Hex.parse(ivKey);
-		console.log("ivOriginal 길이" + iv.toString().length)
-		console.log("ivOriginal 값" + iv)
 
 		for (i = 0; i < 64; i++) {
 			aesKey += aesKeyBytes.charAt(Math.floor(Math.random() * 32));
 		}
 
 		let aes = CryptoJS.enc.Hex.parse(aesKey);
-		console.log("aesOriginal 길이" + aes.toString().length)
-		console.log("aesOriginal 값" + aes)
 
 		return {
 			"aes": aes,
@@ -633,8 +620,6 @@ const func= {
 
 		//let iv = CryptoJS.enc.Hex.parse(ivBytes);
 		let iv = CryptoJS.enc.Utf8.parse(key);
-		console.log("iv길이" + iv.length)
-		console.log("iv 값" + iv)
 		//let aesKey = CryptoJS.enc.Utf8.parse(aesKeyBytes);
 		//let aesKey = CryptoJS.enc.Hex.parse(aesKeyBytes);
 		let aes = CryptoJS.enc.Utf8.parse(key);
@@ -788,7 +773,6 @@ const func= {
 		// const data1 = new TextEncoder().encode(data); //64byte
 		// const data1 = new TextEncoder().encode(data); //64byte
 		let data1 = func.hexToUint8Array(data)
-		console.log("data1data1data1data1data1data1::" + data1)
 
 		const cipher = await window.crypto.subtle.encrypt(
 			{
@@ -932,28 +916,29 @@ const func= {
 	},
 
 	hexToUint8Array(hex) {
-		console.log("hex.toString():::::" + hex.toString())
-	if (hex.toString().length % 2 !== 0) {
-		throw new Error("Invalid hex string length");
-	}
+		if (hex.toString().length % 2 !== 0) {
+			throw new Error("Invalid hex string length");
+		}
 
-	/*const len = hex.length / 2;
-	const bytes = new Uint8Array(len); //32
-	for (let i = 0; i < len; i++) {
-		bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
-	}*/
+		const len = hex.toString().length / 2;
+		const bytes = new Uint8Array(len);
+		for (let i = 0; i < len; i++) {
+			const hex_slice = hex.toString().slice(i * 2, i * 2 + 2);
+			const hex_byte = Number.parseInt(hex_slice, 16);
+			bytes[i] = hex_byte;
+		}
 
-	const len = hex.toString().length / 2;
-	const bytes = new Uint8Array(len); //32
-	for (let i = 0; i < len; i++) {
-		const hex_slice = hex.toString().slice(i * 2, i * 2 + 2);
-		const hex_byte = Number.parseInt(hex_slice, 16);
-		bytes[i] = hex_byte;
-		console.log("hex_slice :::: " + hex_slice + " hex_byte ::::" + hex_byte);
-		//bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
-	}
+		return bytes;
+	},
 
-	return bytes;
-}
+	callByValue(endpoint, accessKeyId, secretAccessKey) {
+
+		return {
+			"endpoint": endpoint,
+			"accessKeyId": accessKeyId,
+			"secretAccessKey": secretAccessKey
+		}
+	},
+
 
 }

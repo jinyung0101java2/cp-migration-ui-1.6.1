@@ -14,7 +14,7 @@
             <div class="creat" style="overflow: auto">
                 <h3 th:text="|Migrations #{M0022}|"></h3>
                 <div class="source" style="float: left;width: 45%;margin-right: 40px;">
-                    <h3 th:text="Soucre"></h3>
+                    <h3 th:text="Source"></h3>
                     <dl>
                         <dt><label for="sourceMigration">Name</label></dt>
                         <dd>
@@ -113,18 +113,18 @@
 
                         let sourceMigration = document.querySelector('#sourceMigration');
                         let sourceBucket = document.querySelector('#sourceBucket');
-                        let detinationMigration = document.querySelector('#destinationMigration');
-                        let detinationBucket = document.querySelector('#destinationBucket');
+                        let destinationMigration = document.querySelector('#destinationMigration');
+                        let destinationBucket = document.querySelector('#destinationBucket');
 
                         if (sessionStorage.getItem('accountsData') === 'N') {
                             func.alertPopup('ALERT', MSG_CHECK_TO_REGISTER_ACCOUNT, true, MSG_CONFIRM, "closed");
                         } else if(sourceBucket.value === "") {
                             func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
-                        } else if (detinationBucket.value === "") {
+                        } else if (destinationBucket.value === "") {
                             func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
-                        } else if (sourceBucket.value === "" && detinationBucket.value === "") {
+                        } else if (sourceBucket.value === "" && destinationBucket.value === "") {
                             func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
-                        } else if (sourceMigration.value !== 0 && detinationMigration.value !== 0 && sourceBucket.value !== 0 && detinationBucket.value !== 0) {
+                        } else if (sourceMigration.value !== 0 && destinationMigration.value !== 0 && sourceBucket.value !== 0 && destinationBucket.value !== 0) {
                             func.alertPopup('SYNC', MSG_CHECK_TO_SYNC, true, MSG_CONFIRM, migrationsCreate.sync);
                         }
 
@@ -134,18 +134,18 @@
 
                         let sourceMigration = document.querySelector('#sourceMigration');
                         let sourceBucket = document.querySelector('#sourceBucket');
-                        let detinationMigration = document.querySelector('#destinationMigration');
-                        let detinationBucket = document.querySelector('#destinationBucket');
+                        let destinationMigration = document.querySelector('#destinationMigration');
+                        let destinationBucket = document.querySelector('#destinationBucket');
 
                         if (sessionStorage.getItem('accountsData') === 'N') {
                             func.alertPopup('ALERT', MSG_CHECK_TO_REGISTER_ACCOUNT, true, MSG_CONFIRM, "closed");
                         } else if(sourceBucket.value === "") {
                             func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
-                        } else if (detinationBucket.value === "") {
+                        } else if (destinationBucket.value === "") {
                             func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
-                        } else if (sourceBucket.value === "" && detinationBucket.value === "") {
+                        } else if (sourceBucket.value === "" && destinationBucket.value === "") {
                             func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
-                        } else if (sourceMigration.value !== 0 && detinationMigration.value !== 0 && sourceBucket.value !== 0 && detinationBucket.value !== 0) {
+                        } else if (sourceMigration.value !== 0 && destinationMigration.value !== 0 && sourceBucket.value !== 0 && destinationBucket.value !== 0) {
                             func.alertPopup('COPY', MSG_CHECK_TO_COPY, true, MSG_CONFIRM, migrationsCreate.copy);
                         }
 
@@ -153,17 +153,17 @@
                 },
 
                 async sync() {
-                    let sourceMigration = document.querySelector('#sourceMigration > option:checked');
+                    let sourceMigration = document.querySelector('#sourceMigration > option:checked').innerHTML;
                     let sourceEndpoint = ``;
                     let sourceAccessKeyId = ``;
                     let sourceSecretAccessKey = ``;
-                    let sourceBucket = document.querySelector('#sourceBucket > option:checked');
+                    let sourceBucket = document.querySelector('#sourceBucket > option:checked').innerHTML;
 
-                    let detinationMigration = document.querySelector('#destinationMigration > option:checked');
-                    let detinationEndpoint = ``;
-                    let detinationAccessKeyId = ``;
-                    let detinationSecretAccessKey = ``;
-                    let detinationBucket = document.querySelector('#destinationBucket > option:checked');
+                    let destinationMigration = document.querySelector('#destinationMigration > option:checked').innerHTML;
+                    let destinationEndpoint = ``;
+                    let destinationAccessKeyId = ``;
+                    let destinationSecretAccessKey = ``;
+                    let destinationBucket = document.querySelector('#destinationBucket > option:checked').innerHTML;
 
 
                     func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
@@ -183,12 +183,14 @@
                         sourceAccessKeyId = decodedData.data.data.accessKeyId;
                         sourceSecretAccessKey = decodedData.data.data.secretAccessKey;
 
+                        func.callByValue(sourceEndpoint, sourceAccessKeyId, sourceSecretAccessKey)
+
                     }
 
-                    func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${detinationMigration}`, 'application/json', detinationDetailDraw);
+                    func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${destinationMigration}`, 'application/json', destinationDetailDraw);
                     // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
 
-                    async function detinationDetailDraw(data) {
+                    async function destinationDetailDraw(data) {
                         let decodeData = await func.responseDecodeData(data)
                         let encodedData = JSON.stringify(decodeData.data)
                         encodedData = encodedData.replaceAll("\"", "");
@@ -198,45 +200,54 @@
                         let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
                         let decodedData = JSON.parse(responseDecodeData)
 
-                        detinationEndpoint = decodedData.data.data.endpoint;
-                        detinationAccessKeyId = decodedData.data.data.accessKeyId;
-                        detinationSecretAccessKey = decodedData.data.data.secretAccessKey;
+                        destinationEndpoint = decodedData.data.data.endpoint;
+                        destinationAccessKeyId = decodedData.data.data.accessKeyId;
+                        destinationSecretAccessKey = decodedData.data.data.secretAccessKey;
                     }
 
-                    let migrationsCreate = {"src":{"storageType":"s3","endpoint":sourceEndpoint,"accessKeyId":sourceAccessKeyId,"secretAccessKey":sourceSecretAccessKey,"bucket":sourceBucket},"dst":{"storageType":"s3","endpoint":detinationEndpoint,"accessKeyId":detinationAccessKeyId,"secretAccessKey":detinationSecretAccessKey,"bucket":detinationBucket}}
+                    let migrationsCreate = {"src":{"storageType":"s3","endpoint":sourceEndpoint,"accessKeyId":sourceAccessKeyId,"secretAccessKey":sourceSecretAccessKey,"bucket":sourceBucket},"dst":{"storageType":"s3","endpoint":destinationEndpoint,"accessKeyId":destinationAccessKeyId,"secretAccessKey":destinationSecretAccessKey,"bucket":destinationBucket}}
 
                     let timestamp = func.createUnixTimestamp();
                     let includeTimestampData = {"data": migrationsCreate, "timestamp": timestamp.toString()}
                     let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData));
                     let includeHmacData = {"data":migrationsCreate,"hmac_data":hmacData,"timestamp":timestamp.toString()}
-                    let aesIV = func.generateAesIv();
+                    let aesIVOriginal = func.generateAesIvOriginal();
 
-                    let encodeDataWithAes = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
-                    const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes)
-                    const encodeIvBase64 = func.encodeIvBase64(aesIV.iv)
+                    let encodeDataWithAesOriginal = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIVOriginal.aes, aesIVOriginal.iv);
+                    const encodeRsaAesOriginal = await func.encodeRsaWebCryptoAPI(aesIVOriginal.aes)
+                    const encodeIvBase64Original = func.encodeIvBase64(aesIVOriginal.iv)
 
-                    let encodeData = {"key":encodeRsaAes,"iv":encodeIvBase64,"data":encodeDataWithAes}
+                    let encodeData = {"key":encodeRsaAesOriginal,"iv":encodeIvBase64Original,"data":encodeDataWithAesOriginal}
 
-                    func.saveData('POST', `${func.migrationUrl}v1/migration/sync/sync`, JSON.stringify(encodeData), true, 'application/json');
+                    console.log("encodeData:::::::" + JSON.stringify(encodeData))
+
+                    //func.saveData('POST', `${func.migrationUrl}v1/migration/sync/sync`, JSON.stringify(encodeData), true, 'application/json');
 
                 },
                 async copy() {
-                    let sourceMigration = document.querySelector('#sourceMigration > option:checked');
-                    let sourceEndpoint = ``;
-                    let sourceAccessKeyId = ``;
-                    let sourceSecretAccessKey = ``;
-                    let sourceBucket = document.querySelector('#sourceBucket > option:checked');
 
-                    let detinationMigration = document.querySelector('#destinationMigration > option:checked');
-                    let detinationEndpoint = ``;
-                    let detinationAccessKeyId = ``;
-                    let detinationSecretAccessKey = ``;
-                    let detinationBucket = document.querySelector('#destinationBucket > option:checked');
+                    let sourceMigration = document.querySelector('#sourceMigration > option:checked').innerHTML;
+                    let sourceEndpoint = '';
+                    let sourceAccessKeyId = '';
+                    let sourceSecretAccessKey = '';
+                    let sourceBucket = document.querySelector('#sourceBucket > option:checked').innerHTML;
+
+                    let destinationMigration = document.querySelector('#destinationMigration > option:checked').innerHTML;
+                    let destinationEndpoint = '';
+                    let destinationAccessKeyId = '';
+                    let destinationSecretAccessKey = '';
+                    let destinationBucket = document.querySelector('#destinationBucket > option:checked').innerHTML;
+
+                    let localAesIV = func.generateAesIvOriginal();
+                    let localAes = localAesIV.aes;
+                    let localIv = localAesIV.iv;
+
 
                     func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
                     // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
 
                     async function sourceDetailDraw(data) {
+
                         let decodeData = await func.responseDecodeData(data)
                         let encodedData = JSON.stringify(decodeData.data)
                         encodedData = encodedData.replaceAll("\"", "");
@@ -249,13 +260,28 @@
                         sourceEndpoint = decodedData.data.data.endpoint;
                         sourceAccessKeyId = decodedData.data.data.accessKeyId;
                         sourceSecretAccessKey = decodedData.data.data.secretAccessKey;
+                        console.log(JSON.stringify("sourceEndpoint:::" + sourceEndpoint + "," + "sourceAccessKeyId:::" + sourceAccessKeyId + "," + "sourceSecretAccessKey:::" + sourceSecretAccessKey))
+
+                        let sourceData = {
+                            "sourceEndpoint": sourceEndpoint,
+                            "sourceAccessKeyId": sourceAccessKeyId,
+                            "sourceSecretAccessKey": sourceSecretAccessKey
+                        }
+
+                        console.log("sourceData:::" + JSON.stringify(sourceData))
+                        console.log("localAes:::" + localAes)
+                        console.log("localIv:::" + localIv)
+
+                        let encodeSourceDataWithAes = func.encodeDataWithAes(JSON.stringify(sourceData), localAes, localIv);
+
+                        sessionStorage.setItem('sourceData', encodeSourceDataWithAes);
 
                     }
 
-                    func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${detinationMigration}`, 'application/json', detinationDetailDraw);
+                    func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${destinationMigration}`, 'application/json', destinationDetailDraw);
                     // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
 
-                    async function detinationDetailDraw(data) {
+                    async function destinationDetailDraw(data) {
                         let decodeData = await func.responseDecodeData(data)
                         let encodedData = JSON.stringify(decodeData.data)
                         encodedData = encodedData.replaceAll("\"", "");
@@ -265,26 +291,68 @@
                         let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
                         let decodedData = JSON.parse(responseDecodeData)
 
-                        detinationEndpoint = decodedData.data.data.endpoint;
-                        detinationAccessKeyId = decodedData.data.data.accessKeyId;
-                        detinationSecretAccessKey = decodedData.data.data.secretAccessKey;
+                        destinationEndpoint = decodedData.data.data.endpoint;
+                        destinationAccessKeyId = decodedData.data.data.accessKeyId;
+                        destinationSecretAccessKey = decodedData.data.data.secretAccessKey;
+
+                        console.log(JSON.stringify("destinationEndpoint:::" + destinationEndpoint + "," + "destinationAccessKeyId:::" + destinationAccessKeyId + "," + "destinationSecretAccessKey:::" + destinationSecretAccessKey))
+
                     }
 
-                    let migrationsCreate = {"src":{"storageType":"s3","endpoint":sourceEndpoint,"accessKeyId":sourceAccessKeyId,"secretAccessKey":sourceSecretAccessKey,"bucket":sourceBucket},"dst":{"storageType":"s3","endpoint":detinationEndpoint,"accessKeyId":detinationAccessKeyId,"secretAccessKey":detinationSecretAccessKey,"bucket":detinationBucket}}
+                    if (sessionStorage.getItem('sourceData') !== '') {
+                        let sourceData = sessionStorage.getItem('sourceData');
+                        console.log("sourceData출력:::::" + JSON.parse(sourceData))
+                    } else {
+                        console.log("sourceData가 없습니다.:::::")
+                    }
+
+
+                    // let decodeSourceDataWithAes = func.decodeDataWithAes(sourceData, localAes, localIv);
+                    // console.log("decodeSourceDataWithAes::" + decodeSourceDataWithAes)
+                    // sourceEndpoint = decodeSourceDataWithAes.sourceEndpoint
+                    // sourceAccessKeyId = decodeSourceDataWithAes.sourceAccessKeyId
+                    // sourceSecretAccessKey = decodeSourceDataWithAes.sourceSecretAccessKey
+                    // console.log("sourceEndpoint::" + sourceEndpoint)
+                    // console.log("sourceAccessKeyId::" + sourceAccessKeyId)
+                    // console.log("sourceSecretAccessKey::" + sourceSecretAccessKey)
+
+
+                    let migrationsCreate = {"src":{"storageType":"s3","endpoint":sourceEndpoint,"accessKeyId":sourceAccessKeyId,"secretAccessKey":sourceSecretAccessKey,"bucket":sourceBucket},"dst":{"storageType":"s3","endpoint":destinationEndpoint,"accessKeyId":destinationAccessKeyId,"secretAccessKey":destinationSecretAccessKey,"bucket":destinationBucket}}
+
+                    console.log("migrationsCreate:::" + JSON.stringify(migrationsCreate))
 
                     let timestamp = func.createUnixTimestamp();
                     let includeTimestampData = {"data": migrationsCreate, "timestamp": timestamp.toString()}
                     let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData));
                     let includeHmacData = {"data":migrationsCreate,"hmac_data":hmacData,"timestamp":timestamp.toString()}
-                    let aesIV = func.generateAesIv();
+                    let aesIVOriginal = func.generateAesIvOriginal();
 
-                    let encodeDataWithAes = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
-                    const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes)
-                    const encodeIvBase64 = func.encodeIvBase64(aesIV.iv)
+                    let encodeDataWithAesOriginal = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIVOriginal.aes, aesIVOriginal.iv);
+                    const encodeRsaAesOriginal = await func.encodeRsaWebCryptoAPI(aesIVOriginal.aes)
+                    const encodeIvBase64Original = func.encodeIvBase64(aesIVOriginal.iv)
 
-                    let encodeData = {"key":encodeRsaAes,"iv":encodeIvBase64,"data":encodeDataWithAes}
+                    let encodeData = {"key":encodeRsaAesOriginal,"iv":encodeIvBase64Original,"data":encodeDataWithAesOriginal}
 
-                    func.saveData('POST', `${func.migrationUrl}v1/migration/sync/copy`, JSON.stringify(encodeData), true, 'application/json');
+                    console.log("encodeData:::::::" + JSON.stringify(encodeData))
+
+                    let decodeData = encodeData.data;
+                    let decodeKey = encodeData.key;
+                    let decodeIv = encodeData.iv;
+
+                    console.log("encodeData:::::::" + JSON.stringify(decodeData))
+                    console.log("encodeKey:::::::" + JSON.stringify(decodeKey))
+                    console.log("encodeIv:::::::" + JSON.stringify(decodeIv))
+
+                    const decodeIvBase64 = func.decodeIvBase64(decodeIv)
+                    console.log("decodeIvBase64:::::::" + JSON.stringify(decodeIvBase64))
+                    const decodeRsaAesOriginal = await func.decodeRsaWebCryptoAPI(decodeKey)
+                    console.log("decodeRsaAesOriginal:::::::" + JSON.stringify(decodeRsaAesOriginal))
+
+                    let decodeDataWithAes = func.decodeDataWithAes(decodeData, aesIVOriginal.aes, aesIVOriginal.iv);
+                    console.log("decodeDataWithAes::: " + decodeDataWithAes)
+
+
+                    //func.saveData('POST', `${func.migrationUrl}v1/migration/sync/copy`, JSON.stringify(encodeData), true, 'application/json');
                 }
             };
             migrationsCreate.init();
@@ -329,27 +397,27 @@
             }
 
             function sourceBucketsDraw(data) {
-              func.removeHtml(document.querySelector('#sourceBucket'));
+                func.removeHtml(document.querySelector('#sourceBucket'));
 
-              data = data.substr(10);
-              data = data.slice(0, -2);
-              // let dataLength = data.match(/map/g)?.length
-              let arrData = data.split('Size');
-              arrData.pop();
+                data = data.substr(10);
+                data = data.slice(0, -2);
+                // let dataLength = data.match(/map/g)?.length
+                let arrData = data.split('Size');
+                arrData.pop();
 
                 for (var i=0; i<=arrData.length-1; i++) {
                     arrData[i] = arrData[i].substring(arrData[i].indexOf(`Name:`) + 5,arrData[i].indexOf(` Path`) );
                 }
 
-              let sourceBucketHtml = ``;
+                let sourceBucketHtml = ``;
 
-              for(var i=0; i<=arrData.length-1; i++){
-                  sourceBucketHtml += `<option value="${arrData[i]}">${arrData[i]}</option>`;
-              }
+                for(var i=0; i<=arrData.length-1; i++){
+                    sourceBucketHtml += `<option value="${arrData[i]}">${arrData[i]}</option>`;
+                }
 
-              func.appendHtml(document.getElementById('sourceBucket'), sourceBucketHtml);
+                func.appendHtml(document.getElementById('sourceBucket'), sourceBucketHtml);
 
-          }
+            }
 
         }
         function changeDestinationMigrationSelect() {
@@ -425,6 +493,7 @@
             }
 
         }
+
     </script>
 </th:block>
 </html>
