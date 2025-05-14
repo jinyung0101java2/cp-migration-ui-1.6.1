@@ -301,24 +301,34 @@
 
                     }*/
 
-                    if (sessionStorage.getItem('sourceData') !== '') {
-                        let sourceData = sessionStorage.getItem('sourceData');
-                        console.log("sourceData출력:::::" + JSON.stringify(sourceData))
-                        console.log("sourceData출력:::::" + sessionStorage.getItem('sourceData'))
-                    } else {
-                        console.log("sourceData가 없습니다.:::::")
-                    }
+                    // if (sessionStorage.getItem('sourceData') !== '') {
+                    //     let sourceData = sessionStorage.getItem('sourceData');
+                    //     console.log("sourceData출력:::::" + JSON.stringify(sourceData))
+                    //     console.log("sourceData출력:::::" + sessionStorage.getItem('sourceData'))
+                    // } else {
+                    //     console.log("sourceData가 없습니다.:::::")
+                    // }
+                    //
+                    // if (sessionStorage.getItem('destinationData') !== '') {
+                    //     let destinationData = sessionStorage.getItem('destinationData');
+                    //     console.log("destinationData출력:::::" + JSON.stringify(destinationData))
+                    //     console.log("destinationData출력:::::" + sessionStorage.getItem('destinationData'))
+                    // } else {
+                    //     console.log("destinationData가 없습니다.:::::")
+                    // }
 
-                    if (sessionStorage.getItem('destinationData') !== '') {
-                        let destinationData = sessionStorage.getItem('destinationData');
-                        console.log("destinationData출력:::::" + JSON.stringify(destinationData))
-                        console.log("destinationData출력:::::" + sessionStorage.getItem('destinationData'))
-                    } else {
-                        console.log("destinationData가 없습니다.:::::")
-                    }
+                    let sourceData = sessionStorage.getItem('sourceData');
+                    let destinationData = sessionStorage.getItem('destinationData');
 
+                    console.log("sourceData출력:::::" + JSON.stringify(sourceData))
+                    console.log("destinationData출력:::::" + JSON.stringify(destinationData))
 
-                    let destinationDataWithRsa = await func.decodeRsaWebCryptoAPI(destinationData)
+                    let decodeSourceData = await func.decodeRsaWebCryptoAPI(sourceData)
+                    let decodeDestinationData = await func.decodeRsaWebCryptoAPI(destinationData)
+
+                    console.log("decodeSourceData::::::::::::::::::::  " + decodeSourceData)
+                    console.log("decodeDestinationData::::::::::::::::::::  " + decodeDestinationData)
+
 
 
 

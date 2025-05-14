@@ -996,7 +996,6 @@ const func= {
 		sourceEndpoint = decodedData.data.data.endpoint;
 		sourceAccessKeyId = decodedData.data.data.accessKeyId;
 		sourceSecretAccessKey = decodedData.data.data.secretAccessKey;
-		console.log(JSON.stringify("sourceEndpoint:::" + sourceEndpoint + "," + "sourceAccessKeyId:::" + sourceAccessKeyId + "," + "sourceSecretAccessKey:::" + sourceSecretAccessKey))
 
 		let sourceData = {
 			"sourceEndpoint": sourceEndpoint,
@@ -1004,7 +1003,7 @@ const func= {
 			"sourceSecretAccessKey": sourceSecretAccessKey
 		}
 
-		let sourceDataWithRsa = await func.encodeRsaMigrationWebCryptoAPI(sourceData)
+		let sourceDataWithRsa = await func.encodeRsaMigrationWebCryptoAPI(JSON.stringify(sourceData))
 
 		sessionStorage.setItem('sourceData', sourceDataWithRsa);
 
@@ -1028,15 +1027,13 @@ const func= {
 		destinationAccessKeyId = decodedData.data.data.accessKeyId;
 		destinationSecretAccessKey = decodedData.data.data.secretAccessKey;
 
-		console.log(JSON.stringify("destinationEndpoint:::" + destinationEndpoint + "," + "destinationAccessKeyId:::" + destinationAccessKeyId + "," + "destinationSecretAccessKey:::" + destinationSecretAccessKey))
-
 		let destinationData = {
 			"destinationEndpoint": destinationEndpoint,
 			"destinationAccessKeyId": destinationAccessKeyId,
 			"destinationSecretAccessKey": destinationSecretAccessKey
 		}
 
-		let destinationDataWithRsa = await func.encodeRsaMigrationWebCryptoAPI(destinationData)
+		let destinationDataWithRsa = await func.encodeRsaMigrationWebCryptoAPI(JSON.stringify(destinationData))
 
 		sessionStorage.setItem('destinationData', destinationDataWithRsa);
 
