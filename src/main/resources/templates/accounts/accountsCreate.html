@@ -212,8 +212,8 @@
                     //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
                     // console.log("[DATA]encodeDataWithAesPkcs7::: " + encodeDataWithAesPkcs7)
 
-                    // let decodeDataWithAes = func.decodeDataWithAes(encodeDataWithAes, aesIV.aes, aesIV.iv);
-                    // console.log("decodeDataWithAes::: " + decodeDataWithAes)
+                     let decodeDataWithAes = func.decodeDataWithAes(encodeDataWithAesOriginal, aesIVOriginal.aes, aesIVOriginal.iv);
+                     console.log("decodeDataWithAes::: " + decodeDataWithAes)
 
                     // let decodeDataWithAesPkcs7 = func.decodeDataWithAesPkcs7 (encodeDataWithAes, aesIV.aes, aesIV.iv);
                     // console.log("decodeDataWithAesPkcs7::: " + decodeDataWithAesPkcs7)
@@ -323,7 +323,7 @@
 
                     // const decodeRsaDataOriginal = await func.decodeRsaWebCryptoAPI(encodeRsaDataOriginal, privateKey)
                     //alert("decodeRsaWebCryptoAPI 출력::: " + decodeRsaData)
-                    // console.log("decodeRsaDataOriginal::: " + decodeRsaDataOriginal)
+                     //console.log("decodeRsaDataOriginal::: " + decodeRsaDataOriginal)
 
                     //let payload = {"payload":encodeRsaData}
 
@@ -371,7 +371,7 @@
                     // console.log("encodeData::: " + typeof encodeData)
                     // console.log("encodeData::: " + JSON.stringify(encodeData))
 
-                    func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(encodeDataOriginal), true, 'application/json', func.saveData);
+                    //func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(encodeDataOriginal), true, 'application/json', func.saveData);
 
                     sessionStorage.setItem('accountsData', 'Y')
                 },
