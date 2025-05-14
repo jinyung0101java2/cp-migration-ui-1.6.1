@@ -238,11 +238,6 @@
                     let destinationSecretAccessKey = '';
                     let destinationBucket = document.querySelector('#destinationBucket > option:checked').innerHTML;
 
-                    let localAesIV = func.generateAesIvOriginal();
-                    let localAes = localAesIV.aes;
-                    let localIv = localAesIV.iv;
-
-
                     func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
                     // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', sourceDetailDraw);
 
@@ -268,13 +263,9 @@
                             "sourceSecretAccessKey": sourceSecretAccessKey
                         }
 
-                        console.log("sourceData:::" + JSON.stringify(sourceData))
-                        console.log("localAes:::" + localAes)
-                        console.log("localIv:::" + localIv)
+                        let sourceDataWithRsa = await func.encodeRsaMigrationWebCryptoAPI(sourceData)
 
-                        let encodeSourceDataWithAes = func.encodeDataWithAes(JSON.stringify(sourceData), localAes, localIv);
-
-                        sessionStorage.setItem('sourceData', encodeSourceDataWithAes);
+                        sessionStorage.setItem('sourceData', sourceDataWithRsa);
 
                     }
 
@@ -297,11 +288,22 @@
 
                         console.log(JSON.stringify("destinationEndpoint:::" + destinationEndpoint + "," + "destinationAccessKeyId:::" + destinationAccessKeyId + "," + "destinationSecretAccessKey:::" + destinationSecretAccessKey))
 
+                        let destinationData = {
+                            "destinationEndpoint": destinationEndpoint,
+                            "destinationAccessKeyId": destinationAccessKeyId,
+                            "destinationSecretAccessKey": destinationSecretAccessKey
+                        }
+
+                        let destinationDataWithRsa = await func.encodeRsaMigrationWebCryptoAPI(destinationData)
+
+                        sessionStorage.setItem('destinationData', destinationDataWithRsa);
+
+
                     }
 
                     if (sessionStorage.getItem('sourceData') !== '') {
                         let sourceData = sessionStorage.getItem('sourceData');
-                        console.log("sourceData출력:::::" + JSON.parse(sourceData))
+                        console.log("sourceData출력:::::" + sourceData)
                     } else {
                         console.log("sourceData가 없습니다.:::::")
                     }

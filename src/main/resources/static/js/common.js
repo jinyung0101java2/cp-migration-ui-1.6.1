@@ -742,6 +742,45 @@ const func= {
 		return decoded;
 	},
 
+	async encodeRsaMigrationWebCryptoAPI(data) {
+		const pemHF = {
+			public: {
+				header: '-----BEGIN PUBLIC KEY-----',
+				footer: '-----END PUBLIC KEY-----',
+			},
+			private: {
+				header: '-----BEGIN PRIVATE KEY-----',
+				footer: '-----END PRIVATE KEY-----',
+			},
+		};
+
+		const binaryDerString = window.atob(func.publicKey.replace(pemHF.public.footer, '').replace(pemHF.public.header, ''));
+		const buffer = new Uint8Array(binaryDerString.length);
+		for (let i = 0; i < binaryDerString.length; i++) {
+			buffer[i] = binaryDerString.charCodeAt(i);
+		}
+		const publicKey = await window.crypto.subtle.importKey(
+			'spki',
+			buffer.buffer,
+			{
+				name: 'RSA-OAEP',
+				hash: 'SHA-256',
+			},
+			true,
+			['encrypt']
+		);
+		const data1 = new TextEncoder().encode(data);
+
+		const cipher = await window.crypto.subtle.encrypt(
+			{
+				name: 'RSA-OAEP',
+			},
+			publicKey,
+			data1
+		);
+
+		return btoa(String.fromCharCode(...new Uint8Array(cipher)));
+	},
 	async encodeRsaWebCryptoAPI(data) {
 		const pemHF = {
 			public: {
