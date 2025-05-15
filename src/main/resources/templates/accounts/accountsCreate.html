@@ -66,7 +66,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 
     <script type="text/javascript">
-    /*<script type="module">*/
+        /*<script type="module">*/
 
         window.onload = () => {
 
@@ -102,277 +102,26 @@
                     let endpoint = document.querySelector('#endpoint').value;
                     let accessKeyId = document.querySelector('#accessKeyId').value;
                     let secretAccessKey = document.querySelector('#secretAccessKey').value;
+                    let type = 'vault';
 
-                    /*let accountsName = "SKT";
-                    let storageType = "s3";
-                    let endpoint = "https://api.endpoint.com";
-                    let accessKeyId = "accessKeyId";
-                    let secretAccessKey = "secretAccessKey";*/
-
-                    //timestamp 생성
                     let timestamp = func.createUnixTimestamp();
-                    // console.log("timestamp::: " + JSON.stringify(timestamp))
-
-                    //let accountsCreate = {"basePath":"asd","userAccount":"sdf","configName":accountsName,"content":{"storageType":storageType,"endpoint":endpoint,"accessKeyId":accessKeyId,"secretAccessKey":secretAccessKey}};
-                    //data 생성
                     let accountsCreate = {"basePath":"jjyStorage","userAccount":sessionStorage.getItem('userGuid'),"configName":accountsName,"content":{"storageType":storageType,"endpoint":endpoint,"accessKeyId":accessKeyId,"secretAccessKey":secretAccessKey}}
-                    //let accountsCreate = {"basePath":"asd","userAccount":"sdf","configName":"dfg","content":{"storageType":"qwe","endpoint":"wer","accessKeyId":"ert","secretAccessKey":"rty"}}
-
-                    //data에 timestamp 추가
                     let includeTimestampData = {"data":accountsCreate,"timestamp":timestamp.toString()}
-                    //let includeTimestampData = {"data":accountsCreate,"timestamp":"1744597671569076100"}
-
-                    // console.log("includeTimestampData::: " + JSON.stringify(includeTimestampData))
-                    // console.log("accountsCreate::: " + JSON.stringify(accountsCreate))
-
-                    //hmac 생성
                     let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData));
-                    // console.log("hmacData::: " + hmacData)
-
-                    //data + timestamp + hmac 추가
-                    //let includeHmacData = {"data":accountsCreate,"hmac_data":hmacData,"timestamp":timestamp}
                     let includeHmacData = {"data":accountsCreate,"hmac_data":hmacData,"timestamp":timestamp.toString()}
-                    //alert("includeHmacData::: " + JSON.stringify(includeHmacData))
-                    // console.log("includeHmacData::: " + JSON.stringify(includeHmacData))
+                    let aesIV = func.generateAesIv();
 
-                    //aes, iv 생성
-                    // let aesIV = func.generateAesIv();
-                    // console.log("aesIV::: " + JSON.stringify(aesIV))
-                    // console.log("aesIV.aes::: " + aesIV.aes)
-                    // console.log("aesIV.iv::: " + aesIV.iv)
+                    let encodeDataWithAes = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
+                    const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes, type)
+                    const encodeIvBase64 = func.encodeIvBase64(aesIV.iv)
 
-                    /*let aesIV2 = func.generateAesIv2();
-                    let aesIVString2 = aesIV2.toString(CryptoJS.enc.Hex)
-                    console.log("aesIV2::: " + JSON.stringify(aesIV2))
-                    console.log("aesIV.aes2::: " + aesIV2.aes)
-                    console.log("aesIV.iv2::: " + aesIV2.iv)
-                    console.log("aesIVString2::: " + aesIVString2)*/
-
-
-                    let aesIVOriginal = func.generateAesIvOriginal();
-                    console.log("aesIVOriginal::: " + JSON.stringify(aesIVOriginal))
-                    console.log("aesIVOriginal.aes::: " + aesIVOriginal.aes)
-                    console.log("aesIVOriginal.iv::: " + aesIVOriginal.iv)
-
-
-                    // let aesIV3 = func.generateAesIv3();
-                    // // let aesIVString3 = aesIV3.toString(CryptoJS.enc.Hex)
-                    // console.log("aesIV3::: " + JSON.stringify(aesIV3))
-                    // console.log("aesIV.aes3::: " + aesIV3.aes)
-                    // console.log("aesIV.iv3::: " + aesIV3.iv)
-                    // console.log("aesIVString3::: " + aesIVString3)
-
-
-                    let encryptDatapadding = await encryptData(JSON.stringify(includeHmacData));
-                    //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
-                    // console.log("encryptDatapadding::: " + encryptDatapadding)
-
-                    let pad = func.pkcs7Pad(encryptDatapadding, 16)
-                    let padStr = new TextDecoder().decode(pad);
-                    // console.log("pad::: " + pad)
-                    // console.log("padStr::: " + padStr)
-
-
-                    let padding = func.pkcs7Pad(includeHmacData, 16)
-
-                    // let encoder = new TextEncoder();
-                    // let uint8Array = encoder.encode(encodeDataWithAes);
-                    // console.log("[DATA]includeHmacData + uint8Array::: " + padding)
-                    // console.log("[DATA]includeHmacData + TextDecoder::: " + new TextDecoder("windows-1252").decode(padding))
-
-                    //data + timestamp + hmac을 aes,iv로 인코딩
-                    // let encodeDataWithAes = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
-                    //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
-                    // console.log("[DATADATA]encodeDataWithAes::: " + encodeDataWithAes)
-                    // console.log("[DATADATA]encodeDataWithAes typeof::: " + typeof encodeDataWithAes)
-
-                    // let encodeDataWithAes2 = func.encodeDataWithAes2(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
-                    //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
-                    // console.log("[DATADATA]encodeDataWithAes2::: " + encodeDataWithAes2)
-                    // console.log("[DATADATA]encodeDataWithAes2 typeof::: " + typeof encodeDataWithAes2)
-
-                    let encodeDataWithAesOriginal = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIVOriginal.aes, aesIVOriginal.iv);
-                    //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
-                    console.log("[DATADATA]encodeDataWithAesOriginal::: " + encodeDataWithAesOriginal)
-                    console.log("[DATADATA]encodeDataWithAesOriginal typeof::: " + typeof encodeDataWithAesOriginal)
-
-                    let encodeDataWithAesOriginal2 = func.encodeDataWithAes2(JSON.stringify(includeHmacData), aesIVOriginal.aes, aesIVOriginal.iv);
-                    //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
-                    // console.log("[DATADATA]encodeDataWithAesOriginal2::: " + encodeDataWithAesOriginal2)
-                    // console.log("[DATADATA]encodeDataWithAesOriginal2 typeof::: " + typeof encodeDataWithAesOriginal2)
-
-                    // let padding2 = func.pkcs7Pad(encodeDataWithAes, 16)
-
-                    // let encoder = new TextEncoder();
-                    // let uint8Array = encoder.encode(encodeDataWithAes);
-                    // console.log("[DATA]encodeDataWithAes + uint8Array::: " + padding2)
-                    // console.log("[DATA]decodeDataWithAes + uint8Array::: " + new TextDecoder('utf-8').decode(padding2))
-
-                    // let encodeDataWithAesPkcs7 = func.encodeDataWithAesPkcs7(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
-                    //let encodeDataWithAes = func.encodeDataWithAes(includeHmacData, aesIV.aes, aesIV.iv);
-                    // console.log("[DATA]encodeDataWithAesPkcs7::: " + encodeDataWithAesPkcs7)
-
-                     let decodeDataWithAes = func.decodeDataWithAes(encodeDataWithAesOriginal, aesIVOriginal.aes, aesIVOriginal.iv);
-                     console.log("decodeDataWithAes::: " + decodeDataWithAes)
-
-                    // let decodeDataWithAesPkcs7 = func.decodeDataWithAesPkcs7 (encodeDataWithAes, aesIV.aes, aesIV.iv);
-                    // console.log("decodeDataWithAesPkcs7::: " + decodeDataWithAesPkcs7)
-
-                    const publicKey = "-----BEGIN PUBLIC KEY-----\n" +
-                        "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
-                        "020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
-                        "a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
-                        "iotzXgx87eVPLt9cWI5RyWsfmtioyuiKip5HD3tN0MAO3guUtq90ucwObjR2VHX0\n" +
-                        "PLdG1eAAmoQgfpIPOJLaS/26PR8zf5vmfso3udoWg78S93Dqflp0Q0RYe1WvWVtp\n" +
-                        "B/RZhea6/qlnGlJCuGyKV8vUAUIaMdv3PFSAjeAqlZS232R0VQPWxy1S7m2G+D2F\n" +
-                        "04+PUoQzCw8npBQEiDVzrGL/+osB7ezscfx/xCFTH3ihuun2K5QknT6Y0wWQ9NI8\n" +
-                        "ZSAiSK3krhQ/pgXKcmS7nt00nMdZ4ojykK0M0DS270GMHpPg8vwYCQ50shqMM5TX\n" +
-                        "IOl5QPNc13XzVct2/fgjhc+pYqcJQlEvyi8A0x8Hy9XB447ekAcWNMFgPzfXxmrL\n" +
-                        "jV19s9LEeFuNdsZrVI1McofX+qTOMmQdu5Wi+RxfKX/yVTQNeozowblC32h89BFI\n" +
-                        "ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
-                        "/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
-                        "-----END PUBLIC KEY-----";
-
-                    const privateKey = "-----BEGIN PRIVATE KEY-----\n" +
-                        "MIIJQQIBADANBgkqhkiG9w0BAQEFAASCCSswggknAgEAAoICAQCUzOtV/h2Gj1Jm\n" +
-                        "ITsT/LTTbSPMX8/8ccghEc2diFzI7f7WkprjNJHR8SNT4DDU7tdsC/WmuF8jz5hn\n" +
-                        "yKoKQq5rwstXsS1A0mwcpll7A5fWLpyzNyun1RWnp33+RmA+wfwwPMo4+/NbPahW\n" +
-                        "9qTBSJWKi3NeDHzt5U8u31xYjlHJax+a2KjK6IqKnkcPe03QwA7eC5S2r3S5zA5u\n" +
-                        "NHZUdfQ8t0bV4ACahCB+kg84ktpL/bo9HzN/m+Z+yje52haDvxL3cOp+WnRDRFh7\n" +
-                        "Va9ZW2kH9FmF5rr+qWcaUkK4bIpXy9QBQhox2/c8VICN4CqVlLbfZHRVA9bHLVLu\n" +
-                        "bYb4PYXTj49ShDMLDyekFASINXOsYv/6iwHt7Oxx/H/EIVMfeKG66fYrlCSdPpjT\n" +
-                        "BZD00jxlICJIreSuFD+mBcpyZLue3TScx1niiPKQrQzQNLbvQYwek+Dy/BgJDnSy\n" +
-                        "GowzlNcg6XlA81zXdfNVy3b9+COFz6lipwlCUS/KLwDTHwfL1cHjjt6QBxY0wWA/\n" +
-                        "N9fGasuNXX2z0sR4W412xmtUjUxyh9f6pM4yZB27laL5HF8pf/JVNA16jOjBuULf\n" +
-                        "aHz0EUjKb5SLvGF7w3nJZkN1Pjs06aJyZzkb8l2slOMizTFRSC3y+9027bD96sXR\n" +
-                        "fNvW373+VtjvJqSAHmqmy+FpMTYctwIDAQABAoICAA3hbcSYT2XJgdzAFdQ/+xhL\n" +
-                        "8o5yk6LPdGVNVVpwKYOe2+plQ6iVM1MbxPlijPuYCiVsmi5CvbFIAMYRrHcHkGDC\n" +
-                        "C5jzEK8e0fH8PJWimKvkrj5zk5F06a+5iqHJK9o+20keqpiVPDbTMhxmpqjXHggO\n" +
-                        "CSWJUbAZd4D+Wg1yvUNmSEz4EArZlW7n4+YYUQJ7oAdrmiROirt4QxJZt34agL2X\n" +
-                        "NTbnTfccAzH7awsSe+Wh1hk0i2fIgcBrGbavFvGURe8qK928j2LlAcIDlLdntQ0G\n" +
-                        "aMF6bBAsek80xD+S9HbLL0wsv+fNxqrskQ9rDV3lwQdmxglWMddjrXxLYE9Q4eZd\n" +
-                        "bQtlTK8jHPehpL2AXkqGwT0mezv6yj2bPiPImGp667eibf45N+1MbjHew+MPedyb\n" +
-                        "aln7lLWbUpQvnCqyBexlelPFhohWHl0By0wndfGzFRt5exOkup0OwM5JO17k+5lr\n" +
-                        "LBx9QS/1NUvAkDmgzBdOH0DsJhx7mR7NB5T4ZeozgHxWh+BAoFtLwlu/luML3fvp\n" +
-                        "MVXjmeEfBahQJ5UOPX1th5avbBuX5GdF9NxCoioYQYJb+YC5SF9TKZWCCVaiywBc\n" +
-                        "C8vlywWfv19L1stumEt0S+JHP+KW4wiO5bTaKmwkkXn6RFGpY9o4uE7uYJMvNL11\n" +
-                        "nEs2SzCA0Kh9OIDubAeZAoIBAQDIp2t9Y09lYBzyaY8CnZ8kc7F5hP775O4n8iHv\n" +
-                        "pz5epFjpVsmnmHSFRz3eYbsSNK/XgMcy6K/A2RKDgB0O86l4rhxSX9dFaPFISk20\n" +
-                        "98QZrLgTKDgdqF+SIrByp8Dyzcsq7m2bk/DBJ0jhACOwy+gTUvMCh7kg9bJ4Hocr\n" +
-                        "l0iCrcE/Jry0C5lUMElnn3ytGy0C/tVZcSfT8g3DH6d4bie0Nq7O/noqJjv9YWOJ\n" +
-                        "q9EudZixtNOJlKyiD6YsBgWrCcvxjP6KkwAmWYPmDd2ym4tEdqXLA9P3vT16FMI5\n" +
-                        "FtF7pAeu0fMvsjxWoFP7eeS8yu8U61yy45OIhTHoJoJYxRnvAoIBAQC92AS+PVJG\n" +
-                        "AkndOsgTQB/VrttZCRbOGMWIOgJOo+YnfG2IX9+UpYNuHL7MiUi521wJlyrC1UBs\n" +
-                        "ZFtDdrp++wyC9XV4lg2qT27FSe8nEsOuwjYiUDS2BDiOOjhXp3khMFMC1qH1Hvcl\n" +
-                        "eIiJEKZacuSkLG8fjYxiDaWkUUj/5ui6KnsVsSJ3l+UkTFnP27f8am8rcHCZCL9l\n" +
-                        "jSio2dowFbomOhZhw8jkeuTPtqKuFvR4yDs44hjmWOS5XPHFsaHTiGorspcoLcWY\n" +
-                        "RM4g64aHLOykAWCRez1EyAdXrj/BFhGLMEOKlk/ghSXYIOYO8HE8I+Dd5mtBAXt2\n" +
-                        "Ffn40HCYSpG5AoIBADDHYn4s8lQ2tVLJDpcYMmPuLCrahhI+aRcU6eMUyTjAw0yW\n" +
-                        "aJdxnIH5+7RgFdYrMMQ27jYWEwPSwYluT6Ie4ggQa5oq6m5ZQK7OQW3I/ccwEd+2\n" +
-                        "W036bKFeBX8aAPIFzWo2ZDb6FAEgx7rLCeIk79oixCjNTdgRYr2Izltuf5YlH2F2\n" +
-                        "zVEHsNKimnWyc+CxRpP/12XS+Fex9F6HB3NjdAt/b6eqfZBZkyPZ1RTWzBd7Rw+M\n" +
-                        "YhCEMCOFomP5Ys9dplKmcArICbVI9aOro0WUQpr2LP/ZgmIrgxJ2kXDHd02TZrq9\n" +
-                        "F110+u4kM8Zir5Sl0NFJFlP2txrtJmDFW9Kwt8kCggEAWtDW3AbLr8/yc9Fl2sen\n" +
-                        "Mvp11e7iKO9yt0tAxUvkkukUINP0SdCvweIgaAoYb0h/i9rzysZnDjMn8Wr/pjUE\n" +
-                        "dDVl36ywltNu4xQOQrvYPmaLrPh/br8wKuGxCEWGTZknbMkuKuuIQTWa4y7C1av2\n" +
-                        "so7LDeYRzOpIXgXAjSJyHHSr8uGM4ncYV7fqkuPB7Q8hZT9hreOgY70WQUgN90i9\n" +
-                        "hwHsqRIWrS4Y/UCaK/uxMYJfykNms/K8X+wVgIQMLPwqBgNmCgNzbfckQF1LOqkD\n" +
-                        "/yTlhFLXKWsjEA+8Uerzs4kAFnD3fylSxERgqa7eDG4BaUWL80n5PLEgpqVX55Js\n" +
-                        "iQKCAQBvKkxQJQOfyOLbZbiIgKgNNlp+5lX8wwIdkq71v7gutRY0zrpWLCoezJgw\n" +
-                        "msnr8VKzIGF1FdSPqFYX5p++0tC7OCxRzsOlBgnV7e8Ax30O/rwvDDYXwys+4j+r\n" +
-                        "DsKFidZTiBBQJDdKBzsXrs58956ThDc3sHiRa0YXmIYTSRgr7tFiPqF7yabW/qbb\n" +
-                        "f2b4MxwLBinz0MlMyPUKmpIItiW0ISbsLWsBscT6uKsCXq9WXlcFK4ZocSSc9lFa\n" +
-                        "gZlATHt35kKk9zY+8XA6Fb6VrwG0zvjsk5hEBJ/onrYH22g9MsHaKF2B8C4dMwPZ\n" +
-                        "oTnDWnK1WK/CVIVxWbb2EmHr9tgX\n" +
-                        "-----END PRIVATE KEY-----"
-
-                    // const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes, publicKey)
-                    // console.log("[KEYKEY]encodeRsaAes::: " + JSON.stringify(encodeRsaAes))
-
-                    const encodeRsaAesOriginal = await func.encodeRsaWebCryptoAPI(aesIVOriginal.aes, publicKey)
-                    console.log("[KEYKEY]encodeRsaAesOriginal::: " + JSON.stringify(encodeRsaAesOriginal))
-
-                    // const decodeRsaAes = await func.decodeRsaWebCryptoAPI(encodeRsaAes)
-                    // console.log("decodeRsaAes::: " + JSON.stringify(decodeRsaAes))
-
-                    const decodeRsaAesOriginal = await func.decodeRsaWebCryptoAPI(encodeRsaAesOriginal)
-                    console.log("decodeRsaAesOriginal::: " + JSON.stringify(decodeRsaAesOriginal))
-
-                    // const encodeIvBase64 = func.encodeIvBase64(aesIV.iv)
-                    // console.log("[IVIV]encodeIvBase64::: " + JSON.stringify(encodeIvBase64))
-                    //console.log("[IVIV]encodeIvBase64 + Uint8Array::: " + func.byteChange(encodeIvBase64))
-
-                    const encodeIvBase64Original = func.encodeIvBase64(aesIVOriginal.iv)
-                    console.log("[IVIV]encodeIvBase64Original::: " + JSON.stringify(encodeIvBase64Original))
-
-                    // const decodeIvBase64 = func.decodeIvBase64(encodeIvBase64)
-                    // console.log("decodeIvBase64::: " + decodeIvBase64)
-
-                    // const decodeIvBase64Original = func.decodeIvBase64(encodeIvBase64Original)
-                    // console.log("decodeIvBase64Original::: " + decodeIvBase64Original)
-
-                    // const encodeRsaData = await func.encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
-                    // console.log("encodeRsaData::: " + JSON.stringify(encodeRsaData))
-
-                    // const encodeRsaDataOriginal = await func.encodeRsaWebCryptoAPI(JSON.stringify(includeHmacData), publicKey)
-                    // console.log("encodeRsaDataOriginal::: " + JSON.stringify(encodeRsaDataOriginal))
-
-                    // const decodeRsaData = await func.decodeRsaWebCryptoAPI(encodeRsaData, privateKey)
-                    //alert("decodeRsaWebCryptoAPI 출력::: " + decodeRsaData)
-                    // console.log("decodeRsaData::: " + decodeRsaData)
-
-                    // const decodeRsaDataOriginal = await func.decodeRsaWebCryptoAPI(encodeRsaDataOriginal, privateKey)
-                    //alert("decodeRsaWebCryptoAPI 출력::: " + decodeRsaData)
-                     //console.log("decodeRsaDataOriginal::: " + decodeRsaDataOriginal)
-
-                    //let payload = {"payload":encodeRsaData}
-
-                   /* function base64(test) {
-                        return btoa(String.fromCharCode(...test))
-                    }*/
-
-
-                   /* let encodeData = {
-                        "key": func.byteChange(encodeRsaAes),
-                        "iv": func.byteChange(encodeIvBase64),
-                        "data": padding2
-                    }*/
-
-
-                    /*let encodeData = {
+                    let encodeData = {
                         "key": encodeRsaAes,
-                        "iv": func.byteChange(decodeIvBase64),
+                        "iv": encodeIvBase64,
                         "data": encodeDataWithAes
-                    }*/
-
-                    /*let encodeData = {
-                        "key":encodeRsaAes,
-                        "iv": decodeIvBase64,
-                        "data": encodeDataWithAes
-                    }*/
-
-                    // let encodeData = {
-                    //     "key":encodeRsaAes,
-                    //     "iv": encodeIvBase64,
-                    //     "data": encodeDataWithAes
-                    // }
-
-                    let encodeDataOriginal = {
-                        "key":encodeRsaAesOriginal,
-                        "iv": encodeIvBase64Original,
-                        "data": encodeDataWithAesOriginal
                     }
 
-                    // console.log("encodeData::: " + JSON.stringify(encodeData))
-                    // console.log("encodeData::: " + encodeData)
-
-                    console.log("encodeDataOriginal::: " + JSON.stringify(encodeDataOriginal))
-                    console.log("encodeDataOriginal::: " + encodeDataOriginal)
-                    // console.log("encodeData::: " + typeof encodeData)
-                    // console.log("encodeData::: " + JSON.stringify(encodeData))
-
-                    //func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(encodeDataOriginal), true, 'application/json', func.saveData);
-
+                    func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(encodeData), true, 'application/json', func.saveData);
                     sessionStorage.setItem('accountsData', 'Y')
                 },
             };
@@ -380,128 +129,19 @@
             accountsCreate.event();
         };
 
-    async function responseDecodeDataWithAes(data, aes, iv) {
-        console.log("data type::" + typeof data + " data:: " + data)
-        console.log("aes type:::" + typeof aes + " aes:: " + aes)
-        console.log("iv type:::" + typeof iv + " iv:: " + iv)
+        async function responseDecodeDataWithAes(data, aes, iv) {
 
-        try {
-            return CryptoJS.AES.decrypt(data.toString(), CryptoJS.enc.Hex.parse(aes),
-                { iv: CryptoJS.enc.Hex.parse(iv),
-                padding: CryptoJS.pad.Pkcs7,
-		        mode: CryptoJS.mode.CBC
-                }).toString(CryptoJS.enc.Utf8);
-        } catch (error) {
-            console.log("Decrypt Error")
+            try {
+                return CryptoJS.AES.decrypt(data.toString(), CryptoJS.enc.Hex.parse(aes),
+                    { iv: CryptoJS.enc.Hex.parse(iv),
+                        padding: CryptoJS.pad.Pkcs7,
+                        mode: CryptoJS.mode.CBC
+                    }).toString(CryptoJS.enc.Utf8);
+            } catch (error) {
+                console.log("Decrypt Error")
+            }
+
         }
-
-    }
-
-    async function responseDecodeRsaWebCryptoAPI(data, privateKeyb64) {
-        const pemHF = {
-            public: {
-                header: '-----BEGIN PUBLIC KEY-----',
-                footer: '-----END PUBLIC KEY-----',
-            },
-            private: {
-                header: '-----BEGIN PRIVATE KEY-----',
-                footer: '-----END PRIVATE KEY-----',
-            },
-        };
-
-        const binaryDerString = window.atob(privateKeyb64.replace(pemHF.private.footer, '').replace(pemHF.private.header, ''));
-        const buffer = new Uint8Array(binaryDerString.length);
-        for (let i = 0; i < binaryDerString.length; i++) {
-            buffer[i] = binaryDerString.charCodeAt(i);
-        }
-
-        const privateKey = await window.crypto.subtle.importKey(
-            'pkcs8',
-            buffer.buffer,
-            {
-                name: 'RSA-OAEP',
-                hash: 'SHA-256',
-            },
-            true,
-            ['decrypt']
-        );
-
-        const binaryDerString2 = window.atob(data);
-        const buffer2 = new Uint8Array(binaryDerString2.length);
-        for (let i = 0; i < binaryDerString2.length; i++) {
-            buffer2[i] = binaryDerString2.charCodeAt(i);
-        }
-
-        const text = await window.crypto.subtle.decrypt(
-            {
-                name: 'RSA-OAEP',
-            },
-            privateKey,
-            buffer2.buffer
-        );
-
-
-        return btoa(String.fromCharCode(...new Uint8Array(text)));
-
-    }
-
-
-    function pkcs7Pad(data) {
-        let blockSize = 16;
-        const padSize  = blockSize - (data.length % blockSize);
-        const padText = new Uint8Array(padSize).fill(padSize);
-
-        return concatUint8Arrays([data, padText]);
-    }
-
-    function concatUint8Arrays(arrays) {
-        const totalLength = arrays.reduce((sum, arr) => sum + arr.length, 0);
-        const result = new Uint8Array(totalLength);
-        let offset = 0;
-
-        for (const arr of arrays) {
-            result.set(arr, offset);
-            offset += arr.length;
-        }
-
-        return result;
-    }
-
-    async function encryptData(data) {
-        const key = await crypto.subtle.generateKey(
-            { name: 'AES-GCM', length: 256 },
-            true,
-            ['encrypt', 'decrypt']
-        );
-
-        console.log('key 데이터:', key);
-
-        // let keyString = new TextDecoder().decode(key);
-        // const binaryDerString2 = window.atob(key);
-        const buffer2 = new Uint8Array(key.length);
-        for (let i = 0; i < key.length; i++) {
-            buffer2[i] = key.charCodeAt(i);
-        }
-
-        console.log('keyString 데이터:', buffer2.buffer);
-        const iv = window.crypto.getRandomValues(new Uint8Array(12)); // 초기화 벡터
-
-        console.log('iv 데이터:', iv);
-        let decoder = new TextDecoder();
-        const keyIv = decoder.decode(iv)
-
-
-        console.log('keyIv 데이터:', keyIv);
-
-        const encodedData = new TextEncoder().encode(data);
-        const encrypted = await crypto.subtle.encrypt(
-            { name: 'AES-GCM', iv },
-            key,
-            encodedData
-        );
-
-        return { encrypted, key, iv };
-    }
 
     </script>
 </th:block>

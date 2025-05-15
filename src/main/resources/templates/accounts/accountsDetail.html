@@ -65,82 +65,83 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
     <script type="text/javascript">
-    window.onload = () => {
+        window.onload = () => {
 
-        const accountsDetail = {
-            init() {
+            const accountsDetail = {
+                init() {
 
-                func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', accountsDetail.draw);
-                // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', accountsDetail.draw);
-            },
+                    func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', accountsDetail.draw);
+                    // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', accountsDetail.draw);
+                },
 
-            async draw(data) {
+                async draw(data) {
 
-                let decodeData = await func.responseDecodeData(data)
-                let encodedData = JSON.stringify(decodeData.data)
-                encodedData = encodedData.replaceAll("\"", "");
+                    let type = 'vault';
+                    let decodeData = await func.responseDecodeData(data, type)
+                    let encodedData = JSON.stringify(decodeData.data)
+                    encodedData = encodedData.replaceAll("\"", "");
 
-                let iv = decodeData.iv
-                let aes = decodeData.aes
-                let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
-                let decodedData = JSON.parse(responseDecodeData)
+                    let iv = decodeData.iv
+                    let aes = decodeData.aes
+                    let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
+                    let decodedData = JSON.parse(responseDecodeData)
 
-                document.getElementById('name').innerText = sessionStorage.getItem('accountsName');
-                document.getElementById('storageType').innerText = decodedData.data.data.storageType;
-                document.getElementById('endpoint').innerText = decodedData.data.data.endpoint;
-                document.getElementById('accessKeyId').innerText = decodedData.data.data.accessKeyId.replaceAll(/./gi, "*");
-                document.getElementById('secretAccessKey').innerText = decodedData.data.data.secretAccessKey.replaceAll(/./gi, "*");
+                    document.getElementById('name').innerText = sessionStorage.getItem('accountsName');
+                    document.getElementById('storageType').innerText = decodedData.data.data.storageType;
+                    document.getElementById('endpoint').innerText = decodedData.data.data.endpoint;
+                    document.getElementById('accessKeyId').innerText = decodedData.data.data.accessKeyId.replaceAll(/./gi, "*");
+                    document.getElementById('secretAccessKey').innerText = decodedData.data.data.secretAccessKey.replaceAll(/./gi, "*");
 
-                let originTime = decodedData.data.metadata.created_time;
-                let createdTime1 = originTime.substr(0, 10)
-                let createdTime2 = originTime.substr(11, 8)
-                document.getElementById('createdTime').innerText = createdTime1 + " " + createdTime2;
+                    let originTime = decodedData.data.metadata.created_time;
+                    let createdTime1 = originTime.substr(0, 10)
+                    let createdTime2 = originTime.substr(11, 8)
+                    document.getElementById('createdTime').innerText = createdTime1 + " " + createdTime2;
 
-            },
+                },
 
-            event(){
-                document.getElementById('delete').addEventListener('click', (e) => {
-                    func.alertPopup('DELETE', MSG_CHECK_TO_DELETE, true, MSG_CONFIRM, accountsDetail.delete);
-            }, false);
+                event(){
+                    document.getElementById('delete').addEventListener('click', (e) => {
+                        func.alertPopup('DELETE', MSG_CHECK_TO_DELETE, true, MSG_CONFIRM, accountsDetail.delete);
+                    }, false);
 
-                document.addEventListener('click', (e) => {
-                    if (e.target && e.target.id === 'editValueBtnName') {
-                        document.getElementById('editValueName').setAttribute("contenteditable", true);
-                        document.getElementById('editValueName').setAttribute("disabled", false);
+                    document.addEventListener('click', (e) => {
+                        if (e.target && e.target.id === 'editValueBtnName') {
+                            document.getElementById('editValueName').setAttribute("contenteditable", true);
+                            document.getElementById('editValueName').setAttribute("disabled", false);
+                        }
+                    });
+
+                },
+
+                delete(){
+                    func.saveData('DELETE', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBack);
+                    func.saveData('DELETE', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBack);
+
+                    if (sessionStorage.getItem('accountsCnt') === 1) {
+                        sessionStorage.setItem('accountsData', 'N')
                     }
-                });
+                },
 
-            },
-
-            delete(){
-                func.saveData('DELETE', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBack);
-                func.saveData('DELETE', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBack);
-
-                if (sessionStorage.getItem('accountsCnt') === 1) {
-                    sessionStorage.setItem('accountsData', 'N')
-                }
-            },
-
-        }
-        accountsDetail.init();
-        accountsDetail.event();
-    }
-
-    async function responseDecodeDataWithAes(data, aes, iv) {
-
-        try {
-            return CryptoJS.AES.decrypt(data.toString(), CryptoJS.enc.Hex.parse(aes),
-                { iv: CryptoJS.enc.Hex.parse(iv),
-                    padding: CryptoJS.pad.Pkcs7,
-                    mode: CryptoJS.mode.CBC
-                }).toString(CryptoJS.enc.Utf8);
-        } catch (error) {
-            console.log("Decrypt Error")
+            }
+            accountsDetail.init();
+            accountsDetail.event();
         }
 
-    }
+        async function responseDecodeDataWithAes(data, aes, iv) {
+
+            try {
+                return CryptoJS.AES.decrypt(data.toString(), CryptoJS.enc.Hex.parse(aes),
+                    { iv: CryptoJS.enc.Hex.parse(iv),
+                        padding: CryptoJS.pad.Pkcs7,
+                        mode: CryptoJS.mode.CBC
+                    }).toString(CryptoJS.enc.Utf8);
+            } catch (error) {
+                console.log("Decrypt Error")
+            }
+
+        }
 
 
-</script>
+    </script>
 </th:block>
 </html>

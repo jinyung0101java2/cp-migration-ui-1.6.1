@@ -54,13 +54,13 @@
                 init() {
                     sessionStorage.setItem('accountsData', 'Y')
 
-                   /* if (sessionStorage.getItem('accountsData') !== 'Y') {
-                        sessionStorage.setItem('accountsData', 'N')
-                    }
+                    /* if (sessionStorage.getItem('accountsData') !== 'Y') {
+                         sessionStorage.setItem('accountsData', 'N')
+                     }
 
-                    if (sessionStorage.getItem('accountsData') === 'N' || sessionStorage.getItem('accountsCnt') < 1) {
-                        sessionStorage.setItem('accountsCnt', 0)
-                    }*/
+                     if (sessionStorage.getItem('accountsData') === 'N' || sessionStorage.getItem('accountsCnt') < 1) {
+                         sessionStorage.setItem('accountsCnt', 0)
+                     }*/
 
                     sessionStorage.setItem('accessToken' , 'Bearer ' + [[${accessToken}]]);
                     sessionStorage.setItem('userGuid' , [[${userGuid}]]);
@@ -75,7 +75,8 @@
 
                 async draw(data) {
 
-                    let decodeData = await func.responseDecodeData(data)
+                    let type = 'vault'
+                    let decodeData = await func.responseDecodeData(data, type)
                     let encodedData = JSON.stringify(decodeData.data)
                     encodedData = encodedData.replaceAll("\"", "");
 

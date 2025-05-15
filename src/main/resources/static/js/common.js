@@ -3,7 +3,7 @@ const func= {
 	migrationUrl: URI_CP_MIGRATION_API,
 	vaultUrl: URI_CP_VAULT_API,
 	ui : 'http://localhost:8090/',
-	privateKey : "-----BEGIN PRIVATE KEY-----\n" +
+	vaultPrivateKey : "-----BEGIN PRIVATE KEY-----\n" +
 		"MIIJQQIBADANBgkqhkiG9w0BAQEFAASCCSswggknAgEAAoICAQCUzOtV/h2Gj1Jm\n" +
 		"ITsT/LTTbSPMX8/8ccghEc2diFzI7f7WkprjNJHR8SNT4DDU7tdsC/WmuF8jz5hn\n" +
 		"yKoKQq5rwstXsS1A0mwcpll7A5fWLpyzNyun1RWnp33+RmA+wfwwPMo4+/NbPahW\n" +
@@ -56,7 +56,75 @@ const func= {
 		"oTnDWnK1WK/CVIVxWbb2EmHr9tgX\n" +
 		"-----END PRIVATE KEY-----",
 
-	publicKey : "-----BEGIN PUBLIC KEY-----\n" +
+	vaultPublicKey : "-----BEGIN PUBLIC KEY-----\n" +
+		"MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
+		"020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
+		"a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
+		"iotzXgx87eVPLt9cWI5RyWsfmtioyuiKip5HD3tN0MAO3guUtq90ucwObjR2VHX0\n" +
+		"PLdG1eAAmoQgfpIPOJLaS/26PR8zf5vmfso3udoWg78S93Dqflp0Q0RYe1WvWVtp\n" +
+		"B/RZhea6/qlnGlJCuGyKV8vUAUIaMdv3PFSAjeAqlZS232R0VQPWxy1S7m2G+D2F\n" +
+		"04+PUoQzCw8npBQEiDVzrGL/+osB7ezscfx/xCFTH3ihuun2K5QknT6Y0wWQ9NI8\n" +
+		"ZSAiSK3krhQ/pgXKcmS7nt00nMdZ4ojykK0M0DS270GMHpPg8vwYCQ50shqMM5TX\n" +
+		"IOl5QPNc13XzVct2/fgjhc+pYqcJQlEvyi8A0x8Hy9XB447ekAcWNMFgPzfXxmrL\n" +
+		"jV19s9LEeFuNdsZrVI1McofX+qTOMmQdu5Wi+RxfKX/yVTQNeozowblC32h89BFI\n" +
+		"ym+Ui7xhe8N5yWZDdT47NOmicmc5G/JdrJTjIs0xUUgt8vvdNu2w/erF0Xzb1t+9\n" +
+		"/lbY7yakgB5qpsvhaTE2HLcCAwEAAQ==\n" +
+		"-----END PUBLIC KEY-----",
+
+	migPrivateKey : "-----BEGIN PRIVATE KEY-----\n" +
+		"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\n" +
+		"oTnDWnK1WK/CVIVxWbb2EmHr9tgX\n" +
+		"-----END PRIVATE KEY-----",
+
+	migPublicKey : "-----BEGIN PUBLIC KEY-----\n" +
 		"MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAlMzrVf4dho9SZiE7E/y0\n" +
 		"020jzF/P/HHIIRHNnYhcyO3+1pKa4zSR0fEjU+Aw1O7XbAv1prhfI8+YZ8iqCkKu\n" +
 		"a8LLV7EtQNJsHKZZewOX1i6cszcrp9UVp6d9/kZgPsH8MDzKOPvzWz2oVvakwUiV\n" +
@@ -274,15 +342,15 @@ const func= {
 			httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
 
 
-		/*httpRequest.onreadystatechange = () => {
-			if (httpRequest.readyState === XMLHttpRequest.DONE){
-				if (httpRequest.status === 200) {
-					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, "closed");
-				} else {
-					return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, func.moveToMain);
-				}
-			}
-		}*/
+			/*httpRequest.onreadystatechange = () => {
+                if (httpRequest.readyState === XMLHttpRequest.DONE){
+                    if (httpRequest.status === 200) {
+                        return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, "closed");
+                    } else {
+                        return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, func.moveToMain);
+                    }
+                }
+            }*/
 			httpRequest.onreadystatechange = () => {
 				if (httpRequest.readyState === XMLHttpRequest.DONE) {
 					if (httpRequest.status === 200) {
@@ -310,7 +378,7 @@ const func= {
 		}, 0)
 	},
 
-	bucketData(method, url, data, bull, header, callbackFunction, list) {
+	/*bucketData(method, url, data, bull, header, callbackFunction, list) {
 
 		if(url == null) {
 			callbackFunction();
@@ -328,7 +396,7 @@ const func= {
 			//httpRequest.responseType = "json"
 
 
-			/*httpRequest.onreadystatechange = () => {
+			/!*httpRequest.onreadystatechange = () => {
                 if (httpRequest.readyState === XMLHttpRequest.DONE){
                     if (httpRequest.status === 200) {
                         return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, "closed");
@@ -336,16 +404,16 @@ const func= {
                         return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, func.moveToMain);
                     }
                 }
-            }*/
+            }*!/
 			httpRequest.onreadystatechange = () => {
 				if (httpRequest.readyState === XMLHttpRequest.DONE) {
 					if (httpRequest.status === 200) {
 						//callbackFunction(JSON.parse(request.responseText), list);
-						/*if(document.getElementById('loading')){
+						/!*if(document.getElementById('loading')){
 							document.getElementById('wrap').removeChild(document.getElementById('loading'));
 						};
-						return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  'closed');*/
-						/*const responseList = JSON.stringify(httpRequest.responseText)
+						return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  'closed');*!/
+						/!*const responseList = JSON.stringify(httpRequest.responseText)
 						responseList.substr(12);
 						responseList.slice(0,-2)
 
@@ -353,7 +421,7 @@ const func= {
 
 						alert('값 넘길때' + responseList2)
 						callbackFunction(JSON.parse(responseList2), list);
-*/
+*!/
 
 						callbackFunction(httpRequest.responseText, list);
 					} else if (httpRequest.status === 500) {
@@ -371,7 +439,7 @@ const func= {
 			}
 			httpRequest.send(JSON.stringify(data));
 		}, 0)
-	},
+	},*/
 
 	/////////////////////////////////////////////////////////////////////////////////////
 	// 상태 데이터 로드 - statusLoadData(method, url, callbackFunction)
@@ -455,6 +523,43 @@ const func= {
 						document.getElementById('wrap').removeChild(document.getElementById('loading'));
 					};
 					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  func.historyBack);
+				} else {
+					if(document.getElementById('loading')){
+						document.getElementById('wrap').removeChild(document.getElementById('loading'));
+					};
+					console.log("에러메세지::: " + httpRequest.responseText)
+					return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');
+				}
+			}
+		}
+		httpRequest.send(data)
+	},
+
+	bucketData(method, url, data, bull, header, callbackFunction, list){
+		if(url == null) {
+			callbackFunction();
+			return false;
+		}
+
+		func.loading();
+		var httpRequest = new XMLHttpRequest();
+
+		httpRequest.open(method, url, bull);
+		httpRequest.setRequestHeader('Content-type', header);
+		httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('accessToken'));
+		//httpRequest.responseType = "json"
+
+		httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
+		httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
+
+		httpRequest.onreadystatechange = () => {
+			if (httpRequest.readyState === XMLHttpRequest.DONE){
+				if (httpRequest.status === 200) {
+					if(document.getElementById('loading')){
+						document.getElementById('wrap').removeChild(document.getElementById('loading'));
+					};
+					// return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  func.historyBack);
+					callbackFunction(httpRequest.responseText, list);
 				} else {
 					if(document.getElementById('loading')){
 						document.getElementById('wrap').removeChild(document.getElementById('loading'));
@@ -566,13 +671,9 @@ const func= {
 
 	},
 
-	generateAesIvOriginal() {
-		//암호문 형식 base64, Hex
-		//iv bytes, aes bytes, 패딩 방식
-
+	generateAesIv() {
 
 		let hex  = "0123456789abcdef"; // 16 bytes
-		// let aesKeyBytes = "0123456789abcdef0123456789abcdef"; // 32 bytes
 		let aesKeyBytes = "0123456789abcdef0123456789abcdef"; // 32 bytes
 		let ivKey='';
 		let aesKey='';
@@ -594,63 +695,6 @@ const func= {
 			"iv": iv
 		}
 
-		// AES 키 rsa 공개키로 encode
-		//IV도 rsa 공기키로 encode
-	},
-
-	generateAesIv() {
-
-		//암호문 형식 base64, Hex
-		//iv bytes, aes bytes, 패딩 방식
-
-
-		let hex  = "0123456789abcdef"; // 16 bytes
-		let aesKeyBytes = "0123456789abcdef0123456789abcdef"; // 32 bytes
-		let key='';
-
-		/*for (i = 0; i < 32; i++) {
-			key += hex.charAt(Math.floor(Math.random() * 16));
-			//Initially this was charAt(chance.integer({min: 0, max: 15}));
-		}*/
-
-		for (i = 0; i < 32; i++) {
-			key += hex.charAt(Math.floor(Math.random() * 16));
-			//Initially this was charAt(chance.integer({min: 0, max: 15}));
-		}
-
-		//let iv = CryptoJS.enc.Hex.parse(ivBytes);
-		let iv = CryptoJS.enc.Utf8.parse(key);
-		//let aesKey = CryptoJS.enc.Utf8.parse(aesKeyBytes);
-		//let aesKey = CryptoJS.enc.Hex.parse(aesKeyBytes);
-		let aes = CryptoJS.enc.Utf8.parse(key);
-
-		return {
-			"aes": aes,
-			"iv": iv
-		}
-
-		// AES 키 rsa 공개키로 encode
-		//IV도 rsa 공기키로 encode
-
-	},
-
-	pkcs7Pad(data, blockSize) {
-	let data2 = new TextEncoder().encode(data);
-	const padding = blockSize - (data2.length % blockSize);
-	const padText = new Uint8Array(padding).fill(padding);
-	const padded = new Uint8Array(data2.length + padding);
-	padded.set(data2, 0);
-	padded.set(padText, data2.length);
-
-	return padded;
-	},
-
-	byteChange(data){
-		let byte_array = new TextEncoder().encode(data);
-		alert("byteChange byte_array:::" + byte_array)
-		/*const array = new Uint8Array(data2.length);
-		alert("byteChange array:::" + array)*/
-		return byte_array
 	},
 
 	encodeDataWithAes(data, aes, iv) {
@@ -681,10 +725,10 @@ const func= {
 	encodeDataWithAesPkcs7(data, aes, iv) {
 		return CryptoJS.AES.encrypt(data, aes,
 			{ iv: iv,
-			  padding: CryptoJS.pad.Pkcs7,
-			  //padding: pkcs7Pad(data, 16),
-			  mode: CryptoJS.mode.CBC
-	        });
+				padding: CryptoJS.pad.Pkcs7,
+				//padding: pkcs7Pad(data, 16),
+				mode: CryptoJS.mode.CBC
+			});
 		/*return CryptoJS.AES.encrypt(data, aes,
 			{ iv: iv
 			}).toString();*/
@@ -693,9 +737,9 @@ const func= {
 	decodeDataWithAes(data, aes, iv) {
 		try {
 			return CryptoJS.AES.decrypt(data, aes,
-				{ iv: iv/*,
-			  padding: CryptoJS.pad.Pkcs7,
-		      mode: CryptoJS.mode.CBC*/
+				{ iv: iv,
+					padding: CryptoJS.pad.Pkcs7,
+					mode: CryptoJS.mode.CBC
 				}).toString(CryptoJS.enc.Utf8);
 		} catch (error) {
 			console.log("Decrypt Error")
@@ -703,39 +747,12 @@ const func= {
 
 	},
 
-	decodeDataWithAesPkcs7(data, aes, iv) {
-		return CryptoJS.AES.decrypt(data, aes,
-			{ iv: iv,
-			  padding: CryptoJS.pad.Pkcs7,
-		      mode: CryptoJS.mode.CBC
-			}).toString(CryptoJS.enc.Utf8);
-	},
-
 	encodeIvBase64(iv) {
 
-	 	return CryptoJS.enc.Base64.stringify(iv)
+		return CryptoJS.enc.Base64.stringify(iv)
 	},
-
-	encodeBase64(data) {
-
-		return CryptoJS.enc.Base64.stringify(data)
-	},
-
-	/*decodeIvBase64(iv) {
-
-		/!*let parseWordArray = CryptoJS.enc.Base64.parse(iv);
-		return parseWordArray.toString(CryptoJS.enc.Utf8);*!/
-
-		console.log("iv 디코딩 길이" + iv.toString(CryptoJS.enc.Utf8).length)
-		console.log("iv 디코딩 값" + iv.toString(CryptoJS.enc.Utf8))
-
-		return CryptoJS.enc.Base64.parse(iv.toString(CryptoJS.enc.Utf8))
-	},*/
 
 	decodeIvBase64(iv) {
-
-		/*let parseWordArray = CryptoJS.enc.Base64.parse(iv);
-		return parseWordArray.toString(CryptoJS.enc.Utf8);*/
 
 		let parseWordArray = CryptoJS.enc.Base64.parse(iv);
 		let decoded = parseWordArray.toString()
@@ -754,7 +771,7 @@ const func= {
 			},
 		};
 
-		const binaryDerString = window.atob(func.publicKey.replace(pemHF.public.footer, '').replace(pemHF.public.header, ''));
+		const binaryDerString = window.atob(func.migPublicKey.replace(pemHF.public.footer, '').replace(pemHF.public.header, ''));
 		const buffer = new Uint8Array(binaryDerString.length);
 		for (let i = 0; i < binaryDerString.length; i++) {
 			buffer[i] = binaryDerString.charCodeAt(i);
@@ -781,7 +798,7 @@ const func= {
 
 		return btoa(String.fromCharCode(...new Uint8Array(cipher)));
 	},
-	async encodeRsaWebCryptoAPI(data) {
+	async encodeRsaWebCryptoAPI(data, type) {
 		const pemHF = {
 			public: {
 				header: '-----BEGIN PUBLIC KEY-----',
@@ -793,38 +810,65 @@ const func= {
 			},
 		};
 
-		const binaryDerString = window.atob(func.publicKey.replace(pemHF.public.footer, '').replace(pemHF.public.header, ''));
-		const buffer = new Uint8Array(binaryDerString.length);
-		for (let i = 0; i < binaryDerString.length; i++) {
-			buffer[i] = binaryDerString.charCodeAt(i);
+		if (type === "vault") {
+			const binaryDerString = window.atob(func.vaultPublicKey.replace(pemHF.public.footer, '').replace(pemHF.public.header, ''));
+			const buffer = new Uint8Array(binaryDerString.length);
+			for (let i = 0; i < binaryDerString.length; i++) {
+				buffer[i] = binaryDerString.charCodeAt(i);
+			}
+			const publicKey = await window.crypto.subtle.importKey(
+				'spki',
+				buffer.buffer,
+				{
+					name: 'RSA-OAEP',
+					hash: 'SHA-256',
+				},
+				true,
+				['encrypt']
+			);
+			let data1 = func.hexToUint8Array(data)
+
+			const cipher = await window.crypto.subtle.encrypt(
+				{
+					name: 'RSA-OAEP',
+				},
+				publicKey,
+				data1
+			);
+
+			return btoa(String.fromCharCode(...new Uint8Array(cipher)));
+		} else {
+			const binaryDerString = window.atob(func.migPublicKey.replace(pemHF.public.footer, '').replace(pemHF.public.header, ''));
+			const buffer = new Uint8Array(binaryDerString.length);
+			for (let i = 0; i < binaryDerString.length; i++) {
+				buffer[i] = binaryDerString.charCodeAt(i);
+			}
+			const publicKey = await window.crypto.subtle.importKey(
+				'spki',
+				buffer.buffer,
+				{
+					name: 'RSA-OAEP',
+					hash: 'SHA-256',
+				},
+				true,
+				['encrypt']
+			);
+			let data1 = func.hexToUint8Array(data)
+
+			const cipher = await window.crypto.subtle.encrypt(
+				{
+					name: 'RSA-OAEP',
+				},
+				publicKey,
+				data1
+			);
+
+			return btoa(String.fromCharCode(...new Uint8Array(cipher)));
 		}
-		const publicKey = await window.crypto.subtle.importKey(
-			'spki',
-			buffer.buffer,
-			{
-				name: 'RSA-OAEP',
-				hash: 'SHA-256',
-			},
-			true,
-			['encrypt']
-		);
-		//hex를 unit8array로 변경(글자수 64, 32byte)
-		// const data1 = new TextEncoder().encode(data); //64byte
-		// const data1 = new TextEncoder().encode(data); //64byte
-		let data1 = func.hexToUint8Array(data)
 
-		const cipher = await window.crypto.subtle.encrypt(
-			{
-				name: 'RSA-OAEP',
-			},
-			publicKey,
-			data1
-		);
-
-		return btoa(String.fromCharCode(...new Uint8Array(cipher)));
 	},
 
-	async decodeRsaWebCryptoAPI(data) {
+	async decodeRsaWebCryptoAPI(data, type) {
 		const pemHF = {
 			public: {
 				header: '-----BEGIN PUBLIC KEY-----',
@@ -836,61 +880,115 @@ const func= {
 			},
 		};
 
-		const binaryDerString = window.atob(func.privateKey.replace(pemHF.private.footer, '').replace(pemHF.private.header, ''));
-		const buffer = new Uint8Array(binaryDerString.length);
-		for (let i = 0; i < binaryDerString.length; i++) {
-			buffer[i] = binaryDerString.charCodeAt(i);
+		if (type === 'vault') {
+			const binaryDerString = window.atob(func.vaultPrivateKey.replace(pemHF.private.footer, '').replace(pemHF.private.header, ''));
+			const buffer = new Uint8Array(binaryDerString.length);
+			for (let i = 0; i < binaryDerString.length; i++) {
+				buffer[i] = binaryDerString.charCodeAt(i);
+			}
+
+			const privateKey = await window.crypto.subtle.importKey(
+				'pkcs8',
+				buffer.buffer,
+				{
+					name: 'RSA-OAEP',
+					hash: 'SHA-256',
+				},
+				true,
+				['decrypt']
+			);
+
+			const binaryDerString2 = window.atob(data);
+			const buffer2 = new Uint8Array(binaryDerString2.length);
+			for (let i = 0; i < binaryDerString2.length; i++) {
+				buffer2[i] = binaryDerString2.charCodeAt(i);
+			}
+
+			const text = await window.crypto.subtle.decrypt(
+				{
+					name: 'RSA-OAEP',
+				},
+				privateKey,
+				buffer2.buffer
+			);
+
+			return new TextDecoder().decode(text);
+
+		} else {
+			const binaryDerString = window.atob(func.migPrivateKey.replace(pemHF.private.footer, '').replace(pemHF.private.header, ''));
+			const buffer = new Uint8Array(binaryDerString.length);
+			for (let i = 0; i < binaryDerString.length; i++) {
+				buffer[i] = binaryDerString.charCodeAt(i);
+			}
+
+			const privateKey = await window.crypto.subtle.importKey(
+				'pkcs8',
+				buffer.buffer,
+				{
+					name: 'RSA-OAEP',
+					hash: 'SHA-256',
+				},
+				true,
+				['decrypt']
+			);
+
+			const binaryDerString2 = window.atob(data);
+			const buffer2 = new Uint8Array(binaryDerString2.length);
+			for (let i = 0; i < binaryDerString2.length; i++) {
+				buffer2[i] = binaryDerString2.charCodeAt(i);
+			}
+
+			const text = await window.crypto.subtle.decrypt(
+				{
+					name: 'RSA-OAEP',
+				},
+				privateKey,
+				buffer2.buffer
+			);
+
+			return new TextDecoder().decode(text);
 		}
 
-		const privateKey = await window.crypto.subtle.importKey(
-			'pkcs8',
-			buffer.buffer,
-			{
-				name: 'RSA-OAEP',
-				hash: 'SHA-256',
-			},
-			true,
-			['decrypt']
-		);
-
-		const binaryDerString2 = window.atob(data);
-		const buffer2 = new Uint8Array(binaryDerString2.length);
-		for (let i = 0; i < binaryDerString2.length; i++) {
-			buffer2[i] = binaryDerString2.charCodeAt(i);
-		}
-
-		const text = await window.crypto.subtle.decrypt(
-			{
-				name: 'RSA-OAEP',
-			},
-			privateKey,
-			buffer2.buffer
-		);
-
-		return new TextDecoder().decode(text);
 	},
 
-	async responseDecodeData(data) {
+	async responseDecodeData(data, type) {
 
-		let jsonParseData = JSON.parse(data)
+		if (type === 'vault') {
+			let jsonParseData = JSON.parse(data)
 
-		let responseKey = jsonParseData.key;
-		let responseIv = jsonParseData.iv;
-		let responseData = jsonParseData.data;
+			let responseKey = jsonParseData.key;
+			let responseIv = jsonParseData.iv;
+			let responseData = jsonParseData.data;
 
-		let responseDecodeAesKey = await func.responseDecodeAesKeyWithRsa(responseKey, func.privateKey)
-		let responseBase64DecodeAesKey = func.decodeIvBase64(responseDecodeAesKey)
-		let responseBase64DecodeIv = func.decodeIvBase64(responseIv)
+			let responseDecodeAesKey = await func.responseDecodeAesKeyWithRsa(responseKey, func.vaultPrivateKey)
+			let responseBase64DecodeAesKey = func.decodeIvBase64(responseDecodeAesKey)
+			let responseBase64DecodeIv = func.decodeIvBase64(responseIv)
 
-		return {
-			"data": responseData,
-			"aes": responseBase64DecodeAesKey,
-			"iv": responseBase64DecodeIv
+			return {
+				"data": responseData,
+				"aes": responseBase64DecodeAesKey,
+				"iv": responseBase64DecodeIv
+			}
+		} else {
+			let jsonParseData = JSON.parse(data)
+
+			let responseKey = jsonParseData.key;
+			let responseIv = jsonParseData.iv;
+			let responseData = jsonParseData.data;
+
+			let responseDecodeAesKey = await func.responseDecodeAesKeyWithRsa(responseKey, func.migPrivateKey)
+			let responseBase64DecodeAesKey = func.decodeIvBase64(responseDecodeAesKey)
+			let responseBase64DecodeIv = func.decodeIvBase64(responseIv)
+
+			return {
+				"data": responseData,
+				"aes": responseBase64DecodeAesKey,
+				"iv": responseBase64DecodeIv
+			}
 		}
-
 	},
 
-	async responseDecodeAesKeyWithRsa(data) {
+	async responseDecodeAesKeyWithRsa(data, key) {
 		const pemHF = {
 			public: {
 				header: '-----BEGIN PUBLIC KEY-----',
@@ -902,7 +1000,7 @@ const func= {
 			},
 		};
 
-		const binaryDerString = window.atob(func.privateKey.replace(pemHF.private.footer, '').replace(pemHF.private.header, ''));
+		const binaryDerString = window.atob(key.replace(pemHF.private.footer, '').replace(pemHF.private.header, ''));
 		const buffer = new Uint8Array(binaryDerString.length);
 		for (let i = 0; i < binaryDerString.length; i++) {
 			buffer[i] = binaryDerString.charCodeAt(i);
@@ -937,23 +1035,6 @@ const func= {
 
 	},
 
-	async responseDecodeDataWithAes(data, aes, iv) {
-		let jsonStringfyData = JSON.stringify(data);
-		console.log("데이터 디코딩 함수")
-		console.log("jsonStringfyData:::" + jsonStringfyData)
-		console.log("aes:::" + aes)
-		console.log("iv:::" + iv)
-
-		try {
-			return CryptoJS.AES.decrypt(jsonStringfyData.toString(), CryptoJS.enc.Hex.parse(aes),
-				{ iv: CryptoJS.enc.Hex.parse(iv)
-				}).toString(CryptoJS.enc.Utf8);
-		} catch (error) {
-			console.log("Decrypt Error")
-		}
-
-	},
-
 	hexToUint8Array(hex) {
 		if (hex.toString().length % 2 !== 0) {
 			throw new Error("Invalid hex string length");
@@ -970,21 +1051,13 @@ const func= {
 		return bytes;
 	},
 
-	callByValue(endpoint, accessKeyId, secretAccessKey) {
-
-		return {
-			"endpoint": endpoint,
-			"accessKeyId": accessKeyId,
-			"secretAccessKey": secretAccessKey
-		}
-	},
-
 	async sourceDetailDraw(data) {
 		let sourceEndpoint = '';
 		let sourceAccessKeyId = '';
 		let sourceSecretAccessKey = '';
+		let type = 'mig';
 
-		let decodeData = await func.responseDecodeData(data)
+		let decodeData = await func.responseDecodeData(data, type)
 		let encodedData = JSON.stringify(decodeData.data)
 		encodedData = encodedData.replaceAll("\"", "");
 
@@ -1013,8 +1086,9 @@ const func= {
 		let destinationEndpoint = '';
 		let destinationAccessKeyId = '';
 		let destinationSecretAccessKey = '';
+		let type = 'mig';
 
-		let decodeData = await func.responseDecodeData(data)
+		let decodeData = await func.responseDecodeData(data, type)
 		let encodedData = JSON.stringify(decodeData.data)
 		encodedData = encodedData.replaceAll("\"", "");
 
