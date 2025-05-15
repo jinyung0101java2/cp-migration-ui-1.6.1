@@ -20,6 +20,7 @@
                         <dd>
                             <fieldset>
                                 <select id="sourceMigration" onchange="changeSourceMigrationSelect()">
+                                    <option style="color:#959ba5;" value="" disabled selected>Migration</option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -29,6 +30,7 @@
                         <dd>
                             <fieldset>
                                 <select id="sourceBucket">
+                                    <option style="color:#959ba5;" value="" disabled selected>Bucket</option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -41,6 +43,7 @@
                         <dd>
                             <fieldset>
                                 <select id="destinationMigration" onchange="changeDestinationMigrationSelect()">
+                                    <option style="color:#959ba5;" value="" disabled selected>Migration</option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -50,6 +53,7 @@
                         <dd>
                             <fieldset>
                                 <select id="destinationBucket">
+                                    <option style="color:#959ba5;" value="" disabled selected>Bucket</option>
                                 </select>
                             </fieldset>
                         </dd>
@@ -92,8 +96,11 @@
                 draw(data) {
                     data = JSON.parse(data)
 
-                    let sourceMigrationHtml = ``;
-                    let destinationMigrationHtml = ``;
+                    func.removeHtml(document.querySelector('#sourceMigration'));
+                    func.removeHtml(document.querySelector('#destinationMigration'));
+
+                    let sourceMigrationHtml = `<option style="color:#959ba5;" value="" disabled selected>Migration</option>`;
+                    let destinationMigrationHtml = `<option style="color:#959ba5;" value="" disabled selected>Migration</option>`;
 
                     for (let key of data.keys) {
                         sourceMigrationHtml += `<option value="${key}">${key}</option>`;
@@ -168,15 +175,8 @@
                     let destinationData = sessionStorage.getItem('destinationData');
 
                     let type = 'vault';
-
-                    console.log("sourceData출력:::::" + JSON.stringify(sourceData))
-                    console.log("destinationData출력:::::" + JSON.stringify(destinationData))
-
                     let decodeSourceData = await func.decodeRsaWebCryptoAPI(sourceData)
                     let decodeDestinationData = await func.decodeRsaWebCryptoAPI(destinationData)
-
-                    console.log("decodeSourceData::::::::::::::::::::  " + decodeSourceData)
-                    console.log("decodeDestinationData::::::::::::::::::::  " + decodeDestinationData)
 
                     decodeSourceData = JSON.parse(decodeSourceData)
                     decodeDestinationData = JSON.parse(decodeDestinationData)
@@ -190,9 +190,6 @@
                     destinationSecretAccessKey = decodeDestinationData.destinationSecretAccessKey;
 
                     let migrationsCreate = {"dst":{"accessKeyId":destinationAccessKeyId,"bucket":destinationBucket,"endpoint":destinationEndpoint,"secretAccessKey":destinationSecretAccessKey,"storageType":"s3"},"src":{"accessKeyId":sourceAccessKeyId,"bucket":sourceBucket,"endpoint":sourceEndpoint,"secretAccessKey":sourceSecretAccessKey,"storageType":"s3"}}
-
-                    console.log("migrationsCreate:::" + JSON.stringify(migrationsCreate))
-
                     let timestamp = func.createUnixTimestamp();
                     let includeTimestampData = {"data": migrationsCreate, "timestamp": timestamp.toString()}
                     let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData));
@@ -205,15 +202,11 @@
 
                     let encodeData = {"key":encodeRsaAes,"iv":encodeIvBase64,"data":encodeDataWithAes}
 
-                    console.log("encodeData:::::::" + JSON.stringify(encodeData))
-
-                    let decodeData = encodeData.data;
-
-                    let decodeDataWithAes = func.decodeDataWithAes(decodeData, aesIV.aes, aesIV.iv);
-                    console.log("decodeDataWithAes::: " + decodeDataWithAes)
-
                     // func.saveData('POST', `${func.migrationUrl}v1/migration/sync/sync`, JSON.stringify(encodeData), true, 'application/json');
-                    func.saveData('POST', `http://192.168.0.5:8901/v1/migration/sync/sync`, JSON.stringify(encodeData), true, 'application/json');
+                    func.saveData('POST', `http://192.168.0.5:8901/v1/migration/sync/sync`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh());
+
+                    sessionStorage.removeItem('sourceData')
+                    sessionStorage.removeItem('destinationData')
                 },
                 async copy() {
 
@@ -230,14 +223,8 @@
                     let sourceData = sessionStorage.getItem('sourceData');
                     let destinationData = sessionStorage.getItem('destinationData');
 
-                    console.log("sourceData출력:::::" + JSON.stringify(sourceData))
-                    console.log("destinationData출력:::::" + JSON.stringify(destinationData))
-
                     let decodeSourceData = await func.decodeRsaWebCryptoAPI(sourceData)
                     let decodeDestinationData = await func.decodeRsaWebCryptoAPI(destinationData)
-
-                    console.log("decodeSourceData::::::::::::::::::::  " + decodeSourceData)
-                    console.log("decodeDestinationData::::::::::::::::::::  " + decodeDestinationData)
 
                     decodeSourceData = JSON.parse(decodeSourceData)
                     decodeDestinationData = JSON.parse(decodeDestinationData)
@@ -251,9 +238,6 @@
                     destinationSecretAccessKey = decodeDestinationData.destinationSecretAccessKey;
 
                     let migrationsCreate = {"dst":{"accessKeyId":destinationAccessKeyId,"bucket":destinationBucket,"endpoint":destinationEndpoint,"secretAccessKey":destinationSecretAccessKey,"storageType":"s3"},"src":{"accessKeyId":sourceAccessKeyId,"bucket":sourceBucket,"endpoint":sourceEndpoint,"secretAccessKey":sourceSecretAccessKey,"storageType":"s3"}}
-
-                    console.log("migrationsCreate:::" + JSON.stringify(migrationsCreate))
-
                     let timestamp = func.createUnixTimestamp();
                     let includeTimestampData = {"data": migrationsCreate, "timestamp": timestamp.toString()}
                     let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData));
@@ -266,15 +250,11 @@
 
                     let encodeData = {"key":encodeRsaAes,"iv":encodeIvBase64,"data":encodeDataWithAes}
 
-                    console.log("encodeData:::::::" + JSON.stringify(encodeData))
-
-                    let decodeData = encodeData.data;
-
-                    let decodeDataWithAes = func.decodeDataWithAes(decodeData, aesIV.aes, aesIV.iv);
-                    console.log("decodeDataWithAes::: " + decodeDataWithAes)
-
                     // func.saveData('POST', `${func.migrationUrl}v1/migration/sync/copy`, JSON.stringify(encodeData), true, 'application/json');
-                    func.saveData('POST', `http://192.168.0.5:8901/v1/migration/sync/copy`, JSON.stringify(encodeData), true, 'application/json');
+                    func.saveData('POST', `http://192.168.0.5:8901/v1/migration/sync/copy`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh());
+
+                    sessionStorage.removeItem('sourceData')
+                    sessionStorage.removeItem('destinationData')
                 }
             };
             migrationsCreate.init();
@@ -290,7 +270,8 @@
 
             func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', func.sourceDetailDraw);
             func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#sourceMigration > option:checked').value}`, 'application/json', sourceAccountsDraw);
-            // func.loadData('GET', `${func.vaultUrl}/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#sourceMigration > option:checked').value}`, 'application/json', sourceAccountsDraw);
+            // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', func.sourceDetailDraw);
+            // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#sourceMigration > option:checked').value}`, 'application/json', sourceAccountsDraw);
 
             async function sourceAccountsDraw(data) {
 
@@ -309,13 +290,6 @@
                 accessKeyId = decodedData.data.data.accessKeyId;
                 secretAccessKey = decodedData.data.data.secretAccessKey;
 
-                /*let bucketsData = {
-                    "storageType": storageType,
-                    "endpoint": endpoint,
-                    "accessKeyId": accessKeyId,
-                    "secretAccessKey": secretAccessKey
-                }*/
-
                 let timestamp = func.createUnixTimestamp();
                 let bucketsData = {"accessKeyId":accessKeyId,"bucket":"","endpoint":endpoint,"secretAccessKey":secretAccessKey,"storageType":storageType}
                 let includeTimestampData = {"data":bucketsData,"timestamp":timestamp.toString()}
@@ -333,13 +307,8 @@
                     "data": encodeDataWithAes
                 }
 
-                let responseDecodeData2 = await func.decodeDataWithAes(encodedData, aesIV.aes, aesIV.iv)
-                let decodeSourceData = await func.decodeRsaWebCryptoAPI(encodeRsaAes)//
-                console.log("encodeData::::::::" + JSON.stringify(encodeData))
-                console.log("responseDecodeData2::::::::" + JSON.stringify(responseDecodeData2))
-
                 func.bucketData('POST', `http://192.168.0.5:8901/v1/migration/operations/list`, JSON.stringify(encodeData), true, 'application/json', sourceBucketsDraw);
-                // func.bucketData('POST', `${func.vaultUrl}v1/migration/operations/list`, bucketsData, true, 'application/json', sourceBucketsDraw);
+                // func.bucketData('POST', `${func.migrationUrl}v1/migration/operations/list`, JSON.stringify(encodeData), true, 'application/json', sourceBucketsDraw);
             }
 
             function sourceBucketsDraw(data) {
@@ -347,7 +316,6 @@
 
                 data = data.substr(10);
                 data = data.slice(0, -2);
-                // let dataLength = data.match(/map/g)?.length
                 let arrData = data.split('Size');
                 arrData.pop();
 
@@ -355,7 +323,7 @@
                     arrData[i] = arrData[i].substring(arrData[i].indexOf(`Name:`) + 5,arrData[i].indexOf(` Path`) );
                 }
 
-                let sourceBucketHtml = ``;
+                let sourceBucketHtml = `<option value="" disabled selected>Bucket</option>`;
 
                 for(var i=0; i<=arrData.length-1; i++){
                     sourceBucketHtml += `<option value="${arrData[i]}">${arrData[i]}</option>`;
@@ -375,6 +343,7 @@
 
             func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${destinationMigration}`, 'application/json', func.destinationDetailDraw);
             func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#destinationMigration > option:checked').value}`, 'application/json', destinationAccountsDraw);
+            // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${destinationMigration}`, 'application/json', func.destinationDetailDraw);
             // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#destinationMigration > option:checked').value}`, 'application/json', destinationAccountsDraw);
 
             async function destinationAccountsDraw(data) {
@@ -394,13 +363,6 @@
                 accessKeyId = decodedData.data.data.accessKeyId;
                 secretAccessKey = decodedData.data.data.secretAccessKey;
 
-                /*let bucketsData = {
-                    "storageType": storageType,
-                    "endpoint": endpoint,
-                    "accessKeyId": accessKeyId,
-                    "secretAccessKey": secretAccessKey
-                }*/
-
                 let timestamp = func.createUnixTimestamp();
                 let bucketsData = {"accessKeyId":accessKeyId,"bucket":"","endpoint":endpoint,"secretAccessKey":secretAccessKey,"storageType":storageType}
                 let includeTimestampData = {"data":bucketsData,"timestamp":timestamp.toString()}
@@ -418,13 +380,8 @@
                     "data": encodeDataWithAes
                 }
 
-                let responseDecodeData2 = await func.decodeDataWithAes(encodedData, aesIV.aes, aesIV.iv)
-                let decodeSourceData = await func.decodeRsaWebCryptoAPI(encodeRsaAes)//
-                console.log("encodeData::::::::" + JSON.stringify(encodeData))
-                console.log("responseDecodeData2::::::::" + JSON.stringify(responseDecodeData2))
-
                 func.bucketData('POST', `http://192.168.0.5:8901/v1/migration/operations/list`, JSON.stringify(encodeData), true, 'application/json', destinationBucketsDraw);
-                // func.bucketData('POST', `${func.vaultUrl}v1/migration/operations/list`, bucketsData, true, 'application/json', destinationBucketsDraw);
+                // func.bucketData('POST', `${func.vaultUrl}v1/migration/operations/list`, JSON.stringify(encodeData), true, 'application/json', destinationBucketsDraw);
             }
 
             function destinationBucketsDraw(data) {
@@ -432,7 +389,6 @@
 
                 data = data.substr(10);
                 data = data.slice(0, -2);
-                // let dataLength = data.match(/map/g)?.length
                 let arrData = data.split('Size');
                 arrData.pop();
 
@@ -440,7 +396,7 @@
                     arrData[i] = arrData[i].substring(arrData[i].indexOf(`Name:`) + 5,arrData[i].indexOf(` Path`) );
                 }
 
-                let destinationBucketHtml = ``;
+                let destinationBucketHtml = `<option value="" disabled selected>Bucket</option>`;
 
                 for(var i=0; i<=arrData.length-1; i++){
                     destinationBucketHtml += `<option value="${arrData[i]}">${arrData[i]}</option>`;

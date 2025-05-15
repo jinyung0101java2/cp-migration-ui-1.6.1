@@ -504,14 +504,13 @@ const func= {
 	// 데이터 SAVE - saveData(method, url, data, bull, callFunc)
 	// (전송타입, url, 데이터, 분기, 콜백함수)
 	/////////////////////////////////////////////////////////////////////////////////////
-	saveData(method, url, data, bull, header){
+	saveData(method, url, data, bull, header, callFunc){
 		func.loading();
 		var httpRequest = new XMLHttpRequest();
 
 		httpRequest.open(method, url, bull);
 		httpRequest.setRequestHeader('Content-type', header);
 		httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('accessToken'));
-		//httpRequest.responseType = "json"
 
 		httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
 		httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
@@ -519,15 +518,15 @@ const func= {
 		httpRequest.onreadystatechange = () => {
 			if (httpRequest.readyState === XMLHttpRequest.DONE){
 				if (httpRequest.status === 200) {
-					if(document.getElementById('loading')){
+					/*if(document.getElementById('loading')){
 						document.getElementById('wrap').removeChild(document.getElementById('loading'));
-					};
-					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  func.historyBack);
+					};*/
+					alert("저장")
+					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, callFunc);
 				} else {
 					if(document.getElementById('loading')){
 						document.getElementById('wrap').removeChild(document.getElementById('loading'));
 					};
-					console.log("에러메세지::: " + httpRequest.responseText)
 					return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');
 				}
 			}
@@ -541,13 +540,11 @@ const func= {
 			return false;
 		}
 
-		func.loading();
 		var httpRequest = new XMLHttpRequest();
 
 		httpRequest.open(method, url, bull);
 		httpRequest.setRequestHeader('Content-type', header);
 		httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('accessToken'));
-		//httpRequest.responseType = "json"
 
 		httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
 		httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
@@ -558,13 +555,39 @@ const func= {
 					if(document.getElementById('loading')){
 						document.getElementById('wrap').removeChild(document.getElementById('loading'));
 					};
-					// return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  func.historyBack);
 					callbackFunction(httpRequest.responseText, list);
 				} else {
 					if(document.getElementById('loading')){
 						document.getElementById('wrap').removeChild(document.getElementById('loading'));
 					};
 					console.log("에러메세지::: " + httpRequest.responseText)
+					return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');
+				}
+			}
+		}
+		httpRequest.send(data)
+	},
+
+	deleteData(method, url, data, bull, header){
+		func.loading();
+		var httpRequest = new XMLHttpRequest();
+
+		httpRequest.open(method, url, bull);
+		httpRequest.setRequestHeader('Content-type', header);
+		httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('accessToken'));
+
+		httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
+		httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
+
+		httpRequest.onreadystatechange = () => {
+			if (httpRequest.readyState === XMLHttpRequest.DONE){
+				if (httpRequest.status === 200) {
+					alert("삭제")
+					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  func.historyBack);
+				} else {
+					if(document.getElementById('loading')){
+						document.getElementById('wrap').removeChild(document.getElementById('loading'));
+					};
 					return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');
 				}
 			}
@@ -606,8 +629,12 @@ const func= {
 		};
 	},
 
-	moveToMain() {
+	/*moveToMain() {
 		location.href = URI_CP_BASE_URL;
+	},*/
+
+	moveToMain() {
+		location.href = URI_CP_ACCOUNTS_LIST;
 	},
 
 	historyBack(){

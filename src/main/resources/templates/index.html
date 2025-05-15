@@ -52,7 +52,17 @@
             const accounts = {
 
                 init() {
-                    sessionStorage.setItem('accountsData', 'Y')
+
+                    sessionStorage.setItem('initAccess', 'Y')
+
+                    sessionStorage.setItem('accessToken' , 'Bearer ' + [[${accessToken}]]);
+                    sessionStorage.setItem('userGuid' , [[${userGuid}]]);
+                    sessionStorage.setItem('accountsName' , '-');
+
+                    if (sessionStorage.getItem('initAccess') === 'Y' ) {
+                        sessionStorage.setItem('accountsData', 'N')
+                    }
+
 
                     /* if (sessionStorage.getItem('accountsData') !== 'Y') {
                          sessionStorage.setItem('accountsData', 'N')
@@ -61,10 +71,6 @@
                      if (sessionStorage.getItem('accountsData') === 'N' || sessionStorage.getItem('accountsCnt') < 1) {
                          sessionStorage.setItem('accountsCnt', 0)
                      }*/
-
-                    sessionStorage.setItem('accessToken' , 'Bearer ' + [[${accessToken}]]);
-                    sessionStorage.setItem('userGuid' , [[${userGuid}]]);
-                    sessionStorage.setItem('accountsName' , '-');
 
                     if (sessionStorage.getItem('accountsData') === 'N') {
                         var html = `<tr><td colspan="4">No Data.</td></tr>`;
