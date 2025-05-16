@@ -574,7 +574,6 @@ const func= {
 		httpRequest.onreadystatechange = () => {
 			if (httpRequest.readyState === XMLHttpRequest.DONE){
 				if (httpRequest.status === 200) {
-					alert("삭제")
 					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, func.historyBackRefresh);
 				} else {
 					if(document.getElementById('loading')){
