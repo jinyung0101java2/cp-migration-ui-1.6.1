@@ -55,8 +55,15 @@
         window.onload = () => {
 
             const accounts = {
+                offset : 0, // 로드 페이지 넘버
+                limit : 10, // 로드 게시물 개수
+                allItemCount : 0, // 게시물 총 개수
 
                 init() {
+
+                    // let text = func.readTextFile("file:///D:/migkey/private_key.pem") // file:///D:/migkey/private_key.pem
+                    // let text = func.readTextFile("file:///D:/migkey/private_key.pem")
+                    // alert('text:: ' + text)
 
                     sessionStorage.setItem('accessToken' , 'Bearer ' + [[${accessToken}]]);
                     sessionStorage.setItem('userGuid' , [[${userGuid}]]);
@@ -102,30 +109,67 @@
                     } else {
                         func.removeHtml(document.querySelector('.listTable'), html, 'tbody');
 
+                        console.log(JSON.stringify(decodedData))
+                        if(accounts.offset === 0) accounts.allItemCount = decodedData.data.length;
+                        console.log(JSON.stringify('accounts.allItemCount:: ' + accounts.allItemCount))
+                        console.log(JSON.stringify('accounts.offset:: ' + accounts.offset))
+                        console.log(JSON.stringify('accounts.limit:: ' + accounts.limit))
+
+
+
                         if (decodedData.data.length > 0) {
-                            for (var i = 0; i <= decodedData.data.length - 1; i++) {
-                                let originTime = '';
-                                let createdTime1 = '';
-                                let createdTime2 = '';
+                            //for (var i = 0; i <= decodedData.data.length-1; i++) {
+                            if (accounts.allItemCount > accounts.limit) {
+                                for (var i = 0; i <= accounts.limit-1; i++) {
+                                    let originTime = '';
+                                    let createdTime1 = '';
+                                    let createdTime2 = '';
 
-                                originTime = decodedData.data[i].metadata.created_time;
-                                createdTime1 = originTime.substr(0, 10)
-                                createdTime2 = originTime.substr(11, 8)
+                                    originTime = decodedData.data[i].metadata.created_time;
+                                    createdTime1 = originTime.substr(0, 10)
+                                    createdTime2 = originTime.substr(11, 8)
 
-                                var html = `<tr>
+                                    var html = `<tr>
                                         <td class="left"><a href="javascript:;" data-name="${decodedData.data[i].name}">${decodedData.data[i].name}</a></td>
                                         <td>${decodedData.data[i].data.storageType}</td>
                                         <td>${decodedData.data[i].data.endpoint}</td>
                                         <td>${createdTime1 + " " + createdTime2}</td>
                                     </tr>`;
 
-                                func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                                    func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                                };
+                            } else if (accounts.allItemCount < accounts.limit) {
+                                for (var i = 0; i <= accounts.allItemCount-1; i++) {
+                                    let originTime = '';
+                                    let createdTime1 = '';
+                                    let createdTime2 = '';
+
+                                    originTime = decodedData.data[i].metadata.created_time;
+                                    createdTime1 = originTime.substr(0, 10)
+                                    createdTime2 = originTime.substr(11, 8)
+
+                                    var html = `<tr>
+                                        <td class="left"><a href="javascript:;" data-name="${decodedData.data[i].name}">${decodedData.data[i].name}</a></td>
+                                        <td>${decodedData.data[i].data.storageType}</td>
+                                        <td>${decodedData.data[i].data.endpoint}</td>
+                                        <td>${createdTime1 + " " + createdTime2}</td>
+                                    </tr>`;
+
+                                    func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                                };
                             }
+
+                            if (document.querySelector('.listTable').querySelectorAll('tr').length < accounts.allItemCount) {
+                                document.querySelector('.more').classList.toggle('on', true);
+                            } else {
+                                document.querySelector('.more').classList.toggle('on', false);
+                            };
                         } else {
                             var html = `<tr><td colspan="4">No Data.</td></tr>`;
 
                             func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                         }
+
                         sessionStorage.setItem('accountsCnt', decodedData.data.length)
                     }
 
@@ -153,7 +197,19 @@
                     document.querySelector('.create').addEventListener('click', (e) => {
                         document.location.href = URI_CP_ACCOUNTS_CREATE;
                     }, false);
+
+                    document.querySelector('.more').addEventListener('click', (e) => {
+                        // accounts.offset++;
+                        accounts.limit += 10;
+
+                        accounts.load();
+                    }, false);
                 },
+                load(){
+                    func.loading();
+
+                    func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=true`, 'application/json', accounts.draw);
+                }
 
             }
 
