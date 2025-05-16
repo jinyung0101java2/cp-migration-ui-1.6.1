@@ -76,6 +76,7 @@
                             var html = `<tr><td colspan="4">No Data.</td></tr>`;
                             func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                         } else {
+                            func.loading();
                             func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=true`, 'application/json', accounts.draw);
                         }
                     }
@@ -143,6 +144,8 @@
                             document.location.href = URI_CP_ACCOUNTS_LIST + URI_CP_DETAILS;
                         }, true);
                     };
+
+                    document.getElementById('wrap').removeChild(document.getElementById('loading'));
                 },
 
                 event(){
