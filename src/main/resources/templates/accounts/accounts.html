@@ -59,6 +59,10 @@
                 allItemCount : 0, // 게시물 총 개수
 
                 init(){
+
+                    sessionStorage.removeItem('sourceData');
+                    sessionStorage.removeItem('destinationData');
+
                     func.loading();
                     if (sessionStorage.getItem('accountsData') === 'Y') {
                         func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=true`, 'application/json', accounts.draw);

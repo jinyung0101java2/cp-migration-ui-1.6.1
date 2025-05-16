@@ -67,6 +67,8 @@
                     sessionStorage.setItem('accessToken' , 'Bearer ' + [[${accessToken}]]);
                     sessionStorage.setItem('userGuid' , [[${userGuid}]]);
                     sessionStorage.setItem('accountsName' , '-');
+                    sessionStorage.removeItem('sourceData')
+                    sessionStorage.removeItem('destinationData')
 
                     sessionStorage.setItem('accountsData' , 'Y');//삭제
                     initDraw(sessionStorage.getItem('accountsData'))
