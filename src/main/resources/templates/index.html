@@ -46,6 +46,11 @@
 </div>
 
 <th:block layout:fragment="script">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha256.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/10.2.0/jsrsasign-all-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
     <script type="text/javascript" th:inline="javascript">
         window.onload = () => {
 
@@ -53,29 +58,26 @@
 
                 init() {
 
-                    sessionStorage.setItem('initAccess', 'Y')
-
                     sessionStorage.setItem('accessToken' , 'Bearer ' + [[${accessToken}]]);
                     sessionStorage.setItem('userGuid' , [[${userGuid}]]);
                     sessionStorage.setItem('accountsName' , '-');
 
-                    if (sessionStorage.getItem('initAccess') === 'Y' ) {
-                        sessionStorage.setItem('accountsData', 'N')
-                    }
+                    sessionStorage.setItem('accountsData' , 'Y');//삭제
+                    initDraw(sessionStorage.getItem('accountsData'))
 
+                    //accountsData 불러오기
+                    //func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', initDraw);
 
-                    /* if (sessionStorage.getItem('accountsData') !== 'Y') {
-                         sessionStorage.setItem('accountsData', 'N')
-                     }
+                    async function initDraw(data) {
+                        // let accountsData = data.accountsData;
+                        let accountsData = data;
 
-                     if (sessionStorage.getItem('accountsData') === 'N' || sessionStorage.getItem('accountsCnt') < 1) {
-                         sessionStorage.setItem('accountsCnt', 0)
-                     }*/
-
-                    if (sessionStorage.getItem('accountsData') === 'N') {
-                        var html = `<tr><td colspan="4">No Data.</td></tr>`;
-
-                        func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                        if (accountsData === 'N') {
+                            var html = `<tr><td colspan="4">No Data.</td></tr>`;
+                            func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                        } else {
+                            func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=true`, 'application/json', accounts.draw);
+                        }
                     }
                 },
 

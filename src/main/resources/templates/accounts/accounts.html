@@ -51,12 +51,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/10.2.0/jsrsasign-all-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
         window.onload = () => {
 
             const accounts = {
 
                 init(){
+
                     if (sessionStorage.getItem('accountsData') === 'Y') {
                         func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=true`, 'application/json', accounts.draw);
                         // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=true`, 'application/json', accounts.draw);
@@ -66,7 +67,6 @@
                         func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                     }
 
-                    sessionStorage.setItem('accountsName' , '-');
                 },
 
                 async draw(data) {

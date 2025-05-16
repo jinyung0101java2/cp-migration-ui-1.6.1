@@ -121,8 +121,8 @@
                         "data": encodeDataWithAes
                     }
 
-                    func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(encodeData), true, 'application/json', func.saveData);
-                    sessionStorage.setItem('accountsData', 'Y')
+                    func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh);
+                    //sessionStorage.setItem('accountsData', 'Y')
                 },
             };
             accountsCreate.init();

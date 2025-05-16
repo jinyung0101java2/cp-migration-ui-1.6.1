@@ -114,10 +114,12 @@
                 },
 
                 delete(){
-                    func.deleteData('DELETE', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBackRefresh());
+                    func.saveData('DELETE', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBackRefresh);
                     // func.saveData('DELETE', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBack);
 
                     if (sessionStorage.getItem('accountsCnt') === 1) {
+                        //vault accountsData 쓰기
+                        //func.saveData('POST', `http://192.168.0.5:8901/v1/migration/sync/sync`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh());
                         sessionStorage.setItem('accountsData', 'N')
                     }
                 },

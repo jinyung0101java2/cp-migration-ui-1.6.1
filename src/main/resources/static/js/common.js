@@ -521,7 +521,6 @@ const func= {
 					/*if(document.getElementById('loading')){
 						document.getElementById('wrap').removeChild(document.getElementById('loading'));
 					};*/
-					alert("저장")
 					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, callFunc);
 				} else {
 					if(document.getElementById('loading')){
