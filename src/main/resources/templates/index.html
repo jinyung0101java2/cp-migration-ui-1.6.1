@@ -55,7 +55,6 @@
         window.onload = () => {
 
             const accounts = {
-                offset : 0, // 로드 페이지 넘버
                 limit : 10, // 로드 게시물 개수
                 allItemCount : 0, // 게시물 총 개수
 
@@ -109,16 +108,9 @@
                     } else {
                         func.removeHtml(document.querySelector('.listTable'), html, 'tbody');
 
-                        console.log(JSON.stringify(decodedData))
-                        if(accounts.offset === 0) accounts.allItemCount = decodedData.data.length;
-                        console.log(JSON.stringify('accounts.allItemCount:: ' + accounts.allItemCount))
-                        console.log(JSON.stringify('accounts.offset:: ' + accounts.offset))
-                        console.log(JSON.stringify('accounts.limit:: ' + accounts.limit))
-
-
+                        accounts.allItemCount = decodedData.data.length;
 
                         if (decodedData.data.length > 0) {
-                            //for (var i = 0; i <= decodedData.data.length-1; i++) {
                             if (accounts.allItemCount > accounts.limit) {
                                 for (var i = 0; i <= accounts.limit-1; i++) {
                                     let originTime = '';
@@ -164,12 +156,12 @@
                             } else {
                                 document.querySelector('.more').classList.toggle('on', false);
                             };
+
                         } else {
                             var html = `<tr><td colspan="4">No Data.</td></tr>`;
 
                             func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                         }
-
                         sessionStorage.setItem('accountsCnt', decodedData.data.length)
                     }
 
@@ -199,12 +191,12 @@
                     }, false);
 
                     document.querySelector('.more').addEventListener('click', (e) => {
-                        // accounts.offset++;
                         accounts.limit += 10;
 
                         accounts.load();
                     }, false);
                 },
+
                 load(){
                     func.loading();
 
