@@ -249,7 +249,6 @@ const func= {
 					if (httpRequest.status === 200) {
 						callbackFunction((httpRequest.responseText), list);
 					} else if (httpRequest.status === 500) {
-						alert(httpRequest.responseText)
 						if (httpRequest.responseText === 'secret is nil') {
 							console.warn = console.error = () => {};
 						}
@@ -289,6 +288,9 @@ const func= {
 					if(document.getElementById('loading')){
 						document.getElementById('wrap').removeChild(document.getElementById('loading'));
 					};
+					if (httpRequest.responseText === 'data already exists') {
+						return func.alertPopup('ERROR', MSG_ALREADY_EXIST, true, MSG_CONFIRM, 'closed');
+					}
 					return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');
 				}
 			}
@@ -319,7 +321,10 @@ const func= {
 					if(document.getElementById('loading')){
 						document.getElementById('wrap').removeChild(document.getElementById('loading'));
 					};
-					return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');
+					if (httpRequest.responseText === 'an unknown error occurred') {
+						return func.alertPopup('ERROR', MSG_NO_BUCKET, true, MSG_CONFIRM, 'closed');
+					}
+					return func.alertPopup('ERROR', MSG_NO_BUCKET, true, MSG_CONFIRM, 'closed');
 				}
 			}
 		}
