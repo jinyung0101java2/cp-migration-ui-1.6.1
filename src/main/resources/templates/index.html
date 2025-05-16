@@ -89,84 +89,89 @@
                 },
 
                 async draw(data) {
+                    try {
+                        if (data !== 'undefined') {
+                            let type = 'vault'
+                            let decodeData = await func.responseDecodeData(data, type)
+                            let encodedData = JSON.stringify(decodeData.data)
+                            encodedData = encodedData.replaceAll("\"", "");
 
-                    let type = 'vault'
-                    let decodeData = await func.responseDecodeData(data, type)
-                    let encodedData = JSON.stringify(decodeData.data)
-                    encodedData = encodedData.replaceAll("\"", "");
+                            let iv = decodeData.iv
+                            let aes = decodeData.aes
+                            let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
+                            let decodedData = JSON.parse(responseDecodeData)
 
-                    let iv = decodeData.iv
-                    let aes = decodeData.aes
-                    let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
-                    let decodedData = JSON.parse(responseDecodeData)
+                            if (sessionStorage.getItem('accountsData') === 'N') {
+                                alert('No Data.')
+                                var html = `<tr><td colspan="4">No Data.</td></tr>`;
 
-                    if (sessionStorage.getItem('accountsData') === 'N') {
-                        alert('No Data.')
-                        var html = `<tr><td colspan="4">No Data.</td></tr>`;
-
-                        func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
-                    } else {
-                        func.removeHtml(document.querySelector('.listTable'), html, 'tbody');
-
-                        accounts.allItemCount = decodedData.data.length;
-
-                        if (decodedData.data.length > 0) {
-                            if (accounts.allItemCount > accounts.limit) {
-                                for (var i = 0; i <= accounts.limit-1; i++) {
-                                    let originTime = '';
-                                    let createdTime1 = '';
-                                    let createdTime2 = '';
-
-                                    originTime = decodedData.data[i].metadata.created_time;
-                                    createdTime1 = originTime.substr(0, 10)
-                                    createdTime2 = originTime.substr(11, 8)
-
-                                    var html = `<tr>
-                                        <td class="left"><a href="javascript:;" data-name="${decodedData.data[i].name}">${decodedData.data[i].name}</a></td>
-                                        <td>${decodedData.data[i].data.storageType}</td>
-                                        <td>${decodedData.data[i].data.endpoint}</td>
-                                        <td>${createdTime1 + " " + createdTime2}</td>
-                                    </tr>`;
-
-                                    func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
-                                };
-                            } else if (accounts.allItemCount < accounts.limit) {
-                                for (var i = 0; i <= accounts.allItemCount-1; i++) {
-                                    let originTime = '';
-                                    let createdTime1 = '';
-                                    let createdTime2 = '';
-
-                                    originTime = decodedData.data[i].metadata.created_time;
-                                    createdTime1 = originTime.substr(0, 10)
-                                    createdTime2 = originTime.substr(11, 8)
-
-                                    var html = `<tr>
-                                        <td class="left"><a href="javascript:;" data-name="${decodedData.data[i].name}">${decodedData.data[i].name}</a></td>
-                                        <td>${decodedData.data[i].data.storageType}</td>
-                                        <td>${decodedData.data[i].data.endpoint}</td>
-                                        <td>${createdTime1 + " " + createdTime2}</td>
-                                    </tr>`;
-
-                                    func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
-                                };
-                            }
-
-                            if (document.querySelector('.listTable').querySelectorAll('tr').length < accounts.allItemCount) {
-                                document.querySelector('.more').classList.toggle('on', true);
+                                func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                             } else {
-                                document.querySelector('.more').classList.toggle('on', false);
-                            };
+                                func.removeHtml(document.querySelector('.listTable'), html, 'tbody');
 
-                        } else {
-                            var html = `<tr><td colspan="4">No Data.</td></tr>`;
+                                accounts.allItemCount = decodedData.data.length;
 
-                            func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                                if (decodedData.data.length > 0) {
+                                    if (accounts.allItemCount > accounts.limit) {
+                                        for (var i = 0; i <= accounts.limit - 1; i++) {
+                                            let originTime = '';
+                                            let createdTime1 = '';
+                                            let createdTime2 = '';
+
+                                            originTime = decodedData.data[i].metadata.created_time;
+                                            createdTime1 = originTime.substr(0, 10)
+                                            createdTime2 = originTime.substr(11, 8)
+
+                                            var html = `<tr>
+                                            <td class="left"><a href="javascript:;" data-name="${decodedData.data[i].name}">${decodedData.data[i].name}</a></td>
+                                            <td>${decodedData.data[i].data.storageType}</td>
+                                            <td>${decodedData.data[i].data.endpoint}</td>
+                                            <td>${createdTime1 + " " + createdTime2}</td>
+                                        </tr>`;
+
+                                            func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                                        }
+                                        ;
+                                    } else if (accounts.allItemCount < accounts.limit) {
+                                        for (var i = 0; i <= accounts.allItemCount - 1; i++) {
+                                            let originTime = '';
+                                            let createdTime1 = '';
+                                            let createdTime2 = '';
+
+                                            originTime = decodedData.data[i].metadata.created_time;
+                                            createdTime1 = originTime.substr(0, 10)
+                                            createdTime2 = originTime.substr(11, 8)
+
+                                            var html = `<tr>
+                                            <td class="left"><a href="javascript:;" data-name="${decodedData.data[i].name}">${decodedData.data[i].name}</a></td>
+                                            <td>${decodedData.data[i].data.storageType}</td>
+                                            <td>${decodedData.data[i].data.endpoint}</td>
+                                            <td>${createdTime1 + " " + createdTime2}</td>
+                                        </tr>`;
+
+                                            func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                                        }
+                                        ;
+                                    }
+
+                                    if (document.querySelector('.listTable').querySelectorAll('tr').length < accounts.allItemCount) {
+                                        document.querySelector('.more').classList.toggle('on', true);
+                                    } else {
+                                        document.querySelector('.more').classList.toggle('on', false);
+                                    }
+                                    ;
+
+                                } else {
+                                    var html = `<tr><td colspan="4">No Data.</td></tr>`;
+
+                                    func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
+                                }
+                                sessionStorage.setItem('accountsCnt', decodedData.data.length)
+                            }
                         }
-                        sessionStorage.setItem('accountsCnt', decodedData.data.length)
+                        accounts.listEvent();
+                    } catch (e){
                     }
-
-                    accounts.listEvent();
-
                 },
 
                 listEvent(){

@@ -751,38 +751,50 @@ const func= {
 
 	async responseDecodeData(data, type) {
 
-		if (type === 'vault' && data !== 'undefined') {
-			let jsonParseData = JSON.parse(data)
+		if (type === 'vault') {
+			if (data !== 'undefined') {
+				try {
+					let jsonParseData = JSON.parse(data)
+					let responseKey = jsonParseData.key;
+					let responseIv = jsonParseData.iv;
+					let responseData = jsonParseData.data;
 
-			let responseKey = jsonParseData.key;
-			let responseIv = jsonParseData.iv;
-			let responseData = jsonParseData.data;
+					let responseDecodeAesKey = await func.responseDecodeAesKeyWithRsa(responseKey, func.vaultPrivateKey)
+					let responseBase64DecodeAesKey = func.decodeIvBase64(responseDecodeAesKey)
+					let responseBase64DecodeIv = func.decodeIvBase64(responseIv)
 
-			let responseDecodeAesKey = await func.responseDecodeAesKeyWithRsa(responseKey, func.vaultPrivateKey)
-			let responseBase64DecodeAesKey = func.decodeIvBase64(responseDecodeAesKey)
-			let responseBase64DecodeIv = func.decodeIvBase64(responseIv)
-
-			return {
-				"data": responseData,
-				"aes": responseBase64DecodeAesKey,
-				"iv": responseBase64DecodeIv
+					return {
+						"data": responseData,
+						"aes": responseBase64DecodeAesKey,
+						"iv": responseBase64DecodeIv
+					}
+				} catch (e) {
+				}
 			}
-		} else if (type === 'mig' && data !== 'undefined') {
-			let jsonParseData = JSON.parse(data)
 
-			let responseKey = jsonParseData.key;
-			let responseIv = jsonParseData.iv;
-			let responseData = jsonParseData.data;
+		} else if (type === 'mig') {
+			if (data !== 'undefined') {
+				try {
+					let jsonParseData = JSON.parse(data)
 
-			let responseDecodeAesKey = await func.responseDecodeAesKeyWithRsa(responseKey, func.migPrivateKey)
-			let responseBase64DecodeAesKey = func.decodeIvBase64(responseDecodeAesKey)
-			let responseBase64DecodeIv = func.decodeIvBase64(responseIv)
+					let responseKey = jsonParseData.key;
+					let responseIv = jsonParseData.iv;
+					let responseData = jsonParseData.data;
 
-			return {
-				"data": responseData,
-				"aes": responseBase64DecodeAesKey,
-				"iv": responseBase64DecodeIv
+					let responseDecodeAesKey = await func.responseDecodeAesKeyWithRsa(responseKey, func.migPrivateKey)
+					let responseBase64DecodeAesKey = func.decodeIvBase64(responseDecodeAesKey)
+					let responseBase64DecodeIv = func.decodeIvBase64(responseIv)
+
+					return {
+						"data": responseData,
+						"aes": responseBase64DecodeAesKey,
+						"iv": responseBase64DecodeIv
+					}
+				} catch (e) {
+				}
+
 			}
+
 		}
 	},
 
