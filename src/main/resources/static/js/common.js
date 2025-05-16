@@ -140,15 +140,6 @@ const func= {
 		"-----END PUBLIC KEY-----",
 	hmacKey : "secret",
 
-	init() {
-
-		/*if (self.name !== 'reload') {
-			self.name = 'reload';
-			self.location.reload(true);
-		}
-		else self.name = '';*/
-	},
-
 	event(){
 		// navigation
 		var nav = document.querySelector('nav').querySelectorAll('.dep01');
@@ -256,74 +247,10 @@ const func= {
 		request.send();
 	},
 
-	/*setUserAuthority(cluster, usersList){
-		var authority ='';
-		for(var i= 0; i < usersList.length; i++) {
-			var users = usersList[i];
-			if(users.clusterId === cluster) {
-				authority = users.userType;
-				break;
-			}
-		}
-		var request = new XMLHttpRequest();
-		request.open('PUT', URI_API_SET_CLUSTER_AUTHORITY, false);
-		request.setRequestHeader('Content-type', 'application/json');
-
-		request.onreadystatechange = () => {
-			if (request.readyState === XMLHttpRequest.DONE){
-				if(request.status === 200){
-				}
-			};
-		};
-		request.send(authority);
-	},*/
 	/////////////////////////////////////////////////////////////////////////////////////
 	// 데이터 로드 - loadData(method, url, callbackFunction)
 	// (전송타입, url, 콜백함수)
 	/////////////////////////////////////////////////////////////////////////////////////
-	initLoadData(method, url, header, callbackFunction, list) {
-
-		if(url == null) {
-			callbackFunction();
-			return false;
-		}
-
-		var httpRequest = new XMLHttpRequest();
-
-		setTimeout(function() {
-			httpRequest.open(method, url, false);
-			httpRequest.setRequestHeader('Content-type', header);
-			httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('accessToken'));
-			httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
-			httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
-
-			httpRequest.onreadystatechange = () => {
-				if (httpRequest.readyState === XMLHttpRequest.DONE) {
-					if (httpRequest.status === 200) {
-						callbackFunction((httpRequest.responseText), list);
-					} else if (httpRequest.status === 500) {
-						alert(httpRequest.responseText)
-						if (httpRequest.responseText === 'secret is nil') {
-							console.warn = console.error = () => {};
-						}
-					} else if (httpRequest.status === 404) {
-						alert(httpRequest.responseText)
-						if (httpRequest.responseText === 'secret is nil') {
-							console.warn = console.error = () => {};
-						}
-					}
-					else {
-						if(document.getElementById('loading')) {
-							document.getElementById('wrap').removeChild(document.getElementById('loading'));
-						};
-						return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');
-					}
-				}
-			}
-			httpRequest.send();
-		}, 0)
-	},
-
 
 	loadData(method, url, header, callbackFunction, list) {
 
@@ -341,25 +268,9 @@ const func= {
 			httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
 			httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
 
-
-			/*httpRequest.onreadystatechange = () => {
-                if (httpRequest.readyState === XMLHttpRequest.DONE){
-                    if (httpRequest.status === 200) {
-                        return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, "closed");
-                    } else {
-                        return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, func.moveToMain);
-                    }
-                }
-            }*/
 			httpRequest.onreadystatechange = () => {
 				if (httpRequest.readyState === XMLHttpRequest.DONE) {
 					if (httpRequest.status === 200) {
-						//callbackFunction(JSON.parse(request.responseText), list);
-						/*if(document.getElementById('loading')){
-							document.getElementById('wrap').removeChild(document.getElementById('loading'));
-						};
-						return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  'closed');*/
-						//callbackFunction(JSON.parse(httpRequest.responseText), list);
 						callbackFunction((httpRequest.responseText), list);
 					} else if (httpRequest.status === 500) {
 						alert(httpRequest.responseText)
@@ -378,127 +289,6 @@ const func= {
 		}, 0)
 	},
 
-	/*bucketData(method, url, data, bull, header, callbackFunction, list) {
-
-		if(url == null) {
-			callbackFunction();
-			return false;
-		}
-
-		var httpRequest = new XMLHttpRequest();
-
-		setTimeout(function() {
-			httpRequest.open(method, url, false);
-			httpRequest.setRequestHeader('Content-type', header);
-			httpRequest.setRequestHeader('Authorization', sessionStorage.getItem('accessToken'));
-			httpRequest.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
-			httpRequest.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
-			//httpRequest.responseType = "json"
-
-
-			/!*httpRequest.onreadystatechange = () => {
-                if (httpRequest.readyState === XMLHttpRequest.DONE){
-                    if (httpRequest.status === 200) {
-                        return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, "closed");
-                    } else {
-                        return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, func.moveToMain);
-                    }
-                }
-            }*!/
-			httpRequest.onreadystatechange = () => {
-				if (httpRequest.readyState === XMLHttpRequest.DONE) {
-					if (httpRequest.status === 200) {
-						//callbackFunction(JSON.parse(request.responseText), list);
-						/!*if(document.getElementById('loading')){
-							document.getElementById('wrap').removeChild(document.getElementById('loading'));
-						};
-						return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  'closed');*!/
-						/!*const responseList = JSON.stringify(httpRequest.responseText)
-						responseList.substr(12);
-						responseList.slice(0,-2)
-
-						const responseList2=responseList
-
-						alert('값 넘길때' + responseList2)
-						callbackFunction(JSON.parse(responseList2), list);
-*!/
-
-						callbackFunction(httpRequest.responseText, list);
-					} else if (httpRequest.status === 500) {
-						alert(httpRequest.responseText)
-						if (httpRequest.responseText === 'secret is nil') {
-							console.warn = console.error = () => {};
-						}
-					} else {
-						if(document.getElementById('loading')) {
-							document.getElementById('wrap').removeChild(document.getElementById('loading'));
-						};
-						return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');
-					}
-				}
-			}
-			httpRequest.send(JSON.stringify(data));
-		}, 0)
-	},*/
-
-	/////////////////////////////////////////////////////////////////////////////////////
-	// 상태 데이터 로드 - statusLoadData(method, url, callbackFunction)
-	// (전송타입, url, 콜백함수)
-	/////////////////////////////////////////////////////////////////////////////////////
-	/*statusLoadData(method, url, header, callbackFunction, list){
-		if(sessionStorage.getItem('token') == null){
-			func.loginCheck();
-		};
-
-		if(url == null) {
-			callbackFunction();
-			return false;
-		}
-
-		var request = new XMLHttpRequest();
-
-		setTimeout(function() {
-			request.open(method, url, false);
-			request.setRequestHeader('Content-type', header);
-			request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
-			request.setRequestHeader('uLang', CURRENT_LOCALE_LANGUAGE);
-			request.setRequestHeader('Accept-Language', CURRENT_LOCALE_LANGUAGE);
-
-
-			request.onreadystatechange = () => {
-				if (request.readyState === XMLHttpRequest.DONE){
-					if(request.status === 200 && request.responseText != ''){
-						var resultMessage = JSON.parse(request.responseText).resultMessage;
-						var resultCode =  JSON.parse(request.responseText).resultCode;
-						var detailMessage = JSON.parse(request.responseText).detailMessage;
-						//토큰 만료 검사
-						if( resultMessage == 'TOKEN_EXPIRED') {
-							func.refreshToken();
-							return func.loadData(method, url, header, callbackFunction, list);
-						}
-						else if(resultMessage == 'TOKEN_FAILED') {
-							func.loginCheck();
-							return func.loadData(method, url, header, callbackFunction, list);
-						}
-						else if(resultCode != RESULT_STATUS_SUCCESS) {
-							if(document.getElementById('loading')){
-								document.getElementById('wrap').removeChild(document.getElementById('loading'));
-							};
-							func.alertPopup('ERROR', detailMessage, true, MSG_CONFIRM, func.moveToMain);
-						}
-						else {
-							callbackFunction(JSON.parse(request.responseText), list);
-						}
-					} else if(JSON.parse(request.responseText).httpStatusCode === 500){
-						sessionStorage.clear();
-						func.loginCheck();
-					};
-				};
-			};
-
-			request.send(); },0);
-
-	},*/
 
 	/////////////////////////////////////////////////////////////////////////////////////
 	// 데이터 SAVE - saveData(method, url, data, bull, callFunc)
@@ -620,10 +410,6 @@ const func= {
 		};
 	},
 
-	/*moveToMain() {
-		location.href = URI_CP_BASE_URL;
-	},*/
-
 	moveToMain() {
 		location.href = URI_CP_ACCOUNTS_LIST;
 	},
@@ -717,15 +503,9 @@ const func= {
 
 	encodeDataWithAes(data, aes, iv) {
 
-		/*return JSON.stringify(CryptoJS.AES.encrypt(data, aes,
-			{ iv: iv
-			}));*/
 		return CryptoJS.AES.encrypt(data, aes,
 			{ iv: iv
 			}).toString();
-		/*return CryptoJS.AES.encrypt(data, aes,
-			{ iv: iv
-			}).toString();*/
 
 	},
 
@@ -971,7 +751,7 @@ const func= {
 
 	async responseDecodeData(data, type) {
 
-		if (type === 'vault') {
+		if (type === 'vault' && data !== 'undefined') {
 			let jsonParseData = JSON.parse(data)
 
 			let responseKey = jsonParseData.key;
@@ -987,7 +767,7 @@ const func= {
 				"aes": responseBase64DecodeAesKey,
 				"iv": responseBase64DecodeIv
 			}
-		} else {
+		} else if (type === 'mig' && data !== 'undefined') {
 			let jsonParseData = JSON.parse(data)
 
 			let responseKey = jsonParseData.key;
@@ -1128,8 +908,22 @@ const func= {
 		let destinationDataWithRsa = await func.encodeRsaMigrationWebCryptoAPI(JSON.stringify(destinationData))
 
 		sessionStorage.setItem('destinationData', destinationDataWithRsa);
+	},
 
-
-	}
+	readTextFile(file) {
+	var rawFile = new XMLHttpRequest();
+	rawFile.open("GET", file, false);
+	rawFile.onreadystatechange = function () {
+		if(rawFile.readyState === 4)
+		{
+			if(rawFile.status === 200 || rawFile.status == 0)
+			{
+				var allText = rawFile.responseText;
+				alert(allText);
+			}
+		}
+	};
+	rawFile.send(null);
+}
 
 }
