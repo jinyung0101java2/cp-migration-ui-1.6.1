@@ -188,30 +188,6 @@ const func= {
 
 	},
 
-	// 로그인 체크 ////////////////////////////////////////////////////////////////
-
-
-	// Refresh 토큰 조회 ////////////////////////////////////////////////////////////////
-	/*refreshToken(){
-		var request = new XMLHttpRequest();
-
-		request.open('GET', URI_CP_REFRESH_TOKEN, false);
-		request.setRequestHeader('Content-type', 'application/json');
-
-		request.onreadystatechange = () => {
-			if (request.readyState === XMLHttpRequest.DONE){
-				if(request.status === 200){
-					// 토큰 업데이트
-					sessionStorage.setItem('token' , 'Bearer ' + JSON.parse(request.responseText).accessToken);
-				} else {
-					func.alertPopup('ERROR', JSON.parse(request.responseText).detailMessage, true, MSG_CLOSE);
-				};
-			};
-		};
-
-		request.send();
-	},*/
-
 	// Locale Language 조회 ////////////////////////////////////////////////////////////////
 	getLocaleLang(){
 		var request = new XMLHttpRequest();
@@ -509,42 +485,6 @@ const func= {
 
 	},
 
-	encodeDataWithAes2(data, aes, iv) {
-		let cipher = CryptoJS.AES.encrypt(data, CryptoJS.enc.Utf8.parse(aes),{
-			iv : CryptoJS.enc.Utf8.parse(iv),
-			padding : CryptoJS.pad.Pkcs7,
-			mode: CryptoJS.mode.CBC
-		});
-
-		let encTarget = cipher.toString()
-		return encTarget;
-	},
-
-	encodeDataWithAesPkcs7(data, aes, iv) {
-		return CryptoJS.AES.encrypt(data, aes,
-			{ iv: iv,
-				padding: CryptoJS.pad.Pkcs7,
-				//padding: pkcs7Pad(data, 16),
-				mode: CryptoJS.mode.CBC
-			});
-		/*return CryptoJS.AES.encrypt(data, aes,
-			{ iv: iv
-			}).toString();*/
-	},
-
-	decodeDataWithAes(data, aes, iv) {
-		try {
-			return CryptoJS.AES.decrypt(data, aes,
-				{ iv: iv,
-					padding: CryptoJS.pad.Pkcs7,
-					mode: CryptoJS.mode.CBC
-				}).toString(CryptoJS.enc.Utf8);
-		} catch (error) {
-			console.log("Decrypt Error")
-		}
-
-	},
-
 	encodeIvBase64(iv) {
 
 		return CryptoJS.enc.Base64.stringify(iv)
@@ -596,6 +536,7 @@ const func= {
 
 		return btoa(String.fromCharCode(...new Uint8Array(cipher)));
 	},
+
 	async encodeRsaWebCryptoAPI(data, type) {
 		const pemHF = {
 			public: {

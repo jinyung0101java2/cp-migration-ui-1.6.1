@@ -110,6 +110,7 @@
                                 func.removeHtml(document.querySelector('.listTable'), html, 'tbody');
 
                                 accounts.allItemCount = decodedData.data.length;
+                                console.log(accounts.allItemCount)
 
                                 if (decodedData.data.length > 0) {
                                     if (accounts.allItemCount > accounts.limit) {
@@ -132,7 +133,7 @@
                                             func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                                         }
                                         ;
-                                    } else if (accounts.allItemCount < accounts.limit) {
+                                    } else if (accounts.allItemCount <= accounts.limit) {
                                         for (var i = 0; i <= accounts.allItemCount - 1; i++) {
                                             let originTime = '';
                                             let createdTime1 = '';

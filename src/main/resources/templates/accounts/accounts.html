@@ -114,7 +114,7 @@
 
                                             func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
                                         };
-                                    } else if (accounts.allItemCount < accounts.limit) {
+                                    } else if (accounts.allItemCount <= accounts.limit) {
                                         for (var i = 0; i <= accounts.allItemCount-1; i++) {
                                             let originTime = '';
                                             let createdTime1 = '';
