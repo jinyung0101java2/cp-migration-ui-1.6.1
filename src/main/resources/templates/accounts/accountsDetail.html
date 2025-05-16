@@ -114,7 +114,7 @@
                 },
 
                 delete(){
-                    func.saveData('DELETE', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBackRefresh);
+                     func.deleteData('DELETE', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBackRefresh);
                     // func.saveData('DELETE', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBack);
 
                     if (sessionStorage.getItem('accountsCnt') === 1) {

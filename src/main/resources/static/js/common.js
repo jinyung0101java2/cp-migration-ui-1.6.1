@@ -518,13 +518,7 @@ const func= {
 		httpRequest.onreadystatechange = () => {
 			if (httpRequest.readyState === XMLHttpRequest.DONE){
 				if (httpRequest.status === 200) {
-					if (method === 'DELETE') {
-						alert('DELETE')
-						return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, callFunc);
-					} else {
-						alert('SUCCESS')
-						return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, callFunc);
-					}
+					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, callFunc);
 				} else {
 					if(document.getElementById('loading')){
 						document.getElementById('wrap').removeChild(document.getElementById('loading'));
@@ -581,7 +575,7 @@ const func= {
 			if (httpRequest.readyState === XMLHttpRequest.DONE){
 				if (httpRequest.status === 200) {
 					alert("삭제")
-					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM,  func.historyBack);
+					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, func.historyBackRefresh);
 				} else {
 					if(document.getElementById('loading')){
 						document.getElementById('wrap').removeChild(document.getElementById('loading'));
