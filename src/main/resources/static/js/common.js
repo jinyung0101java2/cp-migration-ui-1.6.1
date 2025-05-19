@@ -3,6 +3,12 @@ const func= {
 	migrationUrl: URI_CP_MIGRATION_API,
 	vaultUrl: URI_CP_VAULT_API,
 	ui : 'http://localhost:8090/',
+	/*vaultPrivateKey : VAULT_PRIVATE_KEY,
+	vaultPublicKey : VAULT_PUBLIC_KEY,
+	migPrivateKey : MIG_PRIVATE_KEY,
+	migPublicKey : MIG_PUBLIC_KEY,
+	hmacKey : HMAC_KEY,*/
+
 	vaultPrivateKey : "-----BEGIN PRIVATE KEY-----\n" +
 		"MIIJQQIBADANBgkqhkiG9w0BAQEFAASCCSswggknAgEAAoICAQCUzOtV/h2Gj1Jm\n" +
 		"ITsT/LTTbSPMX8/8ccghEc2diFzI7f7WkprjNJHR8SNT4DDU7tdsC/WmuF8jz5hn\n" +

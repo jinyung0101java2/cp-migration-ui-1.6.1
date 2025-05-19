@@ -59,12 +59,17 @@
      var MSG_CLOSE = [[#{M0023}]];
      var MSG_INVALID_FORMAT = "형식이 올바르지 않습니다.";
 
-
      var CURRENT_LOCALE_LANGUAGE = '';
 
      var IS_NAMELOAD = false;
      var IS_VCHK = false;
      var IS_SEARCH = false;
+
+     var VAULT_PRIVATE_KEY = [[${@environment.getProperty('key.vault.private')}]];
+     var VAULT_PUBLIC_KEY = [[${@environment.getProperty('key.vault.public')}]];
+     var MIG_PRIVATE_KEY = [[${@environment.getProperty('key.migration.private')}]];
+     var MIG_PUBLIC_KEY = [[${@environment.getProperty('key.migration.public')}]];
+     var HMAC_KEY = [[${@environment.getProperty('key.hmac')}]];
 
 </script>
 

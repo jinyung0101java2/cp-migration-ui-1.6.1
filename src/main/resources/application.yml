@@ -45,6 +45,15 @@ management:
 logging:
   config: classpath:logback-spring.xml
 
+key:
+  vault:
+    private: ${VAULT_PRIVATE_KEY}
+    public: ${VAULT_PUBLIC_KEY}
+  migration:
+    private: ${MIG_PRIVATE_KEY}
+    public: ${MIG_PUBLIC_KEY}
+  hmac: ${HMAC_KEY}
+
 ---
 spring:
   config:
