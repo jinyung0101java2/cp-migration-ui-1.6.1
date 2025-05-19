@@ -67,9 +67,9 @@ logging:
 cpApi:
   url: http://localhost:3333
 migrationApi:
-  url: https://mig.115.68.198.189.nip.io
+  url: ${CP_MIGRATION_API_URI}
 vaultApi:
-  url: https://mig.115.68.198.189.nip.io
+  url: ${CP_VAULT_API_URI}
 ---
 spring:
   config:

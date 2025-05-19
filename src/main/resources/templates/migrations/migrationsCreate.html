@@ -85,10 +85,8 @@
 
                 init() {
 
-                    if (sessionStorage.getItem('accountsData') === 'Y') {
-                        func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=false`, 'application/json', migrationsCreate.draw);
-                        // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=false`, 'application/json', migrationsCreate.draw);
-                    }
+                    // func.loadData('GET', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}?detail=false`, 'application/json', migrationsCreate.draw);
+                    func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}?detail=false`, 'application/json', migrationsCreate.draw);
 
                     sessionStorage.setItem('accountsName' , '-');
                 },
@@ -202,8 +200,8 @@
 
                     let encodeData = {"key":encodeRsaAes,"iv":encodeIvBase64,"data":encodeDataWithAes}
 
-                    // func.saveData('POST', `${func.migrationUrl}v1/migration/sync/sync`, JSON.stringify(encodeData), true, 'application/json');
-                    func.saveData('POST', `http://192.168.0.5:8901/v1/migration/sync/sync`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh);
+                    // func.saveData('POST', `http://192.168.0.5:8901/v1/migration/sync/sync`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh);
+                    func.saveData('POST', `${func.migrationUrl}v1/migration/sync/sync`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh);
 
                     sessionStorage.removeItem('sourceData')
                     sessionStorage.removeItem('destinationData')
@@ -250,8 +248,8 @@
 
                     let encodeData = {"key":encodeRsaAes,"iv":encodeIvBase64,"data":encodeDataWithAes}
 
-                    // func.saveData('POST', `${func.migrationUrl}v1/migration/sync/copy`, JSON.stringify(encodeData), true, 'application/json');
-                    func.saveData('POST', `http://192.168.0.5:8901/v1/migration/sync/copy`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh);
+                    // func.saveData('POST', `http://192.168.0.5:8901/v1/migration/sync/copy`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh);
+                    func.saveData('POST', `${func.migrationUrl}v1/migration/sync/copy`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh);
 
                     sessionStorage.removeItem('sourceData')
                     sessionStorage.removeItem('destinationData')
@@ -268,10 +266,10 @@
             let accessKeyId = ``;
             let secretAccessKey = ``;
 
-            func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', func.sourceDetailDraw);
-            func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#sourceMigration > option:checked').value}`, 'application/json', sourceAccountsDraw);
-            // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', func.sourceDetailDraw);
-            // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#sourceMigration > option:checked').value}`, 'application/json', sourceAccountsDraw);
+            // func.loadData('GET', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', func.sourceDetailDraw);
+            func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', func.sourceDetailDraw);
+            // func.loadData('GET', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#sourceMigration > option:checked').value}`, 'application/json', sourceAccountsDraw);
+            func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#sourceMigration > option:checked').value}`, 'application/json', sourceAccountsDraw);
 
             async function sourceAccountsDraw(data) {
 
@@ -307,8 +305,8 @@
                     "data": encodeDataWithAes
                 }
 
-                func.bucketData('POST', `http://192.168.0.5:8901/v1/migration/operations/list`, JSON.stringify(encodeData), true, 'application/json', sourceBucketsDraw);
-                // func.bucketData('POST', `${func.migrationUrl}v1/migration/operations/list`, JSON.stringify(encodeData), true, 'application/json', sourceBucketsDraw);
+                // func.bucketData('POST', `http://192.168.0.5:8901/v1/migration/operations/list`, JSON.stringify(encodeData), true, 'application/json', sourceBucketsDraw);
+                func.bucketData('POST', `${func.migrationUrl}v1/migration/operations/list`, JSON.stringify(encodeData), true, 'application/json', sourceBucketsDraw);
             }
 
             function sourceBucketsDraw(data) {
@@ -341,10 +339,10 @@
             let accessKeyId = ``;
             let secretAccessKey = ``;
 
-            func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${destinationMigration}`, 'application/json', func.destinationDetailDraw);
-            func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#destinationMigration > option:checked').value}`, 'application/json', destinationAccountsDraw);
-            // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${destinationMigration}`, 'application/json', func.destinationDetailDraw);
-            // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#destinationMigration > option:checked').value}`, 'application/json', destinationAccountsDraw);
+            // func.loadData('GET', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${destinationMigration}`, 'application/json', func.destinationDetailDraw);
+            func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${destinationMigration}`, 'application/json', func.destinationDetailDraw);
+            // func.loadData('GET', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#destinationMigration > option:checked').value}`, 'application/json', destinationAccountsDraw);
+            func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#destinationMigration > option:checked').value}`, 'application/json', destinationAccountsDraw);
 
             async function destinationAccountsDraw(data) {
 
@@ -380,8 +378,8 @@
                     "data": encodeDataWithAes
                 }
 
-                func.bucketData('POST', `http://192.168.0.5:8901/v1/migration/operations/list`, JSON.stringify(encodeData), true, 'application/json', destinationBucketsDraw);
-                // func.bucketData('POST', `${func.vaultUrl}v1/migration/operations/list`, JSON.stringify(encodeData), true, 'application/json', destinationBucketsDraw);
+                // func.bucketData('POST', `http://192.168.0.5:8901/v1/migration/operations/list`, JSON.stringify(encodeData), true, 'application/json', destinationBucketsDraw);
+                func.bucketData('POST', `${func.migrationUrl}v1/migration/operations/list`, JSON.stringify(encodeData), true, 'application/json', destinationBucketsDraw);
             }
 
             function destinationBucketsDraw(data) {

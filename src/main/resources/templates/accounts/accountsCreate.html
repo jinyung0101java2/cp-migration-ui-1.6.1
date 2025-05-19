@@ -49,7 +49,7 @@
             </div>
             <!-- btn -->
             <div class="btn02">
-                <button onclick="movePage(URI_CP_ACCOUNTS_LIST);" th:text="#{M0025}"></button>
+                <button id="preBtn" th:text="#{M0025}"></button>
                 <div>
                     <button type="submit" id="save" th:text="#{M0026}"></button>
                 </div>
@@ -93,6 +93,16 @@
 
                     }, false);
 
+                    document.getElementById('preBtn').addEventListener('click', () => {
+
+                        if (sessionStorage.getItem('accountsCnt') === '0') {
+                            func.alertPopup('ALERT', MSG_SAVE_ACCOUNTS, true, MSG_CONFIRM, 'closed');
+                        } else {
+                            movePage(URI_CP_ACCOUNTS_LIST)
+                        }
+
+                    }, false);
+
                 },
 
                 async save() {
@@ -105,7 +115,7 @@
                     let type = 'vault';
 
                     let timestamp = func.createUnixTimestamp();
-                    let accountsCreate = {"basePath":"jjyStorage","userAccount":sessionStorage.getItem('userGuid'),"configName":accountsName,"content":{"storageType":storageType,"endpoint":endpoint,"accessKeyId":accessKeyId,"secretAccessKey":secretAccessKey}}
+                    let accountsCreate = {"basePath":"storage","userAccount":sessionStorage.getItem('userGuid'),"configName":accountsName,"content":{"storageType":storageType,"endpoint":endpoint,"accessKeyId":accessKeyId,"secretAccessKey":secretAccessKey}}
                     let includeTimestampData = {"data":accountsCreate,"timestamp":timestamp.toString()}
                     let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData));
                     let includeHmacData = {"data":accountsCreate,"hmac_data":hmacData,"timestamp":timestamp.toString()}
@@ -121,8 +131,9 @@
                         "data": encodeDataWithAes
                     }
 
-                    func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh);
-                    //sessionStorage.setItem('accountsData', 'Y')
+                    // func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh);
+                    func.saveData('POST', `${func.vaultUrl}v1/vault`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh);
+                    sessionStorage.setItem('accountsData', 'Y')
                 },
             };
             accountsCreate.init();

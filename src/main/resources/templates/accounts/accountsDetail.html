@@ -70,8 +70,8 @@
             const accountsDetail = {
                 init() {
 
-                    func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', accountsDetail.draw);
-                    // func.loadData('GET', `${func.vaultUrl}v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', accountsDetail.draw);
+                    // func.loadData('GET', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', accountsDetail.draw);
+                    func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', accountsDetail.draw);
                 },
 
                 async draw(data) {
@@ -114,12 +114,15 @@
                 },
 
                 delete(){
-                     func.deleteData('DELETE', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBackRefresh);
 
-                    if (sessionStorage.getItem('accountsCnt') === 1) {
-                        //vault accountsData 쓰기
-                        //func.saveData('POST', `http://192.168.0.5:8901/v1/migration/sync/sync`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh());
-                        sessionStorage.setItem('accountsData', 'N')
+                    if (sessionStorage.getItem('accountsCnt') === '1') {
+                        sessionStorage.setItem('accountsCnt', '0')
+                        // func.deleteData('DELETE', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', movePage(URI_CP_BASE_URL));
+                        func.deleteData('DELETE', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', movePage(URI_CP_BASE_URL));
+                        sessionStorage.removeItem('accountsData')
+                    } else {
+                        // func.deleteData('DELETE', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBackRefresh);
+                        func.deleteData('DELETE', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBackRefresh);
                     }
                 },
 

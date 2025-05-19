@@ -2,44 +2,56 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout}">
+
 <div layout:fragment="content">
-    <div id="content" class="sub-page">
+    <div id="content" class="sub-page clusters">
         <!--<article class="location">
         </article>-->
-        <article class="base tab-cont-wrap">
-            <ul class="tab-btn">
-                <li type="notice-accounts" id="tab-accounts" class="active"><a href="javascript:">Accounts</a></li>
-                <li type="notice-migrations" id="tab-migrations"><a onclick="movePage(URI_CP_MIGRATIONS_CREATE)">Migrations</a></li>
-            </ul>
-            <div class="notice tab-cont-wrap">
-                <h3>List</h3>
-                <!-- User -->
-                <div class="table_style01">
-                    <!-- board -->
-                    <table>
-                        <caption>Accounts List</caption>
-                        <colgroup >
-                            <col width="20%" />
-                            <col width="10%" />
-                            <col width="40%" />
-                            <col width="30%" />
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Storage Type</th>
-                            <th scope="col">Endpoint</th>
-                            <th scope="col">Created Time</th>
-                        </tr>
-                        </thead>
-                        <tbody class="listTable">
-                        </tbody>
-                    </table>
-                    <!-- more btn -->
-                    <a class="more" href="javascript:;">more</a>
+        <article class="base">
+            <div class="creat">
+                <h3 th:text="|Accounts #{M0022}|"></h3>
+                <div>
+                    <dl>
+                        <dt><label for="accountsName">Name</label></dt>
+                        <dd>
+                            <input id="accountsName" type="text"/>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt><label for="storageType">Storage Type</label></dt>
+                        <dd>
+                            <fieldset>
+                                <select id="storageType">
+                                    <option value="s3">S3</option>
+                                </select>
+                            </fieldset>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt><label for="endpoint">Endpoint</label></dt>
+                        <dd>
+                            <input id="endpoint" type="text"/>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt><label for="accessKeyId">Access Key Id</label></dt>
+                        <dd>
+                            <input id="accessKeyId" type="text"/>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt><label for="secretAccessKey">Secret Access Key</label></dt>
+                        <dd>
+                            <input id="secretAccessKey" type="text"/>
+                        </dd>
+                    </dl>
                 </div>
-                <!-- btn -->
-                <a href="javascript:;" class="create" th:text="#{M0022}"></a>
+            </div>
+            <!-- btn -->
+            <div class="btn02">
+                <div>
+                    <button type="submit" id="save" th:text="#{M0026}"></button>
+                </div>
             </div>
         </article>
     </div>
@@ -52,171 +64,71 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
     <script type="text/javascript" th:inline="javascript">
+
         window.onload = () => {
 
-            const accounts = {
-                limit : 10, // 로드 게시물 개수
-                allItemCount : 0, // 게시물 총 개수
+            const accountsCreate = {
 
                 init() {
-
-                    // let text = func.readTextFile("file:///D:/migkey/private_key.pem") // file:///D:/migkey/private_key.pem
-                    // let text = func.readTextFile("file:///D:/migkey/private_key.pem")
-                    // alert('text:: ' + text)
-
                     sessionStorage.setItem('accessToken' , 'Bearer ' + [[${accessToken}]]);
                     sessionStorage.setItem('userGuid' , [[${userGuid}]]);
+                    sessionStorage.setItem('accountsCnt', '0')
                     sessionStorage.setItem('accountsName' , '-');
-                    sessionStorage.removeItem('sourceData')
-                    sessionStorage.removeItem('destinationData')
+                },
 
-                    sessionStorage.setItem('accountsData' , 'Y');//삭제
-                    initDraw(sessionStorage.getItem('accountsData'))
+                event() {
+                    let accountsName = document.querySelector('#accountsName');
+                    let storageType = document.querySelector('#storageType');
+                    let endpoint = document.querySelector('#endpoint');
+                    let accessKeyId = document.querySelector('#accessKeyId');
+                    let secretAccessKey = document.querySelector('#secretAccessKey');
 
-                    //accountsData 불러오기
-                    //func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', initDraw);
+                    document.getElementById('save').addEventListener('click', () => {
 
-                    async function initDraw(data) {
-                        // let accountsData = data.accountsData;
-                        let accountsData = data;
-
-                        if (accountsData === 'N') {
-                            var html = `<tr><td colspan="4">No Data.</td></tr>`;
-                            func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
-                        } else {
-                            func.loading();
-                            func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=true`, 'application/json', accounts.draw);
+                        if (accountsName.value === '' || storageType.value === '' || endpoint.value === '' || accessKeyId.value === '' || secretAccessKey.value === '') {
+                            func.alertPopup('CHECK', MSG_CHECK_TO_VALUE, true, MSG_CONFIRM, 'closed');
+                        } else if (accountsName.value !== '' && storageType.value !== '' && endpoint.value !== '' && accessKeyId.value !== '' && secretAccessKey.value !== '') {
+                            func.alertPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, accountsCreate.save);
                         }
-                    }
-                },
 
-                async draw(data) {
-                    try {
-                        if (data !== 'undefined') {
-                            let type = 'vault'
-                            let decodeData = await func.responseDecodeData(data, type)
-                            let encodedData = JSON.stringify(decodeData.data)
-                            encodedData = encodedData.replaceAll("\"", "");
-
-                            let iv = decodeData.iv
-                            let aes = decodeData.aes
-                            let responseDecodeData = await responseDecodeDataWithAes(encodedData, aes, iv)
-                            let decodedData = JSON.parse(responseDecodeData)
-
-                            if (sessionStorage.getItem('accountsData') === 'N') {
-                                alert('No Data.')
-                                var html = `<tr><td colspan="4">No Data.</td></tr>`;
-
-                                func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
-                            } else {
-                                func.removeHtml(document.querySelector('.listTable'), html, 'tbody');
-
-                                accounts.allItemCount = decodedData.data.length;
-                                console.log(accounts.allItemCount)
-
-                                if (decodedData.data.length > 0) {
-                                    if (accounts.allItemCount > accounts.limit) {
-                                        for (var i = 0; i <= accounts.limit - 1; i++) {
-                                            let originTime = '';
-                                            let createdTime1 = '';
-                                            let createdTime2 = '';
-
-                                            originTime = decodedData.data[i].metadata.created_time;
-                                            createdTime1 = originTime.substr(0, 10)
-                                            createdTime2 = originTime.substr(11, 8)
-
-                                            var html = `<tr>
-                                            <td class="left"><a href="javascript:;" data-name="${decodedData.data[i].name}">${decodedData.data[i].name}</a></td>
-                                            <td>${decodedData.data[i].data.storageType}</td>
-                                            <td>${decodedData.data[i].data.endpoint}</td>
-                                            <td>${createdTime1 + " " + createdTime2}</td>
-                                        </tr>`;
-
-                                            func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
-                                        }
-                                        ;
-                                    } else if (accounts.allItemCount <= accounts.limit) {
-                                        for (var i = 0; i <= accounts.allItemCount - 1; i++) {
-                                            let originTime = '';
-                                            let createdTime1 = '';
-                                            let createdTime2 = '';
-
-                                            originTime = decodedData.data[i].metadata.created_time;
-                                            createdTime1 = originTime.substr(0, 10)
-                                            createdTime2 = originTime.substr(11, 8)
-
-                                            var html = `<tr>
-                                            <td class="left"><a href="javascript:;" data-name="${decodedData.data[i].name}">${decodedData.data[i].name}</a></td>
-                                            <td>${decodedData.data[i].data.storageType}</td>
-                                            <td>${decodedData.data[i].data.endpoint}</td>
-                                            <td>${createdTime1 + " " + createdTime2}</td>
-                                        </tr>`;
-
-                                            func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
-                                        }
-                                        ;
-                                    }
-
-                                    if (document.querySelector('.listTable').querySelectorAll('tr').length < accounts.allItemCount) {
-                                        document.querySelector('.more').classList.toggle('on', true);
-                                    } else {
-                                        document.querySelector('.more').classList.toggle('on', false);
-                                    }
-                                    ;
-
-                                } else {
-                                    var html = `<tr><td colspan="4">No Data.</td></tr>`;
-
-                                    func.appendHtml(document.querySelector('.listTable'), html, 'tbody');
-                                }
-                                sessionStorage.setItem('accountsCnt', decodedData.data.length)
-                            }
-                        }
-                        accounts.listEvent();
-                    } catch (e){
-                    }
-                },
-
-                listEvent(){
-                    var listAll = document.querySelector('.listTable').querySelectorAll('a');
-
-                    for(var i=0; i<=listAll.length-1; i++){
-
-                        listAll[i].addEventListener('click', (e) => {
-                            sessionStorage.setItem('accountsName', e.target.getAttribute('data-name'));
-
-                            document.location.href = URI_CP_ACCOUNTS_LIST + URI_CP_DETAILS;
-                        }, true);
-                    };
-
-                    document.getElementById('wrap').removeChild(document.getElementById('loading'));
-                },
-
-                event(){
-
-                    document.querySelector('.create').addEventListener('click', (e) => {
-                        document.location.href = URI_CP_ACCOUNTS_CREATE;
                     }, false);
 
-                    document.querySelector('.more').addEventListener('click', (e) => {
-                        accounts.limit += 10;
-
-                        accounts.load();
-                    }, false);
                 },
 
-                load(){
-                    func.loading();
+                async save() {
 
-                    func.loadData('GET', `http://192.168.0.5:8911/v1/vault/jjyStorage/${sessionStorage.getItem('userGuid')}?detail=true`, 'application/json', accounts.draw);
-                }
+                    let accountsName = document.querySelector('#accountsName').value;
+                    let storageType = document.querySelector('#storageType').value;
+                    let endpoint = document.querySelector('#endpoint').value;
+                    let accessKeyId = document.querySelector('#accessKeyId').value;
+                    let secretAccessKey = document.querySelector('#secretAccessKey').value;
+                    let type = 'vault';
 
-            }
+                    let timestamp = func.createUnixTimestamp();
+                    let accountsCreate = {"basePath":"storage","userAccount":sessionStorage.getItem('userGuid'),"configName":accountsName,"content":{"storageType":storageType,"endpoint":endpoint,"accessKeyId":accessKeyId,"secretAccessKey":secretAccessKey}}
+                    let includeTimestampData = {"data":accountsCreate,"timestamp":timestamp.toString()}
+                    let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData));
+                    let includeHmacData = {"data":accountsCreate,"hmac_data":hmacData,"timestamp":timestamp.toString()}
+                    let aesIV = func.generateAesIv();
 
-            accounts.init();
-            accounts.event();
-            accounts.draw();
-        }
+                    let encodeDataWithAes = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
+                    const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes, type)
+                    const encodeIvBase64 = func.encodeIvBase64(aesIV.iv)
+
+                    let encodeData = {
+                        "key": encodeRsaAes,
+                        "iv": encodeIvBase64,
+                        "data": encodeDataWithAes
+                    }
+
+                    // func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(encodeData), true, 'application/json', movePage(URI_CP_ACCOUNTS_LIST));
+                    func.saveData('POST', `${func.vaultUrl}v1/vault`, JSON.stringify(encodeData), true, 'application/json', movePage(URI_CP_ACCOUNTS_LIST));
+                    sessionStorage.setItem('accountsData' , 'Y');
+                },
+            };
+            accountsCreate.init();
+            accountsCreate.event();
+        };
 
         async function responseDecodeDataWithAes(data, aes, iv) {
 
@@ -229,7 +141,9 @@
             } catch (error) {
                 console.log("Decrypt Error")
             }
+
         }
+
     </script>
 </th:block>
 </html>
