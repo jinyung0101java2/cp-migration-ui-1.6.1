@@ -70,8 +70,7 @@
             const accountsDetail = {
                 init() {
 
-                    // func.loadData('GET', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', accountsDetail.draw);
-                    func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', accountsDetail.draw);
+                    func.loadMigData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', accountsDetail.draw);
                 },
 
                 async draw(data) {
@@ -101,7 +100,7 @@
 
                 event(){
                     document.getElementById('delete').addEventListener('click', (e) => {
-                        func.alertPopup('DELETE', MSG_CHECK_TO_DELETE, true, MSG_CONFIRM, accountsDetail.delete);
+                        func.alertMigPopup('DELETE', MSG_CHECK_TO_DELETE, true, MSG_CONFIRM, accountsDetail.delete);
                     }, false);
 
                     document.addEventListener('click', (e) => {
@@ -117,12 +116,10 @@
 
                     if (sessionStorage.getItem('accountsCnt') === '1') {
                         sessionStorage.setItem('accountsCnt', '0')
-                        // func.deleteData('DELETE', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', movePage(URI_CP_BASE_URL));
-                        func.deleteData('DELETE', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', movePage(URI_CP_BASE_URL));
+                        func.deleteMigData('DELETE', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', movePage(URI_CP_BASE_URL));
                         sessionStorage.removeItem('accountsData')
                     } else {
-                        // func.deleteData('DELETE', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBackRefresh);
-                        func.deleteData('DELETE', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.historyBackRefresh);
+                        func.deleteMigData('DELETE', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sessionStorage.getItem('accountsName')}`, 'application/json', func.migHistoryBackRefresh);
                     }
                 },
 

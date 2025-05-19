@@ -86,9 +86,9 @@
                     document.getElementById('save').addEventListener('click', () => {
 
                         if (accountsName.value === '' || storageType.value === '' || endpoint.value === '' || accessKeyId.value === '' || secretAccessKey.value === '') {
-                            func.alertPopup('CHECK', MSG_CHECK_TO_VALUE, true, MSG_CONFIRM, 'closed');
+                            func.alertMigPopup('CHECK', MSG_CHECK_TO_VALUE, true, MSG_CONFIRM, 'closed');
                         } else if (accountsName.value !== '' && storageType.value !== '' && endpoint.value !== '' && accessKeyId.value !== '' && secretAccessKey.value !== '') {
-                            func.alertPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, accountsCreate.save);
+                            func.alertMigPopup('SAVE', MSG_CHECK_TO_SAVE, true, MSG_CONFIRM, accountsCreate.save);
                         }
 
                     }, false);
@@ -96,7 +96,7 @@
                     document.getElementById('preBtn').addEventListener('click', () => {
 
                         if (sessionStorage.getItem('accountsCnt') === '0') {
-                            func.alertPopup('ALERT', MSG_SAVE_ACCOUNTS, true, MSG_CONFIRM, 'closed');
+                            func.alertMigPopup('ALERT', MSG_SAVE_ACCOUNTS, true, MSG_CONFIRM, 'closed');
                         } else {
                             movePage(URI_CP_ACCOUNTS_LIST)
                         }
@@ -131,8 +131,7 @@
                         "data": encodeDataWithAes
                     }
 
-                    // func.saveData('POST', `http://192.168.0.5:8911/v1/vault`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh);
-                    func.saveData('POST', `${func.vaultUrl}v1/vault`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh);
+                    func.saveMigData('POST', `${func.vaultUrl}v1/vault`, JSON.stringify(encodeData), true, 'application/json', func.migHistoryBackRefresh);
                     sessionStorage.setItem('accountsData', 'Y')
                 },
             };

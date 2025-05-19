@@ -85,8 +85,7 @@
 
                 init() {
 
-                    // func.loadData('GET', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}?detail=false`, 'application/json', migrationsCreate.draw);
-                    func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}?detail=false`, 'application/json', migrationsCreate.draw);
+                    func.loadMigData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}?detail=false`, 'application/json', migrationsCreate.draw);
 
                     sessionStorage.setItem('accountsName' , '-');
                 },
@@ -94,8 +93,8 @@
                 draw(data) {
                     data = JSON.parse(data)
 
-                    func.removeHtml(document.querySelector('#sourceMigration'));
-                    func.removeHtml(document.querySelector('#destinationMigration'));
+                    func.migRemoveHtml(document.querySelector('#sourceMigration'));
+                    func.migRemoveHtml(document.querySelector('#destinationMigration'));
 
                     let sourceMigrationHtml = `<option style="color:#959ba5;" value="" disabled selected>Migration</option>`;
                     let destinationMigrationHtml = `<option style="color:#959ba5;" value="" disabled selected>Migration</option>`;
@@ -108,8 +107,8 @@
                         destinationMigrationHtml += `<option value="${key}">${key}</option>`;
                     }
 
-                    func.appendHtml(document.getElementById('sourceMigration'), sourceMigrationHtml);
-                    func.appendHtml(document.getElementById('destinationMigration'), destinationMigrationHtml);
+                    func.migAppendHtml(document.getElementById('sourceMigration'), sourceMigrationHtml);
+                    func.migAppendHtml(document.getElementById('destinationMigration'), destinationMigrationHtml);
                 },
 
                 event() {
@@ -122,15 +121,15 @@
                         let destinationBucket = document.querySelector('#destinationBucket');
 
                         if (sessionStorage.getItem('accountsData') === 'N') {
-                            func.alertPopup('ALERT', MSG_CHECK_TO_REGISTER_ACCOUNT, true, MSG_CONFIRM, "closed");
+                            func.alertMigPopup('ALERT', MSG_CHECK_TO_REGISTER_ACCOUNT, true, MSG_CONFIRM, "closed");
                         } else if(sourceBucket.value === "") {
-                            func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
+                            func.alertMigPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
                         } else if (destinationBucket.value === "") {
-                            func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
+                            func.alertMigPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
                         } else if (sourceBucket.value === "" && destinationBucket.value === "") {
-                            func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
+                            func.alertMigPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
                         } else if (sourceMigration.value !== 0 && destinationMigration.value !== 0 && sourceBucket.value !== 0 && destinationBucket.value !== 0) {
-                            func.alertPopup('SYNC', MSG_CHECK_TO_SYNC, true, MSG_CONFIRM, migrationsCreate.sync);
+                            func.alertMigPopup('SYNC', MSG_CHECK_TO_SYNC, true, MSG_CONFIRM, migrationsCreate.sync);
                         }
 
                     }, false);
@@ -143,15 +142,15 @@
                         let destinationBucket = document.querySelector('#destinationBucket');
 
                         if (sessionStorage.getItem('accountsData') === 'N') {
-                            func.alertPopup('ALERT', MSG_CHECK_TO_REGISTER_ACCOUNT, true, MSG_CONFIRM, "closed");
+                            func.alertMigPopup('ALERT', MSG_CHECK_TO_REGISTER_ACCOUNT, true, MSG_CONFIRM, "closed");
                         } else if(sourceBucket.value === "") {
-                            func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
+                            func.alertMigPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
                         } else if (destinationBucket.value === "") {
-                            func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
+                            func.alertMigPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
                         } else if (sourceBucket.value === "" && destinationBucket.value === "") {
-                            func.alertPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
+                            func.alertMigPopup('ALERT', MSG_CHECK_TO_SELECT_BOX, true, MSG_CONFIRM, "closed");
                         } else if (sourceMigration.value !== 0 && destinationMigration.value !== 0 && sourceBucket.value !== 0 && destinationBucket.value !== 0) {
-                            func.alertPopup('COPY', MSG_CHECK_TO_COPY, true, MSG_CONFIRM, migrationsCreate.copy);
+                            func.alertMigPopup('COPY', MSG_CHECK_TO_COPY, true, MSG_CONFIRM, migrationsCreate.copy);
                         }
 
                     }, false);
@@ -200,8 +199,7 @@
 
                     let encodeData = {"key":encodeRsaAes,"iv":encodeIvBase64,"data":encodeDataWithAes}
 
-                    // func.saveData('POST', `http://192.168.0.5:8901/v1/migration/sync/sync`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh);
-                    func.saveData('POST', `${func.migrationUrl}v1/migration/sync/sync`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh);
+                    func.saveMigData('POST', `${func.migrationUrl}v1/migration/sync/sync`, JSON.stringify(encodeData), true, 'application/json', func.migHistoryBackRefresh);
 
                     sessionStorage.removeItem('sourceData')
                     sessionStorage.removeItem('destinationData')
@@ -248,8 +246,7 @@
 
                     let encodeData = {"key":encodeRsaAes,"iv":encodeIvBase64,"data":encodeDataWithAes}
 
-                    // func.saveData('POST', `http://192.168.0.5:8901/v1/migration/sync/copy`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh);
-                    func.saveData('POST', `${func.migrationUrl}v1/migration/sync/copy`, JSON.stringify(encodeData), true, 'application/json', func.historyBackRefresh);
+                    func.saveMigData('POST', `${func.migrationUrl}v1/migration/sync/copy`, JSON.stringify(encodeData), true, 'application/json', func.migHistoryBackRefresh);
 
                     sessionStorage.removeItem('sourceData')
                     sessionStorage.removeItem('destinationData')
@@ -266,10 +263,8 @@
             let accessKeyId = ``;
             let secretAccessKey = ``;
 
-            // func.loadData('GET', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', func.sourceDetailDraw);
-            func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', func.sourceDetailDraw);
-            // func.loadData('GET', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#sourceMigration > option:checked').value}`, 'application/json', sourceAccountsDraw);
-            func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#sourceMigration > option:checked').value}`, 'application/json', sourceAccountsDraw);
+            func.loadMigData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${sourceMigration}`, 'application/json', func.sourceDetailDraw);
+            func.loadMigData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#sourceMigration > option:checked').value}`, 'application/json', sourceAccountsDraw);
 
             async function sourceAccountsDraw(data) {
 
@@ -305,12 +300,11 @@
                     "data": encodeDataWithAes
                 }
 
-                // func.bucketData('POST', `http://192.168.0.5:8901/v1/migration/operations/list`, JSON.stringify(encodeData), true, 'application/json', sourceBucketsDraw);
-                func.bucketData('POST', `${func.migrationUrl}v1/migration/operations/list`, JSON.stringify(encodeData), true, 'application/json', sourceBucketsDraw);
+                func.bucketMigData('POST', `${func.migrationUrl}v1/migration/operations/list`, JSON.stringify(encodeData), true, 'application/json', sourceBucketsDraw);
             }
 
             function sourceBucketsDraw(data) {
-                func.removeHtml(document.querySelector('#sourceBucket'));
+                func.migRemoveHtml(document.querySelector('#sourceBucket'));
 
                 data = data.substr(10);
                 data = data.slice(0, -2);
@@ -327,7 +321,7 @@
                     sourceBucketHtml += `<option value="${arrData[i]}">${arrData[i]}</option>`;
                 }
 
-                func.appendHtml(document.getElementById('sourceBucket'), sourceBucketHtml);
+                func.migAppendHtml(document.getElementById('sourceBucket'), sourceBucketHtml);
 
             }
 
@@ -339,10 +333,8 @@
             let accessKeyId = ``;
             let secretAccessKey = ``;
 
-            // func.loadData('GET', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${destinationMigration}`, 'application/json', func.destinationDetailDraw);
-            func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${destinationMigration}`, 'application/json', func.destinationDetailDraw);
-            // func.loadData('GET', `http://192.168.0.5:8911/v1/vault/storage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#destinationMigration > option:checked').value}`, 'application/json', destinationAccountsDraw);
-            func.loadData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#destinationMigration > option:checked').value}`, 'application/json', destinationAccountsDraw);
+            func.loadMigData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${destinationMigration}`, 'application/json', func.destinationDetailDraw);
+            func.loadMigData('GET', `${func.vaultUrl}v1/vault/storage/${sessionStorage.getItem('userGuid')}/${document.querySelector('#destinationMigration > option:checked').value}`, 'application/json', destinationAccountsDraw);
 
             async function destinationAccountsDraw(data) {
 
@@ -378,12 +370,11 @@
                     "data": encodeDataWithAes
                 }
 
-                // func.bucketData('POST', `http://192.168.0.5:8901/v1/migration/operations/list`, JSON.stringify(encodeData), true, 'application/json', destinationBucketsDraw);
-                func.bucketData('POST', `${func.migrationUrl}v1/migration/operations/list`, JSON.stringify(encodeData), true, 'application/json', destinationBucketsDraw);
+                func.bucketMigData('POST', `${func.migrationUrl}v1/migration/operations/list`, JSON.stringify(encodeData), true, 'application/json', destinationBucketsDraw);
             }
 
             function destinationBucketsDraw(data) {
-                func.removeHtml(document.querySelector('#destinationBucket'));
+                func.migRemoveHtml(document.querySelector('#destinationBucket'));
 
                 data = data.substr(10);
                 data = data.slice(0, -2);
@@ -400,7 +391,7 @@
                     destinationBucketHtml += `<option value="${arrData[i]}">${arrData[i]}</option>`;
                 }
 
-                func.appendHtml(document.getElementById('destinationBucket'), destinationBucketHtml);
+                func.migAppendHtml(document.getElementById('destinationBucket'), destinationBucketHtml);
 
             }
         }

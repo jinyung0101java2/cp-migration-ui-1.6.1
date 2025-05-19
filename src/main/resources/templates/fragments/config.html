@@ -88,7 +88,7 @@
  function changeLocaleLanguage() {
      var u_locale_lang = document.getElementById("u_locale_lang").value
      var reqUrl = URL_API_LOCALE_LANGUAGE + "?" + URL_API_CHANGE_LOCALE_PARAM + "=" + u_locale_lang;
-     func.setLocaleLang(reqUrl);
+     func.setMigLocaleLang(reqUrl);
  }
 
  function setSelectValue(id, val) {

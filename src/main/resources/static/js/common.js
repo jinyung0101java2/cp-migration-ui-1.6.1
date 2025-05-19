@@ -9,76 +9,7 @@ const func= {
 	migPublicKey: MIG_PUBLIC_KEY,
 	hmacKey: HMAC_KEY,
 
-	event(){
-		// navigation
-		var nav = document.querySelector('nav').querySelectorAll('.dep01');
-
-		for(var i=0; i<=nav.length-1; i++){
-			nav[i].addEventListener('click', (e) => {
-				e.stopPropagation();
-
-				for(var j=0; j<=nav.length-1; j++){
-					nav[j].parentNode.classList.toggle('on', false);
-				};
-
-				e.target.parentNode.classList.toggle('on', true);
-			}, false);
-		};
-
-		// search
-		if(document.getElementById('search') != null){
-			document.getElementById('search').addEventListener('click', (e) => {
-				if(e.target.parentNode.classList != 'on'){
-					e.target.parentNode.classList.toggle('on');
-				} else {
-					if(document.getElementById('searchText').value != ''){
-						IS_SEARCH = true;
-						func.nameLoad();
-					};
-				}
-			}, false);
-
-			document.getElementById('searchText').onkeydown = function(event) {
-				if(event.keyCode === 13){
-					IS_SEARCH = true;
-					func.nameLoad();
-				};
-			};
-
-			document.getElementById('searchText').onkeyup = function(event) {
-				document.getElementById('searchText').value = document.getElementById('searchText').value.replace( /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g,'');
-			};
-		};
-
-		// logout event
-		document.getElementById('logout').addEventListener('click', (e) => {
-			func.alertPopup('Sign Out', MSG_WANT_TO_SIGN_OUT + '<br><p id="logout-sub">' + MSG_INTEGRATED_SIGN_OUT_TAKES_PLACE + '</p>', true, MSG_CONFIRM, func.logout);
-		}, false);
-
-	},
-
-	// Locale Language 조회 ////////////////////////////////////////////////////////////////
-	getLocaleLang(){
-		var request = new XMLHttpRequest();
-		request.open('GET', URL_API_LOCALE_LANGUAGE, false);
-		request.setRequestHeader('Content-type', 'application/json');
-
-		request.onreadystatechange = () => {
-			if (request.readyState === XMLHttpRequest.DONE){
-				if(request.status === 200){
-					CURRENT_LOCALE_LANGUAGE = request.responseText;
-					setSelectValue('u_locale_lang',request.responseText);
-				} else {
-					CURRENT_LOCALE_LANGUAGE = LANG_EN;
-					setSelectValue('u_locale_lang',LANG_EN);
-				};
-			};
-		};
-		request.send();
-	},
-
-	// Locale Language 설정 ////////////////////////////////////////////////////////////////
-	setLocaleLang(reqUrl){
+	setMigLocaleLang(reqUrl){
 		var request = new XMLHttpRequest();
 		request.open('PUT', reqUrl, false);
 		request.setRequestHeader('Content-type', 'application/json');
@@ -92,12 +23,7 @@ const func= {
 		request.send();
 	},
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	// 데이터 로드 - loadData(method, url, callbackFunction)
-	// (전송타입, url, 콜백함수)
-	/////////////////////////////////////////////////////////////////////////////////////
-
-	loadData(method, url, header, callbackFunction, list) {
+	loadMigData(method, url, header, callbackFunction, list) {
 
 		if(url == null) {
 			callbackFunction();
@@ -121,14 +47,10 @@ const func= {
 						if (httpRequest.responseText === 'secret is nil') {
 							//console.warn = console.error = () => {};
 						}
-					} else { //404
+					} else {
 						if (httpRequest.responseText === 'secret is nil') {
 							sessionStorage.setItem('accountsData', 'N')
 						}
-						/*if(document.getElementById('loading')) {
-							document.getElementById('wrap').removeChild(document.getElementById('loading'));
-						};
-						return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');*/
 					}
 				}
 			}
@@ -136,12 +58,7 @@ const func= {
 		}, 0)
 	},
 
-
-	/////////////////////////////////////////////////////////////////////////////////////
-	// 데이터 SAVE - saveData(method, url, data, bull, callFunc)
-	// (전송타입, url, 데이터, 분기, 콜백함수)
-	/////////////////////////////////////////////////////////////////////////////////////
-	saveData(method, url, data, bull, header, callFunc){
+	saveMigData(method, url, data, bull, header, callFunc){
 		func.loading();
 		var httpRequest = new XMLHttpRequest();
 
@@ -155,22 +72,22 @@ const func= {
 		httpRequest.onreadystatechange = () => {
 			if (httpRequest.readyState === XMLHttpRequest.DONE){
 				if (httpRequest.status === 200) {
-					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, callFunc);
+					return func.alertMigPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, callFunc);
 				} else {
 					if(document.getElementById('loading')){
 						document.getElementById('wrap').removeChild(document.getElementById('loading'));
 					};
 					if (httpRequest.responseText === 'data already exists') {
-						return func.alertPopup('ERROR', MSG_ALREADY_EXIST, true, MSG_CONFIRM, 'closed');
+						return func.alertMigPopup('ERROR', MSG_ALREADY_EXIST, true, MSG_CONFIRM, 'closed');
 					}
-					return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');
+					return func.alertMigPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');
 				}
 			}
 		}
 		httpRequest.send(data)
 	},
 
-	bucketData(method, url, data, bull, header, callbackFunction, list){
+	bucketMigData(method, url, data, bull, header, callbackFunction, list){
 		if(url == null) {
 			callbackFunction();
 			return false;
@@ -194,16 +111,16 @@ const func= {
 						document.getElementById('wrap').removeChild(document.getElementById('loading'));
 					};
 					if (httpRequest.responseText === 'an unknown error occurred') {
-						return func.alertPopup('ERROR', MSG_NO_BUCKET, true, MSG_CONFIRM, 'closed');
+						return func.alertMigPopup('ERROR', MSG_NO_BUCKET, true, MSG_CONFIRM, 'closed');
 					}
-					return func.alertPopup('ERROR', MSG_NO_BUCKET, true, MSG_CONFIRM, 'closed');
+					return func.alertMigPopup('ERROR', MSG_NO_BUCKET, true, MSG_CONFIRM, 'closed');
 				}
 			}
 		}
 		httpRequest.send(data)
 	},
 
-	deleteData(method, url, data, bull, header){
+	deleteMigData(method, url, data, bull, header){
 		func.loading();
 		var httpRequest = new XMLHttpRequest();
 
@@ -217,23 +134,19 @@ const func= {
 		httpRequest.onreadystatechange = () => {
 			if (httpRequest.readyState === XMLHttpRequest.DONE){
 				if (httpRequest.status === 200) {
-					return func.alertPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, func.historyBackRefresh);
+					return func.alertMigPopup('SUCCESS', MSG_CHECK_TO_SUCCESS, true, MSG_CONFIRM, func.migHistoryBackRefresh);
 				} else {
 					if(document.getElementById('loading')){
 						document.getElementById('wrap').removeChild(document.getElementById('loading'));
 					};
-					return func.alertPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');
+					return func.alertMigPopup('ERROR', MSG_CHECK_TO_FAIL, true, MSG_CONFIRM, 'closed');
 				}
 			}
 		}
 		httpRequest.send(data)
 	},
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	// 공통 경고 팝업 - alertPopup(title, text, bull, name, fn)
-	// (제목, 문구, 버튼유무, 버튼이름, 콜백함수)
-	/////////////////////////////////////////////////////////////////////////////////////
-	alertPopup(title, text, bull, name, callback){
+	alertMigPopup(title, text, bull, name, callback){
 		var html = `<div class='modal-wrap' id='alertModal'><div class='modal'><h5>${title}</h5><p>${text}</p>`;
 		if(bull) {
 			html += `<a class='confirm' href='javascript:;'>${name}</a>`;
@@ -244,7 +157,7 @@ const func= {
 			document.getElementById('wrap').removeChild(document.getElementById('alertModal'));
 		}
 
-		func.appendHtml(document.getElementById('wrap'), html, 'div');
+		func.migAppendHtml(document.getElementById('wrap'), html, 'div');
 
 		document.getElementById('alertModal').querySelector('.close').addEventListener('click', (e) => {
 			document.getElementById('wrap').removeChild(document.getElementById('alertModal'));
@@ -263,15 +176,7 @@ const func= {
 		};
 	},
 
-	moveToMain() {
-		location.href = URI_CP_ACCOUNTS_LIST;
-	},
-
-	historyBack(){
-		window.history.back();
-	},
-
-	historyBackRefresh(){
+	migHistoryBackRefresh(){
 		location.href = document.referrer;
 
 	},
@@ -293,14 +198,10 @@ const func= {
 						</div>
 					</div>`
 
-		func.appendHtml(document.getElementById('wrap'), html, 'div');
+		func.migAppendHtml(document.getElementById('wrap'), html, 'div');
 	},
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	// html 생성 - appendHtml(target, html, type)
-	// (삽입 타겟, html 내용, 타입)
-	/////////////////////////////////////////////////////////////////////////////////////
-	appendHtml(target, html, type){
+	migAppendHtml(target, html, type){
 		var div = document.createElement(type);
 		div.innerHTML = html;
 		while (div.children.length > 0){
@@ -308,11 +209,7 @@ const func= {
 		};
 	},
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	// html 삭제 - removeHtml(target)
-	// (타겟 : 타겟의 자식요소 전부 삭제)
-	/////////////////////////////////////////////////////////////////////////////////////
-	removeHtml(target){
+	migRemoveHtml(target){
 		while(target.hasChildNodes()){
 			target.removeChild(target.firstChild);
 		};
@@ -323,9 +220,7 @@ const func= {
 	},
 
 	encodeHmacSha256(data) {
-
 		return CryptoJS.HmacSHA256(data, func.hmacKey).toString(CryptoJS.enc.Hex);
-
 	},
 
 	generateAesIv() {
@@ -355,20 +250,16 @@ const func= {
 	},
 
 	encodeDataWithAes(data, aes, iv) {
-
 		return CryptoJS.AES.encrypt(data, aes,
 			{ iv: iv
 			}).toString();
-
 	},
 
 	encodeIvBase64(iv) {
-
 		return CryptoJS.enc.Base64.stringify(iv)
 	},
 
 	decodeIvBase64(iv) {
-
 		let parseWordArray = CryptoJS.enc.Base64.parse(iv);
 		let decoded = parseWordArray.toString()
 		return decoded;
@@ -564,11 +455,9 @@ const func= {
 
 			return new TextDecoder().decode(text);
 		}
-
 	},
 
 	async responseDecodeData(data, type) {
-
 		if (type === 'vault') {
 			if (data !== 'undefined') {
 				try {
