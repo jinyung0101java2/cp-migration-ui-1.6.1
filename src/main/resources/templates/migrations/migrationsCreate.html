@@ -171,11 +171,10 @@
                     let sourceData = sessionStorage.getItem('sourceData');
                     let destinationData = sessionStorage.getItem('destinationData');
 
-                    let decodeType = 'vault';
                     let encodeType = 'mig';
 
-                    let decodeSourceData = await func.decodeRsaWebCryptoAPI(sourceData, decodeType)
-                    let decodeDestinationData = await func.decodeRsaWebCryptoAPI(destinationData, decodeType)
+                    let decodeSourceData = await func.decodeRsaWebCryptoAPI(sourceData, encodeType)
+                    let decodeDestinationData = await func.decodeRsaWebCryptoAPI(destinationData, encodeType)
 
                     decodeSourceData = JSON.parse(decodeSourceData)
                     decodeDestinationData = JSON.parse(decodeDestinationData)
@@ -221,11 +220,10 @@
                     let sourceData = sessionStorage.getItem('sourceData');
                     let destinationData = sessionStorage.getItem('destinationData');
 
-                    let decodeType = 'vault';
                     let encodeType = 'mig';
 
-                    let decodeSourceData = await func.decodeRsaWebCryptoAPI(sourceData, decodeType)
-                    let decodeDestinationData = await func.decodeRsaWebCryptoAPI(destinationData, decodeType)
+                    let decodeSourceData = await func.decodeRsaWebCryptoAPI(sourceData, encodeType)
+                    let decodeDestinationData = await func.decodeRsaWebCryptoAPI(destinationData, encodeType)
 
                     decodeSourceData = JSON.parse(decodeSourceData)
                     decodeDestinationData = JSON.parse(decodeDestinationData)
@@ -246,7 +244,7 @@
                     let aesIV = func.generateAesIv();
 
                     let encodeDataWithAes = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
-                    const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes)
+                    const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes, encodeType)
                     const encodeIvBase64 = func.encodeIvBase64(aesIV.iv)
 
                     let encodeData = {"key":encodeRsaAes,"iv":encodeIvBase64,"data":encodeDataWithAes}
