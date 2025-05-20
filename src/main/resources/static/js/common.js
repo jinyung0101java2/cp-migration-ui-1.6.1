@@ -45,7 +45,7 @@ const func= {
 						callbackFunction((httpRequest.responseText), list);
 					} else if (httpRequest.status === 500) {
 						if (httpRequest.responseText === 'secret is nil') {
-							//console.warn = console.error = () => {};
+							console.warn = console.error = () => {};
 						}
 					} else {
 						if (httpRequest.responseText === 'secret is nil') {
