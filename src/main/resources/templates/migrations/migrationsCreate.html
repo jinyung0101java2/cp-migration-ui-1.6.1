@@ -171,9 +171,11 @@
                     let sourceData = sessionStorage.getItem('sourceData');
                     let destinationData = sessionStorage.getItem('destinationData');
 
-                    let type = 'vault';
-                    let decodeSourceData = await func.decodeRsaWebCryptoAPI(sourceData)
-                    let decodeDestinationData = await func.decodeRsaWebCryptoAPI(destinationData)
+                    let decodeType = 'vault';
+                    let encodeType = 'mig';
+
+                    let decodeSourceData = await func.decodeRsaWebCryptoAPI(sourceData, decodeType)
+                    let decodeDestinationData = await func.decodeRsaWebCryptoAPI(destinationData, decodeType)
 
                     decodeSourceData = JSON.parse(decodeSourceData)
                     decodeDestinationData = JSON.parse(decodeDestinationData)
@@ -189,12 +191,12 @@
                     let migrationsCreate = {"dst":{"accessKeyId":destinationAccessKeyId,"bucket":destinationBucket,"endpoint":destinationEndpoint,"secretAccessKey":destinationSecretAccessKey,"storageType":"s3"},"src":{"accessKeyId":sourceAccessKeyId,"bucket":sourceBucket,"endpoint":sourceEndpoint,"secretAccessKey":sourceSecretAccessKey,"storageType":"s3"}}
                     let timestamp = func.createUnixTimestamp();
                     let includeTimestampData = {"data": migrationsCreate, "timestamp": timestamp.toString()}
-                    let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData));
+                    let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData), encodeType);
                     let includeHmacData = {"data":migrationsCreate,"hmac_data":hmacData,"timestamp":timestamp.toString()}
                     let aesIV = func.generateAesIv();
 
                     let encodeDataWithAes = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
-                    const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes, type)
+                    const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes, encodeType)
                     const encodeIvBase64 = func.encodeIvBase64(aesIV.iv)
 
                     let encodeData = {"key":encodeRsaAes,"iv":encodeIvBase64,"data":encodeDataWithAes}
@@ -219,8 +221,11 @@
                     let sourceData = sessionStorage.getItem('sourceData');
                     let destinationData = sessionStorage.getItem('destinationData');
 
-                    let decodeSourceData = await func.decodeRsaWebCryptoAPI(sourceData)
-                    let decodeDestinationData = await func.decodeRsaWebCryptoAPI(destinationData)
+                    let decodeType = 'vault';
+                    let encodeType = 'mig';
+
+                    let decodeSourceData = await func.decodeRsaWebCryptoAPI(sourceData, decodeType)
+                    let decodeDestinationData = await func.decodeRsaWebCryptoAPI(destinationData, decodeType)
 
                     decodeSourceData = JSON.parse(decodeSourceData)
                     decodeDestinationData = JSON.parse(decodeDestinationData)
@@ -236,7 +241,7 @@
                     let migrationsCreate = {"dst":{"accessKeyId":destinationAccessKeyId,"bucket":destinationBucket,"endpoint":destinationEndpoint,"secretAccessKey":destinationSecretAccessKey,"storageType":"s3"},"src":{"accessKeyId":sourceAccessKeyId,"bucket":sourceBucket,"endpoint":sourceEndpoint,"secretAccessKey":sourceSecretAccessKey,"storageType":"s3"}}
                     let timestamp = func.createUnixTimestamp();
                     let includeTimestampData = {"data": migrationsCreate, "timestamp": timestamp.toString()}
-                    let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData));
+                    let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData), encodeType);
                     let includeHmacData = {"data":migrationsCreate,"hmac_data":hmacData,"timestamp":timestamp.toString()}
                     let aesIV = func.generateAesIv();
 
@@ -268,8 +273,10 @@
 
             async function sourceAccountsDraw(data) {
 
-                let type = 'mig';
-                let decodeData = await func.responseDecodeData(data, type)
+                let decodeType = 'vault';
+                let encodeType = 'mig';
+
+                let decodeData = await func.responseDecodeData(data, decodeType)
                 let encodedData = JSON.stringify(decodeData.data)
                 encodedData = encodedData.replaceAll("\"", "");
 
@@ -286,12 +293,12 @@
                 let timestamp = func.createUnixTimestamp();
                 let bucketsData = {"accessKeyId":accessKeyId,"bucket":"","endpoint":endpoint,"secretAccessKey":secretAccessKey,"storageType":storageType}
                 let includeTimestampData = {"data":bucketsData,"timestamp":timestamp.toString()}
-                let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData));
+                let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData), encodeType);
                 let includeHmacData = {"data":bucketsData,"hmac_data":hmacData,"timestamp":timestamp.toString()}
                 let aesIV = func.generateAesIv();
 
                 let encodeDataWithAes = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
-                const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes, type)
+                const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes, encodeType)
                 const encodeIvBase64 = func.encodeIvBase64(aesIV.iv)
 
                 let encodeData = {
@@ -338,8 +345,10 @@
 
             async function destinationAccountsDraw(data) {
 
-                let type = 'mig';
-                let decodeData = await func.responseDecodeData(data, type)
+                let decodeType = 'vault';
+                let encodeType = 'mig';
+
+                let decodeData = await func.responseDecodeData(data, decodeType)
                 let encodedData = JSON.stringify(decodeData.data)
                 encodedData = encodedData.replaceAll("\"", "");
 
@@ -356,12 +365,12 @@
                 let timestamp = func.createUnixTimestamp();
                 let bucketsData = {"accessKeyId":accessKeyId,"bucket":"","endpoint":endpoint,"secretAccessKey":secretAccessKey,"storageType":storageType}
                 let includeTimestampData = {"data":bucketsData,"timestamp":timestamp.toString()}
-                let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData));
+                let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData), encodeType);
                 let includeHmacData = {"data":bucketsData,"hmac_data":hmacData,"timestamp":timestamp.toString()}
                 let aesIV = func.generateAesIv();
 
                 let encodeDataWithAes = func.encodeDataWithAes(JSON.stringify(includeHmacData), aesIV.aes, aesIV.iv);
-                const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes, type)
+                const encodeRsaAes = await func.encodeRsaWebCryptoAPI(aesIV.aes, encodeType)
                 const encodeIvBase64 = func.encodeIvBase64(aesIV.iv)
 
                 let encodeData = {

@@ -5,9 +5,10 @@ const func= {
 	ui: 'http://localhost:8090/',
 	vaultPrivateKey: VAULT_PRIVATE_KEY,
 	vaultPublicKey: VAULT_PUBLIC_KEY,
+	vaultHmacKey: VAULT_HMAC_KEY,
 	migPrivateKey: MIG_PRIVATE_KEY,
 	migPublicKey: MIG_PUBLIC_KEY,
-	hmacKey: HMAC_KEY,
+	migHmacKey: MIG_HMAC_KEY,
 
 	setMigLocaleLang(reqUrl){
 		var request = new XMLHttpRequest();
@@ -219,8 +220,14 @@ const func= {
 		return Math.floor(new Date().getTime());
 	},
 
-	encodeHmacSha256(data) {
-		return CryptoJS.HmacSHA256(data, func.hmacKey).toString(CryptoJS.enc.Hex);
+	encodeHmacSha256(data, type) {
+
+		if (type === "vault") {
+			return CryptoJS.HmacSHA256(data, func.vaultHmacKey).toString(CryptoJS.enc.Hex);
+		} else {
+			return CryptoJS.HmacSHA256(data, func.migHmacKey).toString(CryptoJS.enc.Hex);
+		}
+
 	},
 
 	generateAesIv() {

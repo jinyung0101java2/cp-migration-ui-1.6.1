@@ -117,7 +117,7 @@
                     let timestamp = func.createUnixTimestamp();
                     let accountsCreate = {"basePath":"storage","userAccount":sessionStorage.getItem('userGuid'),"configName":accountsName,"content":{"storageType":storageType,"endpoint":endpoint,"accessKeyId":accessKeyId,"secretAccessKey":secretAccessKey}}
                     let includeTimestampData = {"data":accountsCreate,"timestamp":timestamp.toString()}
-                    let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData));
+                    let hmacData = func.encodeHmacSha256(JSON.stringify(includeTimestampData), type);
                     let includeHmacData = {"data":accountsCreate,"hmac_data":hmacData,"timestamp":timestamp.toString()}
                     let aesIV = func.generateAesIv();
 

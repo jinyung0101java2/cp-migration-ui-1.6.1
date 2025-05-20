@@ -49,11 +49,11 @@ key:
   vault:
     private: ${VAULT_PRIVATE_KEY}
     public: ${VAULT_PUBLIC_KEY}
+    hmac: ${VAULT_HMAC_KEY}
   migration:
     private: ${MIG_PRIVATE_KEY}
     public: ${MIG_PUBLIC_KEY}
-  hmac: ${HMAC_KEY}
-
+    hmac: ${MIG_HMAC_KEY}
 ---
 spring:
   config:
